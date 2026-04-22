@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEAM RUN — The Game</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a0a1a}
+iframe{width:100%;height:100%;border:none;display:block}
+</style>
+</head>
+<body>
+<iframe id="gameFrame" src="game/index.html" allow="autoplay"></iframe>
+<script>
+// Auto-focus the iframe so keyboard works immediately
+var f = document.getElementById('gameFrame');
+f.addEventListener('load', function() { f.focus(); });
+window.addEventListener('click', function() { f.focus(); });
+window.addEventListener('keydown', function() { f.focus(); });
+f.focus();
+</script>
+<script src="components/cookie-consent.js"></script>
+</body>
+</html>

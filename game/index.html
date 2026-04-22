@@ -1,0 +1,3007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEAM RUN</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a1a; }
+canvas { display: block; margin: 0 auto; image-rendering: pixelated; image-rendering: crisp-edges; }
+canvas.cursor-hidden { cursor: none; }
+#gameContainer { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #0a0a1a; }
+</style>
+</head>
+<body>
+<div id="gameContainer">
+<canvas id="game"></canvas>
+</div>
+<script>
+// ============================================================
+// TEAM RUN — A Music Release Platformer
+// ============================================================
+
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const GAME_W = 800;
+const GAME_H = 500;
+canvas.width = GAME_W;
+canvas.height = GAME_H;
+
+// Auto-focus so keyboard works immediately (even inside iframe)
+window.focus();
+document.body.tabIndex = 0;
+document.body.focus();
+
+// Responsive scaling
+function resize() {
+  const container = document.getElementById('gameContainer');
+  const scale = Math.min(container.clientWidth / GAME_W, container.clientHeight / GAME_H);
+  canvas.style.width = (GAME_W * scale) + 'px';
+  canvas.style.height = (GAME_H * scale) + 'px';
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ============================================================
+// INPUT
+// ============================================================
+const keys = {};
+let clickX = -1, clickY = -1, clicked = false;
+window.addEventListener('keydown', e => { keys[e.code] = true; e.preventDefault(); });
+window.addEventListener('keyup', e => { keys[e.code] = false; });
+canvas.addEventListener('click', e => {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = GAME_W / rect.width;
+  const scaleY = GAME_H / rect.height;
+  clickX = (e.clientX - rect.left) * scaleX;
+  clickY = (e.clientY - rect.top) * scaleY;
+  clicked = true;
+});
+let mouseX = -1, mouseY = -1;
+let cursorHideTimer = null;
+function showCursor() {
+  canvas.classList.remove('cursor-hidden');
+  clearTimeout(cursorHideTimer);
+  cursorHideTimer = setTimeout(() => canvas.classList.add('cursor-hidden'), 2000);
+}
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  mouseX = (e.clientX - rect.left) * (GAME_W / rect.width);
+  mouseY = (e.clientY - rect.top) * (GAME_H / rect.height);
+  showCursor();
+});
+
+function consumeClick() { const c = clicked; clicked = false; return c; }
+function isKeyPressed(code) { return !!keys[code]; }
+const justPressed = {};
+function wasJustPressed(code) {
+  if (keys[code] && !justPressed[code]) { justPressed[code] = true; return true; }
+  if (!keys[code]) justPressed[code] = false;
+  return false;
+}
+
+// ============================================================
+// AUDIO (Web Audio API — simple chiptune sounds)
+// ============================================================
+let audioCtx = null;
+let audioEnabled = true;
+function initAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+function playTone(freq, duration, type = 'square', volume = 0.1) {
+  if (!audioEnabled || !audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.value = volume;
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + duration);
+}
+function sfxJump() { playTone(400, 0.1); setTimeout(() => playTone(600, 0.1), 50); }
+function sfxCollect() { playTone(800, 0.08); setTimeout(() => playTone(1200, 0.12), 60); }
+function sfxDeath() { playTone(200, 0.3, 'sawtooth', 0.15); setTimeout(() => playTone(100, 0.4, 'sawtooth', 0.1), 200); }
+function sfxLevelComplete() {
+  [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => playTone(f, 0.2, 'square', 0.08), i * 120));
+}
+function sfxCountdown() { playTone(440, 0.15, 'square', 0.08); }
+function sfxGo() { playTone(880, 0.3, 'square', 0.1); }
+function sfxMenuSelect() { playTone(660, 0.08, 'square', 0.06); }
+
+// Background music
+let bgMusic = null;
+let musicEnabled = true;
+function initMusic() {
+  if (bgMusic) return;
+  bgMusic = new Audio('../assets/arcade-game-background-music-1.mp3');
+  bgMusic.loop = true;
+  bgMusic.volume = 0.25;
+}
+function startMusic() {
+  if (!bgMusic) initMusic();
+  if (musicEnabled && bgMusic.paused) {
+    bgMusic.play().catch(() => {});
+  }
+}
+function stopMusic() {
+  if (bgMusic && !bgMusic.paused) bgMusic.pause();
+}
+function toggleMusic() {
+  musicEnabled = !musicEnabled;
+  audioEnabled = !audioEnabled;
+  if (musicEnabled) startMusic();
+  else stopMusic();
+}
+// Start music on first user interaction (browser requires gesture for audio)
+let musicStarted = false;
+function tryStartMusic() {
+  if (musicStarted) return;
+  musicStarted = true;
+  initMusic();
+  startMusic();
+}
+['keydown','mousedown','touchstart'].forEach(function(evt) {
+  document.addEventListener(evt, tryStartMusic, { once: false, passive: true });
+});
+
+// ============================================================
+// COLORS — Team Brand
+// ============================================================
+const BRAND = {
+  primary: '#6C5CE7',
+  secondary: '#A29BFE',
+  accent: '#FD79A8',
+  dark: '#0a0a1a',
+  darker: '#05050f',
+  light: '#DFE6E9',
+  gold: '#FDCB6E',
+  green: '#00B894',
+  red: '#E17055',
+  blue: '#74B9FF',
+  orange: '#E17055',
+  white: '#FFFFFF',
+  cyan: '#00CEC9',
+};
+
+// ============================================================
+// PIXEL ART RENDERER
+// ============================================================
+function drawPixelArt(data, x, y, pixelSize, flipX = false) {
+  for (let row = 0; row < data.length; row++) {
+    for (let col = 0; col < data[row].length; col++) {
+      const color = data[row][col];
+      if (color === 0 || color === '0' || color === ' ' || color === '') continue;
+      ctx.fillStyle = typeof color === 'string' && color.startsWith('#') ? color : colorMap[color] || '#FF00FF';
+      const drawCol = flipX ? (data[row].length - 1 - col) : col;
+      ctx.fillRect(Math.floor(x + drawCol * pixelSize), Math.floor(y + row * pixelSize), pixelSize, pixelSize);
+    }
+  }
+}
+
+const colorMap = {
+  'W': '#FFFFFF', 'K': '#1a1a2e', 'R': '#E17055', 'G': '#00B894',
+  'B': '#74B9FF', 'P': '#6C5CE7', 'Y': '#FDCB6E', 'O': '#E17055',
+  'S': '#DFE6E9', 'D': '#2d3436', 'M': '#A29BFE', 'A': '#FD79A8',
+  'C': '#00CEC9', 'L': '#636e72', 'F': '#b2bec3', 'N': '#0a0a1a',
+  'H': '#d63031', 'T': '#e17055', 'U': '#fab1a0', 'V': '#fdcb6e',
+  'X': '#55efc4', 'Z': '#81ecec',
+};
+
+// ============================================================
+// SPRITE DEFINITIONS
+// ============================================================
+
+// TEAM Logo (Nintendo style)
+const TEAM_LOGO_COLORS = {
+  border: BRAND.primary,
+  fill: BRAND.dark,
+  text: BRAND.white,
+  accent: BRAND.accent,
+};
+
+// Character sprites (16x16, rendered at 2-3x)
+const CHAR_SPRITES = {
+  manager: {
+    name: 'The Manager',
+    tagline: 'Balanced & reliable',
+    color1: '#6C5CE7', color2: '#A29BFE', skin: '#FFEAA7',
+    idle: [
+      '    PPPP    ',
+      '   PPPPPP   ',
+      '   PssPPP   ',
+      '   PssPPP   ',
+      '    ssss    ',
+      '   WMMMW    ',
+      '   MMMMMM   ',
+      '    MMMM    ',
+      '    MMMM    ',
+      '   KK  KK   ',
+      '   KK  KK   ',
+      '   DD  DD   ',
+    ],
+    run1: [
+      '    PPPP    ',
+      '   PPPPPP   ',
+      '   PssPPP   ',
+      '   PssPPP   ',
+      '    ssss    ',
+      '    MMMM    ',
+      '   MMMMMM   ',
+      '    MMMM    ',
+      '   KK KK    ',
+      '   KK  KK   ',
+      '  DD    DD  ',
+      '            ',
+    ],
+    jump: [
+      '    PPPP    ',
+      '   PPPPPP   ',
+      '   PssPPP   ',
+      '   PssPPP   ',
+      '    ssss    ',
+      '  WWMMMMWW  ',
+      '   MMMMMM   ',
+      '    MMMM    ',
+      '    KKKK    ',
+      '   KK  KK   ',
+      '   DD  DD   ',
+      '            ',
+    ],
+  },
+  producer: {
+    name: 'The Producer',
+    tagline: 'High jumper',
+    color1: '#E17055', color2: '#FAB1A0', skin: '#FFEAA7',
+    idle: [
+      '  KKKKKKKK  ',
+      '   KKKKKK   ',
+      '   KssKKK   ',
+      '   KssKKK   ',
+      '    ssss    ',
+      '   TTTTTT   ',
+      '   TTTTTT   ',
+      '    TTTT    ',
+      '    TTTT    ',
+      '   KK  KK   ',
+      '   KK  KK   ',
+      '   WW  WW   ',
+    ],
+    run1: [
+      '  KKKKKKKK  ',
+      '   KKKKKK   ',
+      '   KssKKK   ',
+      '   KssKKK   ',
+      '    ssss    ',
+      '    TTTT    ',
+      '   TTTTTT   ',
+      '    TTTT    ',
+      '   KK KK    ',
+      '   KK  KK   ',
+      '  WW    WW  ',
+      '            ',
+    ],
+    jump: [
+      '  KKKKKKKK  ',
+      '   KKKKKK   ',
+      '   KssKKK   ',
+      '   KssKKK   ',
+      '    ssss    ',
+      '  WWTTTTTT  ',
+      '   TTTTTT   ',
+      '    TTTT    ',
+      '    KKKK    ',
+      '   KK  KK   ',
+      '   WW  WW   ',
+      '            ',
+    ],
+  },
+  ar: {
+    name: 'The A&R',
+    tagline: 'Speed demon',
+    color1: '#00B894', color2: '#55EFC4', skin: '#FFEAA7',
+    idle: [
+      '    GGGG    ',
+      '   GGGGGG   ',
+      '   GssGGG   ',
+      '   GssGGG   ',
+      '    ssss    ',
+      '   XXXXXX   ',
+      '   XXXXXX   ',
+      '    XXXX    ',
+      '    XXXX    ',
+      '   KK  KK   ',
+      '   KK  KK   ',
+      '   GG  GG   ',
+    ],
+    run1: [
+      '    GGGG    ',
+      '   GGGGGG   ',
+      '   GssGGG   ',
+      '   GssGGG   ',
+      '    ssss    ',
+      '    XXXX    ',
+      '   XXXXXX   ',
+      '    XXXX    ',
+      '   KK KK    ',
+      '   KK  KK   ',
+      '  GG    GG  ',
+      '            ',
+    ],
+    jump: [
+      '    GGGG    ',
+      '   GGGGGG   ',
+      '   GssGGG   ',
+      '   GssGGG   ',
+      '    ssss    ',
+      '  WWXXXXWW  ',
+      '   XXXXXX   ',
+      '    XXXX    ',
+      '    KKKK    ',
+      '   KK  KK   ',
+      '   GG  GG   ',
+      '            ',
+    ],
+  },
+  dj: {
+    name: 'The DJ',
+    tagline: 'Double jump!',
+    color1: '#FD79A8', color2: '#E84393', skin: '#FFEAA7',
+    idle: [
+      '   KAAAKK   ',
+      '  KAAAAAKK  ',
+      '   AssAAA   ',
+      '   AssAAA   ',
+      '    ssss    ',
+      '   AAAAAA   ',
+      '   AAAAAA   ',
+      '    AAAA    ',
+      '    AAAA    ',
+      '   KK  KK   ',
+      '   KK  KK   ',
+      '   AA  AA   ',
+    ],
+    run1: [
+      '   KAAAKK   ',
+      '  KAAAAAKK  ',
+      '   AssAAA   ',
+      '   AssAAA   ',
+      '    ssss    ',
+      '    AAAA    ',
+      '   AAAAAA   ',
+      '    AAAA    ',
+      '   KK KK    ',
+      '   KK  KK   ',
+      '  AA    AA  ',
+      '            ',
+    ],
+    jump: [
+      '   KAAAKK   ',
+      '  KAAAAAKK  ',
+      '   AssAAA   ',
+      '   AssAAA   ',
+      '    ssss    ',
+      '  WWAAAAWW  ',
+      '   AAAAAA   ',
+      '    AAAA    ',
+      '    KKKK    ',
+      '   KK  KK   ',
+      '   AA  AA   ',
+      '            ',
+    ],
+  },
+  intern: {
+    name: 'The Intern',
+    tagline: 'Hard mode',
+    color1: '#FDCB6E', color2: '#F9CA24', skin: '#FFEAA7',
+    idle: [
+      '    YYYY    ',
+      '   YYYYYY   ',
+      '   YssYYY   ',
+      '   YssYYY   ',
+      '    ssss    ',
+      '   FFFFFF   ',
+      '   FFFFFF   ',
+      '    FFFF    ',
+      '    FFFF    ',
+      '   KK  KK   ',
+      '   KK  KK   ',
+      '   WW  WW   ',
+    ],
+    run1: [
+      '    YYYY    ',
+      '   YYYYYY   ',
+      '   YssYYY   ',
+      '   YssYYY   ',
+      '    ssss    ',
+      '    FFFF    ',
+      '   FFFFFF   ',
+      '    FFFF    ',
+      '   KK KK    ',
+      '   KK  KK   ',
+      '  WW    WW  ',
+      '            ',
+    ],
+    jump: [
+      '    YYYY    ',
+      '   YYYYYY   ',
+      '   YssYYY   ',
+      '   YssYYY   ',
+      '    ssss    ',
+      '  WWFFFFWW  ',
+      '   FFFFFF   ',
+      '    FFFF    ',
+      '    KKKK    ',
+      '   KK  KK   ',
+      '   WW  WW   ',
+      '            ',
+    ],
+  },
+};
+
+// Replace 's' with skin color in sprite data
+Object.values(CHAR_SPRITES).forEach(ch => {
+  colorMap['s'] = ch.skin;
+  ['idle', 'run1', 'jump'].forEach(anim => {
+    ch[anim] = ch[anim].map(row => row.split(''));
+  });
+});
+
+// ============================================================
+// GAME STATE
+// ============================================================
+const STATE = {
+  SPLASH: 0, TITLE: 1, CHAR_SELECT: 2, INSTRUCTIONS: 9, COUNTDOWN: 3,
+  PLAYING: 4, LEVEL_COMPLETE: 5, GAME_OVER: 6, VICTORY: 7,
+  PAUSED: 8,
+};
+
+let gameState = STATE.SPLASH;
+let stateTimer = 0;
+let selectedChar = 0;
+const charKeys = Object.keys(CHAR_SPRITES);
+let score = 0;
+let lives = 3;
+let currentLevel = 0;
+let levelScore = 0;
+let levelTime = 0;
+let scoreAtLevelStart = 0;
+let collectedAtLevelStart = 0;
+let countdownNum = 3;
+let deathCount = 0;
+let totalCollected = 0;
+let highScore = parseInt(localStorage.getItem('teamrun_highscore') || '0');
+
+// Game Over quips
+const GAME_OVER_QUIPS = [
+  'You forgot to upload the final master!',
+  'You overslept and missed launch day!',
+  'The label dropped you mid-rollout!',
+  'Your single leaked three weeks early!',
+  'The distributor sent the wrong track!',
+  'You accidentally deleted the stems!',
+  'Your feature artist ghosted you!',
+  'The vinyl pressing came back warped!',
+  'You posted the release date wrong!',
+  'The music video budget went on catering!',
+];
+let gameOverQuip = '';
+
+// Menu navigation for Game Over / Victory screens
+// Items: 0=Try Again, 1=CTA, 2-8=social icons (twitter,facebook,linkedin,whatsapp,reddit,email,copy)
+let menuSelection = 0;
+const MENU_SOCIAL_PLATFORMS = ['twitter', 'facebook', 'linkedin', 'whatsapp', 'reddit', 'email', 'copy'];
+const MENU_TOTAL_ITEMS = 2 + MENU_SOCIAL_PLATFORMS.length; // 9 total
+
+// Hearts collected — tracked globally so they don't respawn on death
+// Stored as Set of "level_x_y" strings
+let collectedHearts = new Set();
+
+// Particles
+let particles = [];
+function spawnParticles(x, y, color, count = 8) {
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 6,
+      vy: (Math.random() - 0.5) * 6 - 2,
+      life: 30 + Math.random() * 20,
+      maxLife: 50,
+      color: color,
+      size: 2 + Math.random() * 3,
+    });
+  }
+}
+function updateParticles() {
+  particles = particles.filter(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.15;
+    p.life--;
+    return p.life > 0;
+  });
+}
+function drawParticles() {
+  particles.forEach(p => {
+    const alpha = p.life / p.maxLife;
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = p.color;
+    ctx.fillRect(Math.floor(p.x), Math.floor(p.y), p.size, p.size);
+  });
+  ctx.globalAlpha = 1;
+}
+
+// Screen shake
+let shakeX = 0, shakeY = 0, shakeIntensity = 0;
+function triggerShake(intensity = 8) { shakeIntensity = intensity; }
+function updateShake() {
+  if (shakeIntensity > 0) {
+    shakeX = (Math.random() - 0.5) * shakeIntensity;
+    shakeY = (Math.random() - 0.5) * shakeIntensity;
+    shakeIntensity *= 0.85;
+    if (shakeIntensity < 0.5) { shakeIntensity = 0; shakeX = 0; shakeY = 0; }
+  }
+}
+
+// ============================================================
+// PIXEL FONT RENDERER
+// ============================================================
+const PIXEL_CHARS = {
+  'A': ['01110','10001','11111','10001','10001'],
+  'B': ['11110','10001','11110','10001','11110'],
+  'C': ['01111','10000','10000','10000','01111'],
+  'D': ['11110','10001','10001','10001','11110'],
+  'E': ['11111','10000','11110','10000','11111'],
+  'F': ['11111','10000','11110','10000','10000'],
+  'G': ['01111','10000','10011','10001','01111'],
+  'H': ['10001','10001','11111','10001','10001'],
+  'I': ['11111','00100','00100','00100','11111'],
+  'J': ['11111','00010','00010','10010','01100'],
+  'K': ['10010','10100','11000','10100','10010'],
+  'L': ['10000','10000','10000','10000','11111'],
+  'M': ['10001','11011','10101','10001','10001'],
+  'N': ['10001','11001','10101','10011','10001'],
+  'O': ['01110','10001','10001','10001','01110'],
+  'P': ['11110','10001','11110','10000','10000'],
+  'Q': ['01110','10001','10101','10010','01101'],
+  'R': ['11110','10001','11110','10010','10001'],
+  'S': ['01111','10000','01110','00001','11110'],
+  'T': ['11111','00100','00100','00100','00100'],
+  'U': ['10001','10001','10001','10001','01110'],
+  'V': ['10001','10001','10001','01010','00100'],
+  'W': ['10001','10001','10101','11011','10001'],
+  'X': ['10001','01010','00100','01010','10001'],
+  'Y': ['10001','01010','00100','00100','00100'],
+  'Z': ['11111','00010','00100','01000','11111'],
+  '0': ['01110','10011','10101','11001','01110'],
+  '1': ['00100','01100','00100','00100','01110'],
+  '2': ['01110','10001','00110','01000','11111'],
+  '3': ['11110','00001','01110','00001','11110'],
+  '4': ['10010','10010','11111','00010','00010'],
+  '5': ['11111','10000','11110','00001','11110'],
+  '6': ['01110','10000','11110','10001','01110'],
+  '7': ['11111','00001','00010','00100','00100'],
+  '8': ['01110','10001','01110','10001','01110'],
+  '9': ['01110','10001','01111','00001','01110'],
+  '!': ['00100','00100','00100','00000','00100'],
+  '?': ['01110','10001','00110','00000','00100'],
+  '.': ['00000','00000','00000','00000','00100'],
+  ',': ['00000','00000','00000','00100','01000'],
+  ':': ['00000','00100','00000','00100','00000'],
+  '-': ['00000','00000','01110','00000','00000'],
+  '+': ['00000','00100','01110','00100','00000'],
+  '/': ['00001','00010','00100','01000','10000'],
+  '(': ['00010','00100','00100','00100','00010'],
+  ')': ['01000','00100','00100','00100','01000'],
+  '#': ['01010','11111','01010','11111','01010'],
+  '&': ['01100','10010','01110','10010','01101'],
+  "'": ['00100','00100','00000','00000','00000'],
+  ' ': ['00000','00000','00000','00000','00000'],
+};
+
+function drawPixelText(text, x, y, size, color = BRAND.white, centered = false) {
+  const str = text.toUpperCase();
+  const charW = 6 * size;
+  const totalW = str.length * charW;
+  const startX = centered ? x - totalW / 2 : x;
+
+  ctx.fillStyle = color;
+  for (let i = 0; i < str.length; i++) {
+    const ch = PIXEL_CHARS[str[i]];
+    if (!ch) continue;
+    for (let row = 0; row < 5; row++) {
+      for (let col = 0; col < 5; col++) {
+        if (ch[row][col] === '1') {
+          ctx.fillRect(
+            Math.floor(startX + i * charW + col * size),
+            Math.floor(y + row * size),
+            size, size
+          );
+        }
+      }
+    }
+  }
+  return { w: totalW, h: 5 * size };
+}
+
+// ============================================================
+// UI HELPERS
+// ============================================================
+function drawButton(text, x, y, w, h, isHovered) {
+  // Pixel art button
+  const baseColor = isHovered ? BRAND.accent : BRAND.primary;
+  const darkColor = isHovered ? '#c0547d' : '#4a3ea3';
+  const lightColor = isHovered ? '#ff9fc4' : '#8a7ff0';
+
+  // Shadow
+  ctx.fillStyle = '#000000';
+  ctx.fillRect(x + 3, y + 3, w, h);
+  // Main
+  ctx.fillStyle = baseColor;
+  ctx.fillRect(x, y, w, h);
+  // Highlight top/left
+  ctx.fillStyle = lightColor;
+  ctx.fillRect(x, y, w, 3);
+  ctx.fillRect(x, y, 3, h);
+  // Shadow bottom/right
+  ctx.fillStyle = darkColor;
+  ctx.fillRect(x, y + h - 3, w, 3);
+  ctx.fillRect(x + w - 3, y, 3, h);
+
+  drawPixelText(text, x + w / 2, y + h / 2 - 5, 2, BRAND.white, true);
+
+  return mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h;
+}
+
+function isButtonClicked(x, y, w, h) {
+  return clicked && clickX >= x && clickX <= x + w && clickY >= y && clickY <= y + h;
+}
+
+// ============================================================
+// LEVEL DEFINITIONS
+// ============================================================
+// Tile types: 0=empty, 1=ground, 2=platform, 3=collectible, 4=obstacle, 5=flag, 6=gap
+const TILE_SIZE = 32;
+
+const LEVEL_THEMES = [
+  { name: 'DEMO DAY', subtitle: 'The journey begins...', bg1: '#1a1a3e', bg2: '#2d2d5e', bg3: '#0d0d2e', groundColor: '#3d3d6e', platformColor: '#4a4a8e', collectName: 'Vinyl LPs', obstacleName: 'Broken Strings' },
+  { name: 'STUDIO SESSION', subtitle: 'Time to record!', bg1: '#1a2a1a', bg2: '#2d4d2d', bg3: '#0d1a0d', groundColor: '#3d5d3d', platformColor: '#4a7a4a', collectName: 'Gold Records', obstacleName: 'Rejected Demos' },
+  { name: 'PRESS RUN', subtitle: 'Hit the streets!', bg1: '#2a1a1a', bg2: '#4d2d2d', bg3: '#1a0d0d', groundColor: '#5d3d3d', platformColor: '#7a4a4a', collectName: 'Play Buttons', obstacleName: 'Bad Reviews' },
+  { name: 'TOUR BUS', subtitle: 'On the road!', bg1: '#1a1a2a', bg2: '#2d2d4d', bg3: '#0d0d1a', groundColor: '#3d3d5d', platformColor: '#4a4a7a', collectName: 'Backstage Passes', obstacleName: 'Potholes' },
+  { name: 'RELEASE DAY', subtitle: 'The big moment!', bg1: '#2a1a2a', bg2: '#4d2d4d', bg3: '#1a0d1a', groundColor: '#5d3d5d', platformColor: '#7a4a7a', collectName: 'Diamond Records', obstacleName: 'Copyright Strikes' },
+];
+
+const COLLECT_SCORES = [100, 250, 150, 200, 500];
+
+// Hand-crafted level segments that are guaranteed playable.
+// Each segment is 10 tiles wide x 15 tiles tall.
+// Segments are stitched together to form full levels.
+// Legend: 0=empty, 1=ground, 2=platform, 3=collectible, 4=obstacle, 5=flag
+
+// Segment library — each is a 15-row x 10-col block
+// Ground is rows 12-14 (y=12,13,14)
+const SEGMENTS = {
+  // === FLAT & EASY ===
+  flat: [
+    '..........', // 0
+    '..........', // 1
+    '..........', // 2
+    '..........', // 3
+    '..........', // 4
+    '..........', // 5
+    '..........', // 6
+    '..........', // 7
+    '..........', // 8
+    '..........', // 9
+    '..........', // 10
+    '..........', // 11
+    'gggggggggg', // 12
+    'gggggggggg', // 13
+    'gggggggggg', // 14
+  ],
+  // Flat with collectibles in a row
+  flatCoins: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..c..c..c.',
+    '..........',
+    '..........',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Single obstacle to jump over
+  singleJump: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '....c.....',
+    '..........',
+    '..........',
+    '....x.....',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Two obstacles
+  doubleJump: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..c...c...',
+    '..........',
+    '..........',
+    '..x...x...',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Low platform with coins on top
+  lowPlatform: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '...c..c...',
+    '..........',
+    '..pppppp..',
+    '..........',
+    '..........',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Staircase platforms going up
+  stairUp: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '........c.',
+    '.......pp.',
+    '..........',
+    '....c.....',
+    '...ppp....',
+    '..........',
+    '..........',
+    '..........',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Small gap (2 tiles) — easy jump
+  smallGap: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '....cc....',
+    '..........',
+    '..........',
+    'gggg..gggg',
+    'gggg..gggg',
+    'gggg..gggg',
+  ],
+  // Medium gap (3 tiles)
+  medGap: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '...c.c....',
+    '..........',
+    '..........',
+    'ggg...gggg',
+    'ggg...gggg',
+    'ggg...gggg',
+  ],
+  // Platform over gap
+  gapWithPlatform: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '....c.....',
+    '...ppp....',
+    '..........',
+    '..........',
+    '..........',
+    'ggg...gggg',
+    'ggg...gggg',
+    'ggg...gggg',
+  ],
+  // High platform with collectibles
+  highPlatform: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '...ccc....',
+    '..ppppp...',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Obstacle then platform (jump obstacle, optional platform)
+  obstacleAndPlatform: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '.......c..',
+    '......ppp.',
+    '..c.......',
+    '..........',
+    '..........',
+    '..x.......',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Triple step platforms
+  tripleStep: [
+    '..........',
+    '..........',
+    '..........',
+    '.........c',
+    '........pp',
+    '..........',
+    '......c...',
+    '.....pp...',
+    '..........',
+    '...c......',
+    '..pp......',
+    '..........',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Wide gap with stepping stone
+  wideGapStone: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '.....c....',
+    '..........',
+    '....pp....',
+    '..........',
+    'gg......gg',
+    'gg......gg',
+    'gg......gg',
+  ],
+  // Zigzag platforms
+  zigzag: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '.c........',
+    'ppp.......',
+    '..........',
+    '.......c..',
+    '......ppp.',
+    '..........',
+    '..........',
+    '..........',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Obstacle gauntlet (3 in a row, spaced for jumping)
+  gauntlet: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '.c..c..c..',
+    '..........',
+    '..........',
+    '.x..x..x..',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Floating coins high up
+  coinSky: [
+    '..........',
+    '..........',
+    '..........',
+    '..c..c..c.',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '.ppp.ppp..',
+    '..........',
+    '..........',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Two platforms at different heights
+  twoLevel: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '.c........',
+    'ppp.......',
+    '..........',
+    '..........',
+    '.....c.c..',
+    '....ppppp.',
+    '..........',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Gap with obstacle before it
+  trapGap: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..x.......',
+    'gggg..gggg',
+    'gggg..gggg',
+    'gggg..gggg',
+  ],
+  // Descending platforms
+  descend: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '.c........',
+    'ppp.......',
+    '..........',
+    '....c.....',
+    '...ppp....',
+    '..........',
+    '.......c..',
+    '......ppp.',
+    '..........',
+    '..........',
+    'gggggggggg',
+  ],
+  // Long platform bridge
+  bridge: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '.ccccccc..',
+    'pppppppppp',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    'gggggggggg',
+  ],
+  // Heart on a high platform — reward for jumping up
+  heartHigh: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '.....h....',
+    '....ppp...',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Heart on ground — but guarded by obstacles
+  heartGuarded: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '....h.....',
+    '..x...x...',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+  // Flag ending segment
+  flagEnd: [
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '..........',
+    '....f.....',
+    'gggggggggg',
+    'gggggggggg',
+    'gggggggggg',
+  ],
+};
+
+// Level definitions — ordered lists of segment names
+const LEVEL_DESIGNS = [
+  // Level 1: Demo Day — easy intro, 1 heart
+  ['flat', 'flatCoins', 'singleJump', 'flatCoins', 'lowPlatform', 'heartHigh', 'singleJump', 'smallGap', 'flatCoins', 'doubleJump', 'lowPlatform', 'flatCoins', 'flagEnd'],
+  // Level 2: Studio Session — 1 heart
+  ['flat', 'flatCoins', 'stairUp', 'smallGap', 'lowPlatform', 'doubleJump', 'medGap', 'heartGuarded', 'obstacleAndPlatform', 'flatCoins', 'highPlatform', 'smallGap', 'singleJump', 'flatCoins', 'flagEnd'],
+  // Level 3: Press Run — 2 hearts
+  ['flat', 'singleJump', 'stairUp', 'medGap', 'gauntlet', 'heartHigh', 'gapWithPlatform', 'tripleStep', 'doubleJump', 'zigzag', 'trapGap', 'heartGuarded', 'flatCoins', 'lowPlatform', 'singleJump', 'coinSky', 'flagEnd'],
+  // Level 4: Tour Bus — 2 hearts
+  ['flat', 'doubleJump', 'stairUp', 'wideGapStone', 'gauntlet', 'heartHigh', 'tripleStep', 'medGap', 'zigzag', 'obstacleAndPlatform', 'gapWithPlatform', 'heartGuarded', 'twoLevel', 'trapGap', 'descend', 'doubleJump', 'coinSky', 'flagEnd'],
+  // Level 5: Release Day — 2 hearts (you'll need them)
+  ['flat', 'gauntlet', 'stairUp', 'wideGapStone', 'obstacleAndPlatform', 'heartHigh', 'tripleStep', 'trapGap', 'zigzag', 'gauntlet', 'bridge', 'wideGapStone', 'heartGuarded', 'descend', 'gauntlet', 'gapWithPlatform', 'twoLevel', 'coinSky', 'doubleJump', 'flagEnd'],
+];
+
+function generateLevel(levelIdx) {
+  const design = LEVEL_DESIGNS[levelIdx];
+  const segWidth = 10;
+  const levelHeight = 15;
+  const levelWidth = design.length * segWidth;
+  const tiles = [];
+
+  // Init empty
+  for (let y = 0; y < levelHeight; y++) {
+    tiles[y] = [];
+    for (let x = 0; x < levelWidth; x++) {
+      tiles[y][x] = 0;
+    }
+  }
+
+  // Stitch segments
+  for (let s = 0; s < design.length; s++) {
+    const seg = SEGMENTS[design[s]];
+    if (!seg) continue;
+    const ox = s * segWidth;
+    for (let y = 0; y < levelHeight; y++) {
+      const row = seg[y];
+      for (let x = 0; x < segWidth; x++) {
+        const ch = row[x];
+        switch (ch) {
+          case 'g': tiles[y][ox + x] = 1; break; // ground
+          case 'p': tiles[y][ox + x] = 2; break; // platform
+          case 'c': tiles[y][ox + x] = 3; break; // collectible
+          case 'x': tiles[y][ox + x] = 4; break; // obstacle
+          case 'f': tiles[y][ox + x] = 5; break; // flag
+          case 'h': tiles[y][ox + x] = 7; break; // heart (extra life)
+          default: tiles[y][ox + x] = 0; break;  // empty
+        }
+      }
+    }
+  }
+
+  // Remove hearts that were already collected in this run
+  for (let y = 0; y < levelHeight; y++) {
+    for (let x = 0; x < levelWidth; x++) {
+      if (tiles[y][x] === 7 && collectedHearts.has(levelIdx + '_' + x + '_' + y)) {
+        tiles[y][x] = 0;
+      }
+    }
+  }
+
+  return { tiles, width: levelWidth, height: levelHeight };
+}
+
+let currentLevelData = null;
+
+// ============================================================
+// PLAYER
+// ============================================================
+let player = {
+  x: 100, y: 300,
+  vx: 0, vy: 0,
+  w: 28, h: 36,
+  onGround: false,
+  facing: 1,
+  animFrame: 0,
+  animTimer: 0,
+  isDead: false,
+  deathTimer: 0,
+  canDoubleJump: false,
+  hasDoubleJumped: false,
+  jumpHeld: false,
+  invincible: 0,
+};
+
+function resetPlayer() {
+  player.x = 100;
+  player.y = 300;
+  player.vx = 0;
+  player.vy = 0;
+  player.onGround = false;
+  player.isDead = false;
+  player.deathTimer = 0;
+  player.hasDoubleJumped = false;
+  player.jumpHeld = false;
+  player.invincible = 0;
+  player.animFrame = 0;
+}
+
+// ============================================================
+// CAMERA
+// ============================================================
+let camera = { x: 0, y: 0 };
+
+function updateCamera() {
+  // Camera leads ahead of the player for auto-runner visibility
+  const targetX = player.x - GAME_W / 4;
+  const targetY = player.y - GAME_H / 2;
+  camera.x += (targetX - camera.x) * 0.1;
+  camera.y += (targetY - camera.y) * 0.1;
+  camera.x = Math.max(0, Math.min(camera.x, currentLevelData.width * TILE_SIZE - GAME_W));
+  camera.y = Math.max(0, Math.min(camera.y, currentLevelData.height * TILE_SIZE - GAME_H));
+}
+
+// ============================================================
+// COLLECTIBLE & OBSTACLE RENDERING
+// ============================================================
+function drawVinylLP(x, y, size) {
+  const s = size;
+  const cx = x + s/2;
+  const cy = y + s/2;
+  // Outer edge — bright so it's visible
+  ctx.fillStyle = '#555';
+  ctx.beginPath(); ctx.arc(cx, cy, s/2, 0, Math.PI * 2); ctx.fill();
+  // Main disc — dark but visible
+  ctx.fillStyle = '#222';
+  ctx.beginPath(); ctx.arc(cx, cy, s/2 - 1, 0, Math.PI * 2); ctx.fill();
+  // Grooves — visible rings
+  ctx.strokeStyle = '#444';
+  ctx.lineWidth = 1;
+  for (let r = 4; r < s/2 - 3; r += 3) {
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+  }
+  // Shine — light reflection arc
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(cx - 1, cy - 1, s/3, -0.8, 0.3); ctx.stroke();
+  // Label — coloured center
+  ctx.fillStyle = BRAND.accent;
+  ctx.beginPath(); ctx.arc(cx, cy, s/4, 0, Math.PI * 2); ctx.fill();
+  // Label detail
+  ctx.fillStyle = '#d44a7a';
+  ctx.beginPath(); ctx.arc(cx, cy, s/6, 0, Math.PI * 2); ctx.fill();
+  // Center hole
+  ctx.fillStyle = '#fff';
+  ctx.beginPath(); ctx.arc(cx, cy, 2, 0, Math.PI * 2); ctx.fill();
+}
+
+function drawGoldRecord(x, y, size) {
+  const s = size;
+  ctx.fillStyle = BRAND.gold;
+  ctx.beginPath(); ctx.arc(x + s/2, y + s/2, s/2, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#c8a200';
+  ctx.beginPath(); ctx.arc(x + s/2, y + s/2, s/3, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = BRAND.gold;
+  ctx.beginPath(); ctx.arc(x + s/2, y + s/2, s/5, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#fff';
+  ctx.beginPath(); ctx.arc(x + s/2, y + s/2, 2, 0, Math.PI * 2); ctx.fill();
+}
+
+function drawPlayButton(x, y, size) {
+  const s = size;
+  // Circle
+  ctx.fillStyle = BRAND.red;
+  ctx.beginPath(); ctx.arc(x + s/2, y + s/2, s/2, 0, Math.PI * 2); ctx.fill();
+  // Triangle
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.moveTo(x + s * 0.35, y + s * 0.25);
+  ctx.lineTo(x + s * 0.75, y + s * 0.5);
+  ctx.lineTo(x + s * 0.35, y + s * 0.75);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function drawBackstagePass(x, y, size) {
+  const s = size;
+  ctx.fillStyle = BRAND.cyan;
+  ctx.fillRect(x + 2, y, s - 4, s);
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(x + 4, y + 2, s - 8, s * 0.3);
+  ctx.fillStyle = BRAND.dark;
+  ctx.fillRect(x + 6, y + s * 0.45, s - 12, 2);
+  ctx.fillRect(x + 6, y + s * 0.55, s - 12, 2);
+  ctx.fillRect(x + 6, y + s * 0.65, s * 0.4, 2);
+  // Lanyard hole
+  ctx.fillStyle = '#888';
+  ctx.beginPath(); ctx.arc(x + s/2, y + s - 4, 3, 0, Math.PI * 2); ctx.fill();
+}
+
+function drawDiamondRecord(x, y, size) {
+  const s = size;
+  // Diamond shape
+  ctx.fillStyle = '#A29BFE';
+  ctx.beginPath();
+  ctx.moveTo(x + s/2, y);
+  ctx.lineTo(x + s, y + s/2);
+  ctx.lineTo(x + s/2, y + s);
+  ctx.lineTo(x, y + s/2);
+  ctx.closePath();
+  ctx.fill();
+  // Shine
+  ctx.fillStyle = '#DFE6E9';
+  ctx.beginPath();
+  ctx.moveTo(x + s/2, y + 4);
+  ctx.lineTo(x + s * 0.65, y + s * 0.4);
+  ctx.lineTo(x + s/2, y + s/2);
+  ctx.lineTo(x + s * 0.35, y + s * 0.4);
+  ctx.closePath();
+  ctx.fill();
+}
+
+const collectDrawFuncs = [drawVinylLP, drawGoldRecord, drawPlayButton, drawBackstagePass, drawDiamondRecord];
+
+function drawObstacle(x, y, size, levelIdx) {
+  const s = size;
+  switch (levelIdx) {
+    case 0: // Broken guitar strings — spiky
+      ctx.fillStyle = '#888';
+      ctx.fillRect(x + s/2 - 2, y, 4, s);
+      ctx.fillStyle = BRAND.red;
+      // Spikes
+      for (let i = 0; i < 3; i++) {
+        const sy = y + i * s/3;
+        ctx.beginPath();
+        ctx.moveTo(x, sy + s/6);
+        ctx.lineTo(x + s/2, sy);
+        ctx.lineTo(x + s/2, sy + s/3);
+        ctx.closePath();
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(x + s, sy + s/6);
+        ctx.lineTo(x + s/2, sy);
+        ctx.lineTo(x + s/2, sy + s/3);
+        ctx.closePath();
+        ctx.fill();
+      }
+      break;
+    case 1: // Rejected demo boxes
+      ctx.fillStyle = '#8B7355';
+      ctx.fillRect(x + 2, y + s * 0.3, s - 4, s * 0.7);
+      ctx.fillStyle = '#A08060';
+      ctx.fillRect(x + 4, y + s * 0.35, s - 8, s * 0.3);
+      ctx.fillStyle = BRAND.red;
+      // X mark
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = BRAND.red;
+      ctx.beginPath();
+      ctx.moveTo(x + 8, y + s * 0.4);
+      ctx.lineTo(x + s - 8, y + s * 0.6);
+      ctx.moveTo(x + s - 8, y + s * 0.4);
+      ctx.lineTo(x + 8, y + s * 0.6);
+      ctx.stroke();
+      break;
+    case 2: // Bad review newspapers
+      ctx.fillStyle = '#F5F0E1';
+      ctx.fillRect(x + 4, y + 4, s - 8, s - 4);
+      ctx.fillStyle = '#333';
+      ctx.fillRect(x + 6, y + 8, s - 12, 3);
+      ctx.fillRect(x + 6, y + 14, s * 0.5, 2);
+      ctx.fillRect(x + 6, y + 18, s * 0.6, 2);
+      // Thumbs down
+      ctx.fillStyle = BRAND.red;
+      ctx.fillRect(x + s/2 - 4, y + s * 0.6, 8, 8);
+      ctx.fillRect(x + s/2 - 2, y + s * 0.5, 4, 6);
+      break;
+    case 3: // Potholes
+      ctx.fillStyle = '#2a2a2a';
+      ctx.beginPath();
+      ctx.ellipse(x + s/2, y + s * 0.7, s/2, s * 0.25, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#1a1a1a';
+      ctx.beginPath();
+      ctx.ellipse(x + s/2, y + s * 0.75, s/3, s * 0.15, 0, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    case 4: // Copyright strikes — lightning bolts
+      ctx.fillStyle = BRAND.gold;
+      ctx.beginPath();
+      ctx.moveTo(x + s * 0.55, y);
+      ctx.lineTo(x + s * 0.3, y + s * 0.45);
+      ctx.lineTo(x + s * 0.5, y + s * 0.45);
+      ctx.lineTo(x + s * 0.4, y + s);
+      ctx.lineTo(x + s * 0.7, y + s * 0.5);
+      ctx.lineTo(x + s * 0.5, y + s * 0.5);
+      ctx.closePath();
+      ctx.fill();
+      break;
+  }
+}
+
+// ============================================================
+// FLAG / END MARKER
+// ============================================================
+function drawFlag(x, y) {
+  // Pole
+  ctx.fillStyle = '#DFE6E9';
+  ctx.fillRect(x + 12, y - 64, 4, 96);
+  // Flag
+  ctx.fillStyle = BRAND.accent;
+  ctx.beginPath();
+  ctx.moveTo(x + 16, y - 64);
+  ctx.lineTo(x + 44, y - 48);
+  ctx.lineTo(x + 16, y - 32);
+  ctx.closePath();
+  ctx.fill();
+  // Star on flag
+  ctx.fillStyle = BRAND.gold;
+  ctx.beginPath();
+  ctx.arc(x + 26, y - 48, 4, 0, Math.PI * 2);
+  ctx.fill();
+  // Base
+  ctx.fillStyle = '#636e72';
+  ctx.fillRect(x + 6, y + 28, 20, 4);
+}
+
+// ============================================================
+// PARALLAX BACKGROUNDS
+// ============================================================
+function drawBackground(theme, camX) {
+  // Sky gradient
+  const grad = ctx.createLinearGradient(0, 0, 0, GAME_H);
+  grad.addColorStop(0, theme.bg3);
+  grad.addColorStop(1, theme.bg1);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, GAME_W, GAME_H);
+
+  // Stars
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  for (let i = 0; i < 50; i++) {
+    const sx = ((i * 137 + 50) % GAME_W + GAME_W - camX * 0.02 % GAME_W) % GAME_W;
+    const sy = (i * 73 + 20) % (GAME_H * 0.5);
+    ctx.fillRect(sx, sy, 2, 2);
+  }
+
+  // Back mountains (layer 1 — slowest)
+  ctx.fillStyle = theme.bg2;
+  for (let i = 0; i < 10; i++) {
+    const bx = i * 160 - (camX * 0.1) % 160;
+    const bh = 80 + (i * 47) % 60;
+    ctx.beginPath();
+    ctx.moveTo(bx, GAME_H);
+    ctx.lineTo(bx + 80, GAME_H - bh);
+    ctx.lineTo(bx + 160, GAME_H);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Mid buildings (layer 2)
+  ctx.fillStyle = theme.bg1;
+  for (let i = 0; i < 15; i++) {
+    const bx = i * 100 - (camX * 0.25) % 100;
+    const bh = 40 + (i * 31) % 80;
+    ctx.fillRect(bx, GAME_H - bh, 60, bh);
+    // Windows
+    ctx.fillStyle = 'rgba(255,255,200,0.15)';
+    for (let wy = GAME_H - bh + 8; wy < GAME_H - 8; wy += 14) {
+      for (let wx = bx + 8; wx < bx + 52; wx += 16) {
+        ctx.fillRect(wx, wy, 8, 8);
+      }
+    }
+    ctx.fillStyle = theme.bg1;
+  }
+}
+
+// ============================================================
+// DRAW CHARACTER
+// ============================================================
+function drawCharacter(charKey, x, y, state, scale = 3, facing = 1) {
+  const ch = CHAR_SPRITES[charKey];
+  if (!ch) return;
+  colorMap['s'] = ch.skin;
+  let sprite;
+  if (state === 'jump') sprite = ch.jump;
+  else if (state === 'run') sprite = ch.run1;
+  else sprite = ch.idle;
+
+  drawPixelArt(sprite, x, y, scale, facing < 0);
+}
+
+// ============================================================
+// SOCIAL SHARE ICONS (Pixel Art Style)
+// ============================================================
+function drawPixelSocialIcon(type, x, y, size) {
+  const s = size;
+  const p = Math.max(1, Math.floor(s / 16)); // pixel unit
+
+  // Background circle/square
+  const colors = {
+    twitter: '#1DA1F2', facebook: '#4267B2', linkedin: '#0077B5',
+    whatsapp: '#25D366', reddit: '#FF4500', email: '#888888', copy: BRAND.primary,
+  };
+  ctx.fillStyle = colors[type] || '#888';
+  // Rounded square
+  ctx.fillRect(x + p, y, s - p*2, s);
+  ctx.fillRect(x, y + p, s, s - p*2);
+
+  // Icon in white pixels
+  ctx.fillStyle = '#fff';
+  const cx = x + s/2;
+  const cy = y + s/2;
+
+  switch(type) {
+    case 'twitter': // X logo
+      ctx.fillRect(cx - 5*p, cy - 5*p, 2*p, 2*p);
+      ctx.fillRect(cx + 3*p, cy - 5*p, 2*p, 2*p);
+      ctx.fillRect(cx - 3*p, cy - 3*p, 2*p, 2*p);
+      ctx.fillRect(cx + 1*p, cy - 3*p, 2*p, 2*p);
+      ctx.fillRect(cx - 1*p, cy - 1*p, 2*p, 2*p);
+      ctx.fillRect(cx - 3*p, cy + 1*p, 2*p, 2*p);
+      ctx.fillRect(cx + 1*p, cy + 1*p, 2*p, 2*p);
+      ctx.fillRect(cx - 5*p, cy + 3*p, 2*p, 2*p);
+      ctx.fillRect(cx + 3*p, cy + 3*p, 2*p, 2*p);
+      break;
+    case 'facebook': // F
+      ctx.fillRect(cx - 1*p, cy - 5*p, 4*p, 2*p);
+      ctx.fillRect(cx - 1*p, cy - 5*p, 2*p, 10*p);
+      ctx.fillRect(cx - 3*p, cy - 1*p, 6*p, 2*p);
+      break;
+    case 'linkedin': // in
+      ctx.fillRect(cx - 5*p, cy - 5*p, 2*p, 2*p);
+      ctx.fillRect(cx - 5*p, cy - 1*p, 2*p, 6*p);
+      ctx.fillRect(cx - 1*p, cy - 1*p, 2*p, 6*p);
+      ctx.fillRect(cx - 1*p, cy - 1*p, 4*p, 2*p);
+      ctx.fillRect(cx + 3*p, cy + 1*p, 2*p, 4*p);
+      break;
+    case 'whatsapp': // Phone
+      ctx.fillRect(cx - 3*p, cy - 5*p, 6*p, 2*p);
+      ctx.fillRect(cx - 5*p, cy - 3*p, 2*p, 6*p);
+      ctx.fillRect(cx + 3*p, cy - 3*p, 2*p, 6*p);
+      ctx.fillRect(cx - 3*p, cy + 3*p, 6*p, 2*p);
+      ctx.fillRect(cx - 1*p, cy - 1*p, 4*p, 2*p);
+      ctx.fillRect(cx + 1*p, cy - 1*p, 2*p, 4*p);
+      break;
+    case 'reddit': // Robot face
+      ctx.fillRect(cx - 5*p, cy - 3*p, 10*p, 2*p);
+      ctx.fillRect(cx - 5*p, cy - 1*p, 2*p, 4*p);
+      ctx.fillRect(cx + 3*p, cy - 1*p, 2*p, 4*p);
+      ctx.fillRect(cx - 5*p, cy + 3*p, 10*p, 2*p);
+      ctx.fillRect(cx - 3*p, cy - 1*p, 2*p, 2*p);
+      ctx.fillRect(cx + 1*p, cy - 1*p, 2*p, 2*p);
+      ctx.fillRect(cx - 1*p, cy - 5*p, 2*p, 2*p);
+      break;
+    case 'email': // Envelope
+      ctx.fillRect(cx - 5*p, cy - 3*p, 10*p, 2*p);
+      ctx.fillRect(cx - 5*p, cy + 3*p, 10*p, 2*p);
+      ctx.fillRect(cx - 5*p, cy - 1*p, 2*p, 4*p);
+      ctx.fillRect(cx + 3*p, cy - 1*p, 2*p, 4*p);
+      ctx.fillRect(cx - 3*p, cy - 1*p, 2*p, 2*p);
+      ctx.fillRect(cx + 1*p, cy - 1*p, 2*p, 2*p);
+      ctx.fillRect(cx - 1*p, cy + 1*p, 2*p, 2*p);
+      break;
+    case 'copy': // Clipboard
+      ctx.fillRect(cx - 3*p, cy - 5*p, 6*p, 2*p);
+      ctx.fillRect(cx - 5*p, cy - 3*p, 2*p, 8*p);
+      ctx.fillRect(cx + 3*p, cy - 3*p, 2*p, 8*p);
+      ctx.fillRect(cx - 3*p, cy + 3*p, 6*p, 2*p);
+      ctx.fillRect(cx - 1*p, cy - 1*p, 4*p, 2*p);
+      ctx.fillRect(cx - 1*p, cy + 1*p, 2*p, 2*p);
+      break;
+  }
+}
+
+function drawShareButtons(yStart, scoreText) {
+  const platforms = MENU_SOCIAL_PLATFORMS;
+  const labels = ['X', 'FB', 'IN', 'WA', 'RD', 'EM', 'CP'];
+  const iconSize = 40;
+  const gap = 12;
+  const totalW = platforms.length * (iconSize + gap) - gap;
+  const startX = GAME_W / 2 - totalW / 2;
+
+  const shareSelected = menuSelection >= 2;
+  drawPixelText('SHARE YOUR SCORE', GAME_W / 2, yStart, 2, shareSelected ? BRAND.gold : '#8a7030', true);
+
+  for (let i = 0; i < platforms.length; i++) {
+    const ix = startX + i * (iconSize + gap);
+    const iy = yStart + 20;
+    const isHighlighted = menuSelection === 2 + i;
+
+    if (isHighlighted) {
+      // Glowing highlight box
+      ctx.fillStyle = 'rgba(253,121,168,0.3)';
+      ctx.fillRect(ix - 4, iy - 4, iconSize + 8, iconSize + 8);
+      ctx.strokeStyle = BRAND.accent;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(ix - 4, iy - 4, iconSize + 8, iconSize + 8);
+    }
+
+    drawPixelSocialIcon(platforms[i], ix, iy, iconSize);
+    drawPixelText(labels[i], ix + iconSize / 2, iy + iconSize + 4, 1, isHighlighted ? BRAND.accent : BRAND.light, true);
+  }
+}
+
+function shareTo(platform, scoreText) {
+  const msg = `I just scored ${score} on TEAM RUN! Can you beat my score? Play the hidden game at teamrollouts.com/teamrun`;
+  const url = 'https://teamrollouts.com';
+  const encoded = encodeURIComponent(msg);
+  const encodedUrl = encodeURIComponent(url);
+
+  let shareUrl = '';
+  switch(platform) {
+    case 'twitter':
+      shareUrl = `https://twitter.com/intent/tweet?text=${encoded}`;
+      break;
+    case 'facebook':
+      shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encoded}`;
+      break;
+    case 'linkedin':
+      shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+      break;
+    case 'whatsapp':
+      shareUrl = `https://wa.me/?text=${encoded}`;
+      break;
+    case 'reddit':
+      shareUrl = `https://reddit.com/submit?url=${encodedUrl}&title=${encodeURIComponent('TEAM RUN - Music Release Platformer')}`;
+      break;
+    case 'email':
+      shareUrl = `mailto:?subject=${encodeURIComponent('Can you beat my TEAM RUN score?')}&body=${encoded}`;
+      break;
+    case 'copy':
+      navigator.clipboard.writeText(msg).catch(() => {});
+      return;
+  }
+  if (shareUrl) window.open(shareUrl, '_blank');
+}
+
+// ============================================================
+// DRAW TEAM LOGO (Nintendo-style badge)
+// ============================================================
+function drawTeamLogo(x, y, scale = 1) {
+  const w = 200 * scale;
+  const h = 80 * scale;
+  const bx = x - w/2;
+  const by = y - h/2;
+
+  // Outer border (rounded pixel rectangle)
+  ctx.fillStyle = BRAND.primary;
+  ctx.fillRect(bx + 4, by, w - 8, h);
+  ctx.fillRect(bx, by + 4, w, h - 8);
+  ctx.fillRect(bx + 2, by + 2, w - 4, h - 4);
+
+  // Inner fill
+  ctx.fillStyle = BRAND.dark;
+  ctx.fillRect(bx + 6, by + 6, w - 12, h - 12);
+
+  // "TEAM" text
+  drawPixelText('TEAM', x, by + h * 0.25, 5 * scale, BRAND.white, true);
+
+  // Subtitle
+  drawPixelText('ENTERTAINMENT SYSTEM', x, by + h * 0.7, 1.5 * scale, BRAND.secondary, true);
+
+  // Corner accents
+  const cs = 4;
+  ctx.fillStyle = BRAND.accent;
+  ctx.fillRect(bx + 8, by + 8, cs, cs);
+  ctx.fillRect(bx + w - 8 - cs, by + 8, cs, cs);
+  ctx.fillRect(bx + 8, by + h - 8 - cs, cs, cs);
+  ctx.fillRect(bx + w - 8 - cs, by + h - 8 - cs, cs, cs);
+}
+
+// ============================================================
+// STATE: SPLASH SCREEN
+// ============================================================
+function updateSplash(dt) {
+  stateTimer += dt;
+  if (stateTimer > 2.5 || wasJustPressed('Space') || wasJustPressed('Enter')) {
+    gameState = STATE.TITLE;
+    stateTimer = 0;
+    initAudio();
+  }
+}
+
+function drawSplash() {
+  ctx.fillStyle = BRAND.dark;
+  ctx.fillRect(0, 0, GAME_W, GAME_H);
+
+  const alpha = stateTimer < 0.5 ? stateTimer / 0.5 : stateTimer > 2 ? Math.max(0, 1 - (stateTimer - 2) / 0.5) : 1;
+  ctx.globalAlpha = alpha;
+
+  drawTeamLogo(GAME_W / 2, GAME_H / 2 - 15, 1.2);
+
+  // Loading text with animated dots
+  const dots = '.'.repeat(Math.floor(stateTimer * 2) % 4);
+  drawPixelText('LOADING' + dots, GAME_W / 2, GAME_H / 2 + 55, 2, BRAND.secondary, true);
+
+  // Music credit
+  drawPixelText('MUSIC BY VLAD KROTOV FROM PIXABAY', GAME_W / 2, GAME_H - 30, 1.2, BRAND.secondary, true);
+
+  // Scanline effect
+  ctx.fillStyle = 'rgba(0,0,0,0.03)';
+  for (let sy = 0; sy < GAME_H; sy += 3) {
+    ctx.fillRect(0, sy, GAME_W, 1);
+  }
+
+  ctx.globalAlpha = 1;
+}
+
+// ============================================================
+// STATE: TITLE SCREEN
+// ============================================================
+let titleBgScroll = 0;
+let titleBlink = 0;
+
+// Level skip backdoor — press a number 1-5 five times on title screen
+let skipKey = null;
+let skipCount = 0;
+let skipTimer = 0;
+
+function updateTitle(dt) {
+  stateTimer += dt;
+  titleBgScroll += dt * 60;
+  titleBlink += dt;
+
+  if (wasJustPressed('Space') || wasJustPressed('Enter')) {
+    sfxMenuSelect();
+    gameState = STATE.CHAR_SELECT;
+    stateTimer = 0;
+  }
+}
+
+function drawTitle() {
+  // Animated background — scrolling landscape
+  const theme = LEVEL_THEMES[0];
+  drawBackground(theme, titleBgScroll);
+
+  // Draw some ground
+  ctx.fillStyle = theme.groundColor;
+  ctx.fillRect(0, GAME_H - 60, GAME_W, 60);
+  ctx.fillStyle = '#4a4a7a';
+  ctx.fillRect(0, GAME_H - 60, GAME_W, 4);
+
+  // Animated character running
+  const runFrame = Math.floor(stateTimer * 6) % 2 === 0 ? 'run' : 'idle';
+  const charX = 100 + Math.sin(stateTimer * 0.5) * 30;
+  drawCharacter('manager', charX, GAME_H - 96, runFrame, 3, 1);
+
+  // Some floating collectibles
+  for (let i = 0; i < 5; i++) {
+    const cx = 250 + i * 100;
+    const cy = GAME_H - 100 - Math.sin(stateTimer * 2 + i) * 15;
+    drawVinylLP(cx, cy, 24);
+  }
+
+  // Title overlay
+  ctx.fillStyle = 'rgba(10,10,26,0.6)';
+  ctx.fillRect(0, 0, GAME_W, GAME_H * 0.55);
+
+  // "TEAM RUN" title
+  const titleY = 60;
+  // Shadow
+  drawPixelText('TEAM RUN', GAME_W / 2 + 4, titleY + 4, 8, '#000000', true);
+  // Main
+  drawPixelText('TEAM RUN', GAME_W / 2, titleY, 8, BRAND.primary, true);
+  // Highlight
+  drawPixelText('TEAM RUN', GAME_W / 2, titleY - 2, 8, BRAND.secondary, true);
+
+  // Subtitle
+  drawPixelText('A MUSIC RELEASE ADVENTURE', GAME_W / 2, titleY + 60, 2, BRAND.accent, true);
+
+  // Blinking "PRESS START"
+  if (Math.floor(titleBlink * 2) % 2 === 0) {
+    drawPixelText('PRESS SPACE TO START', GAME_W / 2, GAME_H * 0.48, 2, BRAND.white, true);
+  }
+
+  // High score
+  if (highScore > 0) {
+    drawPixelText('HIGH SCORE: ' + highScore, GAME_W / 2, GAME_H - 30, 2, BRAND.gold, true);
+  }
+
+  // (Music mute handled globally in game loop)
+
+  // Version
+  drawPixelText('V1.0', 10, GAME_H - 16, 1, '#444', false);
+}
+
+// ============================================================
+// STATE: CHARACTER SELECT
+// ============================================================
+let charSelectAnim = 0;
+
+function updateCharSelect(dt) {
+  stateTimer += dt;
+  charSelectAnim += dt;
+
+  if (wasJustPressed('ArrowRight') || wasJustPressed('KeyD')) {
+    selectedChar = (selectedChar + 1) % charKeys.length;
+    sfxMenuSelect();
+  }
+  if (wasJustPressed('ArrowLeft') || wasJustPressed('KeyA')) {
+    selectedChar = (selectedChar - 1 + charKeys.length) % charKeys.length;
+    sfxMenuSelect();
+  }
+  if (wasJustPressed('Space') || wasJustPressed('Enter')) {
+    sfxMenuSelect();
+    gameState = STATE.INSTRUCTIONS;
+    stateTimer = 0;
+    countdownNum = 3;
+    score = 0;
+    lives = charKeys[selectedChar] === 'ceo' ? 5 : 3;
+    deathCount = 0;
+    totalCollected = 0;
+    collectedHearts = new Set();
+    currentLevel = 0;
+    startLevel(0);
+  }
+
+  // Level skip backdoor — press a number 1-5 five times to jump to that level
+  skipTimer += dt;
+  if (skipTimer > 2) { skipKey = null; skipCount = 0; }
+  for (let lvl = 1; lvl <= 5; lvl++) {
+    if (wasJustPressed('Digit' + lvl)) {
+      if (skipKey === lvl) { skipCount++; skipTimer = 0; }
+      else { skipKey = lvl; skipCount = 1; skipTimer = 0; }
+      if (skipCount >= 5) {
+        sfxMenuSelect();
+        skipCount = 0;
+        skipKey = null;
+        gameState = STATE.COUNTDOWN;
+        stateTimer = 0;
+        countdownNum = 3;
+        score = 0;
+        lives = charKeys[selectedChar] === 'ceo' ? 5 : 3;
+        deathCount = 0;
+        totalCollected = 0;
+        collectedHearts = new Set();
+        currentLevel = lvl - 1;
+        startLevel(lvl - 1);
+      }
+    }
+  }
+}
+
+function drawCharSelect() {
+  ctx.fillStyle = BRAND.dark;
+  ctx.fillRect(0, 0, GAME_W, GAME_H);
+
+  drawPixelText('CHOOSE YOUR CHARACTER', GAME_W / 2, 30, 3, BRAND.primary, true);
+
+  // Infinite loop carousel — no boxes, just characters
+  const centerX = GAME_W / 2;
+  const centerY = GAME_H / 2 - 10;
+  const spacing = 160;
+  const numChars = charKeys.length;
+
+  // Draw positions -3 to +3 for infinite wrapping
+  for (let pos = -3; pos <= 3; pos++) {
+    // Wrap index for infinite loop
+    const idx = ((selectedChar + pos) % numChars + numChars) % numChars;
+    const cx = centerX + pos * spacing;
+    const isSelected = pos === 0;
+
+    // Skip if off screen
+    if (cx < -80 || cx > GAME_W + 80) continue;
+
+    // Scale and fade based on distance from center
+    const dist = Math.abs(pos);
+    const alpha = isSelected ? 1 : Math.max(0.15, 0.5 - dist * 0.15);
+    const sprScale = isSelected ? 5 : Math.max(2, 3.5 - dist * 0.5);
+    const yOffset = isSelected ? 0 : 20 + dist * 5;
+
+    ctx.globalAlpha = alpha;
+
+    const ch_key = charKeys[idx];
+    const sprChar = CHAR_SPRITES[ch_key];
+
+    // Animation — selected bounces and animates, others are static
+    const animState = isSelected ? (Math.floor(charSelectAnim * 3) % 2 === 0 ? 'idle' : 'run') : 'idle';
+    const bounceY = isSelected ? Math.sin(charSelectAnim * 4) * 6 : 0;
+
+    const sprW = 12 * sprScale;
+    const sprH = 12 * sprScale;
+    const charY = centerY - sprH / 2 + yOffset + bounceY;
+
+    drawCharacter(ch_key, cx - sprW / 2, charY, animState, sprScale);
+
+    // Name and tagline below character
+    const textY = centerY + sprH / 2 + yOffset + bounceY + 20;
+    const nameScale = isSelected ? 2.5 : 1.5;
+    const tagScale = isSelected ? 1.5 : 1;
+    const nameColor = isSelected ? BRAND.white : BRAND.light;
+    const tagColor = isSelected ? BRAND.secondary : BRAND.light;
+
+    drawPixelText(sprChar.name, cx, textY, nameScale, nameColor, true);
+    drawPixelText(sprChar.tagline, cx, textY + nameScale * 7 + 4, tagScale, tagColor, true);
+
+    ctx.globalAlpha = 1;
+  }
+
+  // Selection indicator — subtle glow under selected character
+  ctx.globalAlpha = 0.15 + Math.sin(charSelectAnim * 3) * 0.05;
+  ctx.fillStyle = BRAND.primary;
+  ctx.beginPath();
+  ctx.ellipse(centerX, centerY + 80, 60, 10, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // Arrows (always visible — infinite loop)
+  const arrowBlink = Math.sin(stateTimer * 4) > 0;
+  const arrowAlpha = arrowBlink ? 1 : 0.4;
+  ctx.globalAlpha = arrowAlpha;
+  drawPixelText('<', 30, centerY - 10, 4, BRAND.accent, true);
+  drawPixelText('>', GAME_W - 30, centerY - 10, 4, BRAND.accent, true);
+  ctx.globalAlpha = 1;
+
+  // Special ability note for selected character
+  const selKey = charKeys[selectedChar];
+  if (selKey === 'dj') {
+    drawPixelText('SPECIAL: DOUBLE JUMP!', GAME_W / 2, GAME_H - 55, 1.5, BRAND.gold, true);
+  } else if (selKey === 'producer') {
+    drawPixelText('SPECIAL: HIGH JUMP!', GAME_W / 2, GAME_H - 55, 1.5, BRAND.gold, true);
+  } else if (selKey === 'ar') {
+    drawPixelText('SPECIAL: EXTRA SPEED!', GAME_W / 2, GAME_H - 55, 1.5, BRAND.gold, true);
+  } else if (selKey === 'intern') {
+    drawPixelText('HARD MODE: FASTEST SPEED!', GAME_W / 2, GAME_H - 55, 1.5, BRAND.red, true);
+  } else if (selKey === 'ceo') {
+    drawPixelText('EASY MODE: FULL CONTROL + 5 LIVES', GAME_W / 2, GAME_H - 55, 1.5, BRAND.gold, true);
+  }
+
+  // Instructions
+  drawPixelText('ARROWS TO SELECT  -  SPACE TO CONFIRM', GAME_W / 2, GAME_H - 30, 1.5, BRAND.light, true);
+}
+
+// ============================================================
+// STATE: INSTRUCTIONS
+// ============================================================
+function updateInstructions(dt) {
+  stateTimer += dt;
+  if (wasJustPressed('Space') || wasJustPressed('Enter')) {
+    sfxMenuSelect();
+    gameState = STATE.COUNTDOWN;
+    stateTimer = 0;
+  }
+}
+
+function drawInstructions() {
+  ctx.fillStyle = BRAND.dark;
+  ctx.fillRect(0, 0, GAME_W, GAME_H);
+
+  drawPixelText('HOW TO PLAY', GAME_W / 2, 100, 5, BRAND.white, true);
+
+  drawPixelText('PRESS  SPACE  TO JUMP', GAME_W / 2, 220, 3, BRAND.green, true);
+
+  drawPixelText('COLLECT RELEASES TO SCORE POINTS', GAME_W / 2, 300, 2, BRAND.light, true);
+  drawPixelText('AVOID HAZARDS OR LOSE A LIFE', GAME_W / 2, 340, 2, BRAND.light, true);
+  drawPixelText('REACH THE END OF EACH LEVEL TO PROGRESS', GAME_W / 2, 380, 2, BRAND.light, true);
+
+  // Pulsing prompt
+  var alpha = 0.5 + Math.sin(stateTimer * 3) * 0.5;
+  var col = 'rgba(217,250,135,' + alpha.toFixed(2) + ')';
+  drawPixelText('PRESS SPACE TO START', GAME_W / 2, GAME_H - 60, 2.5, col, true);
+}
+
+// ============================================================
+// STATE: COUNTDOWN
+// ============================================================
+function updateCountdown(dt) {
+  stateTimer += dt;
+
+  if (stateTimer > 1 && countdownNum > 0) {
+    countdownNum--;
+    stateTimer = 0;
+    if (countdownNum > 0) sfxCountdown();
+    else sfxGo();
+  }
+  if (countdownNum === 0 && stateTimer > 0.5) {
+    gameState = STATE.PLAYING;
+    stateTimer = 0;
+    levelTime = 0;
+  }
+}
+
+function drawCountdown() {
+  ctx.fillStyle = BRAND.dark;
+  ctx.fillRect(0, 0, GAME_W, GAME_H);
+
+  const theme = LEVEL_THEMES[currentLevel];
+
+  // Level name
+  drawPixelText('LEVEL ' + (currentLevel + 1), GAME_W / 2, 120, 3, BRAND.secondary, true);
+  drawPixelText(theme.name, GAME_W / 2, 160, 5, BRAND.white, true);
+  drawPixelText(theme.subtitle, GAME_W / 2, 210, 2, BRAND.accent, true);
+
+  // Countdown number
+  const text = countdownNum > 0 ? countdownNum.toString() : 'GO!';
+  const scale = countdownNum > 0 ? 12 : 8;
+  const color = countdownNum > 0 ? BRAND.white : BRAND.green;
+
+  // Pulse effect
+  const pulse = 1 + Math.sin(stateTimer * 10) * 0.1;
+  const s = scale * pulse;
+
+  drawPixelText(text, GAME_W / 2, GAME_H / 2 + 20, s, color, true);
+
+  // Promo text
+  if (charKeys[selectedChar] === 'ceo') {
+    drawPixelText('LABEL OWNER MODE: FULL CONTROL + EXTRA JUMP HEIGHT', GAME_W / 2, GAME_H - 40, 1.5, BRAND.gold, true);
+  } else {
+    drawPixelText('HEAD OVER TO TEAMROLLOUTS.COM TO MANAGE YOUR NEXT RELEASE!', GAME_W / 2, GAME_H - 40, 1.3, BRAND.light, true);
+  }
+}
+
+// ============================================================
+// START LEVEL
+// ============================================================
+function startLevel(idx) {
+  currentLevel = idx;
+  currentLevelData = generateLevel(idx);
+  resetPlayer();
+  camera.x = 0;
+  camera.y = 0;
+  scoreAtLevelStart = score;
+  collectedAtLevelStart = totalCollected;
+  levelScore = 0;
+  levelTime = 0;
+  particles = [];
+  player.canDoubleJump = charKeys[selectedChar] === 'dj';
+}
+
+// ============================================================
+// STATE: PLAYING
+// ============================================================
+function updatePlaying(dt) {
+  if (player.isDead) {
+    player.deathTimer += dt;
+    if (player.deathTimer > 1.5) {
+      lives--;
+      if (lives <= 0) {
+        gameState = STATE.GAME_OVER;
+        stateTimer = 0;
+        menuSelection = 0;
+        gameOverQuip = GAME_OVER_QUIPS[Math.floor(Math.random() * GAME_OVER_QUIPS.length)];
+        if (score > highScore) {
+          highScore = score;
+          localStorage.setItem('teamrun_highscore', highScore.toString());
+        }
+      } else {
+        // Reset score to what it was at level start and regenerate level
+        score = scoreAtLevelStart;
+        totalCollected = collectedAtLevelStart;
+        currentLevelData = generateLevel(currentLevel);
+        resetPlayer();
+        camera.x = 0;
+        camera.y = 0;
+        levelScore = 0;
+        levelTime = 0;
+        particles = [];
+      }
+    }
+    updateParticles();
+    return;
+  }
+
+  levelTime += dt;
+
+  // Invincibility frames
+  if (player.invincible > 0) player.invincible -= dt;
+
+  // Movement
+  const charKey = charKeys[selectedChar];
+  const isCEO = charKey === 'ceo';
+
+  if (isCEO) {
+    // CEO: manual left/right control (not auto-run)
+    const speed = 4;
+    if (isKeyPressed('ArrowRight') || isKeyPressed('KeyD')) {
+      player.vx = speed;
+      player.facing = 1;
+    } else if (isKeyPressed('ArrowLeft') || isKeyPressed('KeyA')) {
+      player.vx = -speed;
+      player.facing = -1;
+    } else {
+      player.vx *= 0.7;
+    }
+  } else {
+    // Everyone else: auto-run
+    const speed = charKey === 'producer' ? 3.5 : charKey === 'manager' ? 4 : charKey === 'ar' ? 5 : charKey === 'intern' ? 6 : charKey === 'dj' ? 4 : 4;
+    player.vx = speed;
+    player.facing = 1;
+  }
+
+  // Jump (spacebar, up arrow, or W)
+  // CEO gets double jump height + double jump ability
+  const jumpPower = isCEO ? -16 : charKey === 'producer' ? -13 : -11;
+  if (wasJustPressed('Space') || wasJustPressed('ArrowUp') || wasJustPressed('KeyW')) {
+    if (player.onGround) {
+      player.vy = jumpPower;
+      player.onGround = false;
+      player.hasDoubleJumped = false;
+      sfxJump();
+    } else if ((player.canDoubleJump || isCEO) && !player.hasDoubleJumped) {
+      player.vy = jumpPower * 0.85;
+      player.hasDoubleJumped = true;
+      sfxJump();
+      spawnParticles(player.x + player.w/2, player.y + player.h, BRAND.accent, 5);
+    }
+  }
+
+  // Gravity
+  player.vy += 0.6;
+  if (player.vy > 12) player.vy = 12;
+
+  // Move X
+  player.x += player.vx;
+  // Clamp to level bounds
+  if (player.x < 0) player.x = 0;
+  if (player.x + player.w > currentLevelData.width * TILE_SIZE) player.x = currentLevelData.width * TILE_SIZE - player.w;
+
+  // Collide X
+  resolveCollisionX();
+
+  // Move Y
+  player.y += player.vy;
+
+  // Collide Y
+  player.onGround = false;
+  resolveCollisionY();
+
+  // Fall into pit
+  if (player.y > currentLevelData.height * TILE_SIZE + 50) {
+    killPlayer();
+  }
+
+  // Scrolled off left edge of screen — death
+  if (player.x + player.w < camera.x) {
+    killPlayer();
+  }
+
+  // Check collectibles
+  checkCollectibles();
+
+  // Check obstacles
+  checkObstacles();
+
+  // Check flag
+  checkFlag();
+
+  // Update camera
+  updateCamera();
+
+  // Animate
+  player.animTimer += dt;
+  if (player.animTimer > 0.15) {
+    player.animTimer = 0;
+    player.animFrame = (player.animFrame + 1) % 2;
+  }
+
+  updateParticles();
+  updateShake();
+
+  // Pause
+  if (wasJustPressed('Escape') || wasJustPressed('KeyP')) {
+    gameState = STATE.PAUSED;
+  }
+
+  // Mute toggle
+  if (wasJustPressed('KeyM')) audioEnabled = !audioEnabled;
+}
+
+function getTile(tx, ty) {
+  if (tx < 0 || ty < 0 || tx >= currentLevelData.width || ty >= currentLevelData.height) return 0;
+  return currentLevelData.tiles[ty][tx];
+}
+
+function isSolid(tx, ty) {
+  const t = getTile(tx, ty);
+  return t === 1 || t === 2;
+}
+
+function resolveCollisionX() {
+  const left = Math.floor(player.x / TILE_SIZE);
+  const right = Math.floor((player.x + player.w) / TILE_SIZE);
+  const top = Math.floor(player.y / TILE_SIZE);
+  const bot = Math.floor((player.y + player.h - 1) / TILE_SIZE);
+
+  for (let ty = top; ty <= bot; ty++) {
+    for (let tx = left; tx <= right; tx++) {
+      if (isSolid(tx, ty)) {
+        const tileLeft = tx * TILE_SIZE;
+        const tileRight = tileLeft + TILE_SIZE;
+        if (player.vx > 0) {
+          player.x = tileLeft - player.w - 0.1;
+        } else if (player.vx < 0) {
+          player.x = tileRight + 0.1;
+        }
+        player.vx = 0;
+      }
+    }
+  }
+}
+
+function resolveCollisionY() {
+  const left = Math.floor(player.x / TILE_SIZE);
+  const right = Math.floor((player.x + player.w - 1) / TILE_SIZE);
+  const top = Math.floor(player.y / TILE_SIZE);
+  const bot = Math.floor((player.y + player.h) / TILE_SIZE);
+
+  for (let ty = top; ty <= bot; ty++) {
+    for (let tx = left; tx <= right; tx++) {
+      if (isSolid(tx, ty)) {
+        const tileTop = ty * TILE_SIZE;
+        const tileBot = tileTop + TILE_SIZE;
+        if (player.vy > 0) {
+          player.y = tileTop - player.h;
+          player.vy = 0;
+          player.onGround = true;
+        } else if (player.vy < 0) {
+          player.y = tileBot;
+          player.vy = 0;
+        }
+      }
+    }
+  }
+}
+
+function checkCollectibles() {
+  const px = player.x + player.w / 2;
+  const py = player.y + player.h / 2;
+  const tx = Math.floor(px / TILE_SIZE);
+  const ty = Math.floor(py / TILE_SIZE);
+
+  for (let dy = -1; dy <= 1; dy++) {
+    for (let dx = -1; dx <= 1; dx++) {
+      const cx = tx + dx;
+      const cy = ty + dy;
+      const tileVal = getTile(cx, cy);
+      if (tileVal === 3 || tileVal === 7) {
+        // Check actual proximity
+        const tileCX = cx * TILE_SIZE + TILE_SIZE / 2;
+        const tileCY = cy * TILE_SIZE + TILE_SIZE / 2;
+        const dist = Math.hypot(px - tileCX, py - tileCY);
+        if (dist < TILE_SIZE) {
+          currentLevelData.tiles[cy][cx] = 0;
+          if (tileVal === 7) {
+            // Heart — extra life, permanently collected
+            lives++;
+            collectedHearts.add(currentLevel + '_' + cx + '_' + cy);
+            sfxLevelComplete();
+            spawnParticles(tileCX, tileCY, BRAND.accent, 12);
+            spawnParticles(tileCX, tileCY, '#ff9fc4', 8);
+          } else {
+            // Regular collectible
+            const pts = COLLECT_SCORES[currentLevel];
+            score += pts;
+            levelScore += pts;
+            totalCollected++;
+            sfxCollect();
+            spawnParticles(tileCX, tileCY, BRAND.gold, 6);
+            spawnParticles(tileCX, tileCY, BRAND.primary, 4);
+          }
+        }
+      }
+    }
+  }
+}
+
+function checkObstacles() {
+  if (player.invincible > 0) return;
+  const px = player.x + player.w / 2;
+  const py = player.y + player.h / 2;
+  const tx = Math.floor(px / TILE_SIZE);
+  const ty = Math.floor(py / TILE_SIZE);
+
+  for (let dy = -1; dy <= 1; dy++) {
+    for (let dx = -1; dx <= 1; dx++) {
+      const cx = tx + dx;
+      const cy = ty + dy;
+      if (getTile(cx, cy) === 4) {
+        const tileCX = cx * TILE_SIZE + TILE_SIZE / 2;
+        const tileCY = cy * TILE_SIZE + TILE_SIZE / 2;
+        const dist = Math.hypot(px - tileCX, py - tileCY);
+        if (dist < TILE_SIZE * 0.7) {
+          killPlayer();
+          return;
+        }
+      }
+    }
+  }
+}
+
+function checkFlag() {
+  // Find the flag position and trigger level complete when player reaches or passes it
+  if (!currentLevelData._flagX) {
+    // Cache flag position on first call
+    for (let y = 0; y < currentLevelData.height; y++) {
+      for (let x = 0; x < currentLevelData.width; x++) {
+        if (currentLevelData.tiles[y][x] === 5) {
+          currentLevelData._flagX = x * TILE_SIZE;
+          break;
+        }
+      }
+      if (currentLevelData._flagX) break;
+    }
+  }
+  if (currentLevelData._flagX && player.x + player.w >= currentLevelData._flagX) {
+    const timeBonus = Math.max(0, Math.floor((120 - levelTime) * 10));
+    score += timeBonus;
+    sfxLevelComplete();
+    gameState = STATE.LEVEL_COMPLETE;
+    stateTimer = 0;
+  }
+}
+
+function killPlayer() {
+  if (player.isDead) return;
+  player.isDead = true;
+  player.deathTimer = 0;
+  player.vy = -8;
+  deathCount++;
+  sfxDeath();
+  triggerShake(12);
+  spawnParticles(player.x + player.w/2, player.y + player.h/2, BRAND.red, 15);
+}
+
+function drawPlaying() {
+  ctx.save();
+  ctx.translate(shakeX, shakeY);
+
+  const theme = LEVEL_THEMES[currentLevel];
+  drawBackground(theme, camera.x);
+
+  ctx.save();
+  ctx.translate(-Math.floor(camera.x), -Math.floor(camera.y));
+
+  // Draw tiles
+  const startTX = Math.max(0, Math.floor(camera.x / TILE_SIZE) - 1);
+  const endTX = Math.min(currentLevelData.width, Math.ceil((camera.x + GAME_W) / TILE_SIZE) + 1);
+  const startTY = Math.max(0, Math.floor(camera.y / TILE_SIZE) - 1);
+  const endTY = Math.min(currentLevelData.height, Math.ceil((camera.y + GAME_H) / TILE_SIZE) + 1);
+
+  for (let ty = startTY; ty < endTY; ty++) {
+    for (let tx = startTX; tx < endTX; tx++) {
+      const tile = currentLevelData.tiles[ty][tx];
+      const x = tx * TILE_SIZE;
+      const y = ty * TILE_SIZE;
+
+      if (tile === 1) {
+        // Ground
+        ctx.fillStyle = theme.groundColor;
+        ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+        // Top edge highlight
+        if (ty === 0 || !isSolid(tx, ty - 1)) {
+          ctx.fillStyle = theme.platformColor;
+          ctx.fillRect(x, y, TILE_SIZE, 4);
+        }
+        // Texture
+        ctx.fillStyle = 'rgba(0,0,0,0.1)';
+        if ((tx + ty) % 2 === 0) ctx.fillRect(x + 4, y + 8, 8, 4);
+      } else if (tile === 2) {
+        // Platform
+        ctx.fillStyle = theme.platformColor;
+        ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+        ctx.fillStyle = 'rgba(255,255,255,0.1)';
+        ctx.fillRect(x, y, TILE_SIZE, 4);
+        ctx.fillStyle = 'rgba(0,0,0,0.2)';
+        ctx.fillRect(x, y + TILE_SIZE - 4, TILE_SIZE, 4);
+      } else if (tile === 3) {
+        // Collectible
+        const bobY = Math.sin(stateTimer * 3 + tx * 0.5) * 4;
+        collectDrawFuncs[currentLevel](x + 4, y + 4 + bobY, TILE_SIZE - 8);
+      } else if (tile === 4) {
+        // Obstacle
+        drawObstacle(x, y, TILE_SIZE, currentLevel);
+      } else if (tile === 5) {
+        drawFlag(x, y);
+      } else if (tile === 7) {
+        // Heart pickup — extra life
+        const bobY = Math.sin(stateTimer * 4 + tx) * 5;
+        const hs = TILE_SIZE - 8;
+        const hx = x + 4;
+        const hy = y + 4 + bobY;
+        // Glow
+        ctx.fillStyle = 'rgba(253,121,168,0.25)';
+        ctx.beginPath();
+        ctx.arc(hx + hs/2, hy + hs/2, hs * 0.8, 0, Math.PI * 2);
+        ctx.fill();
+        // Pixel heart
+        const p = Math.floor(hs / 8);
+        ctx.fillStyle = BRAND.accent;
+        ctx.fillRect(hx + p, hy, p*3, p*2);
+        ctx.fillRect(hx + p*5, hy, p*3, p*2);
+        ctx.fillRect(hx, hy + p*2, p*9, p*2);
+        ctx.fillRect(hx + p, hy + p*4, p*7, p*2);
+        ctx.fillRect(hx + p*2, hy + p*6, p*5, p);
+        ctx.fillRect(hx + p*3, hy + p*7, p*3, p);
+        // Shine
+        ctx.fillStyle = '#ff9fc4';
+        ctx.fillRect(hx + p*2, hy + p, p*2, p);
+      }
+    }
+  }
+
+  // Draw player
+  if (!player.isDead || player.deathTimer < 1) {
+    const blink = player.invincible > 0 && Math.floor(player.invincible * 10) % 2 === 0;
+    if (!blink) {
+      let animState = 'run';
+      if (!player.onGround) animState = 'jump';
+      else animState = player.animFrame === 0 ? 'run' : 'idle';
+
+      const deadAlpha = player.isDead ? Math.max(0, 1 - player.deathTimer) : 1;
+      ctx.globalAlpha = deadAlpha;
+      drawCharacter(charKeys[selectedChar], player.x - 4, player.y - 2, animState, 3, player.facing);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  drawParticles();
+
+  ctx.restore(); // camera
+
+  // HUD
+  drawHUD();
+
+  ctx.restore(); // shake
+}
+
+function drawHUD() {
+  // HUD background
+  ctx.fillStyle = 'rgba(10,10,26,0.7)';
+  ctx.fillRect(0, 0, GAME_W, 36);
+  ctx.fillStyle = BRAND.primary;
+  ctx.fillRect(0, 36, GAME_W, 2);
+
+  // Score (far left)
+  drawPixelText('SCORE: ' + score, 10, 13, 1.5, BRAND.white);
+
+  // Timer (left-center)
+  drawPixelText('TIME: ' + Math.floor(levelTime), 180, 13, 1.5, BRAND.light);
+
+  // Level (center)
+  const theme = LEVEL_THEMES[currentLevel];
+  drawPixelText('LVL ' + (currentLevel + 1) + ' - ' + theme.name, GAME_W / 2, 13, 1.5, BRAND.secondary, true);
+
+  // ESC hint
+  drawPixelText('ESC:QUIT', GAME_W - 120, 13, 1, '#555');
+
+  // Lives (far right — hearts)
+  for (let i = 0; i < lives; i++) {
+    ctx.fillStyle = BRAND.accent;
+    const hx = GAME_W - 18 - i * 22;
+    const hy = 18;
+    // Pixel heart
+    ctx.fillRect(hx - 6, hy - 5, 3, 3);
+    ctx.fillRect(hx + 1, hy - 5, 3, 3);
+    ctx.fillRect(hx - 8, hy - 2, 3, 3);
+    ctx.fillRect(hx - 5, hy - 2, 3, 3);
+    ctx.fillRect(hx - 2, hy - 2, 3, 3);
+    ctx.fillRect(hx + 1, hy - 2, 3, 3);
+    ctx.fillRect(hx - 6, hy + 1, 3, 3);
+    ctx.fillRect(hx - 3, hy + 1, 3, 3);
+    ctx.fillRect(hx, hy + 1, 3, 3);
+    ctx.fillRect(hx - 5, hy + 4, 3, 3);
+    ctx.fillRect(hx - 2, hy + 4, 3, 3);
+    ctx.fillRect(hx - 3, hy + 7, 3, 3);
+  }
+
+  // Label Owner mode instruction overlay — fades out after 3 seconds
+  if (charKeys[selectedChar] === 'ceo' && levelTime < 3) {
+    ctx.globalAlpha = Math.max(0, 1 - levelTime / 3);
+    ctx.fillStyle = 'rgba(10,10,26,0.5)';
+    ctx.fillRect(GAME_W / 2 - 200, GAME_H - 70, 400, 30);
+    drawPixelText('ARROWS TO MOVE - SPACE TO JUMP', GAME_W / 2, GAME_H - 62, 1.5, BRAND.gold, true);
+    ctx.globalAlpha = 1;
+  }
+}
+
+// ============================================================
+// STATE: PAUSED
+// ============================================================
+function updatePaused(dt) {
+  if (wasJustPressed('Space') || wasJustPressed('KeyP')) {
+    gameState = STATE.PLAYING;
+  }
+  if (wasJustPressed('Escape')) {
+    // Quit to Game Over
+    gameState = STATE.GAME_OVER;
+    stateTimer = 0;
+    menuSelection = 0;
+    gameOverQuip = GAME_OVER_QUIPS[Math.floor(Math.random() * GAME_OVER_QUIPS.length)];
+    if (score > highScore) {
+      highScore = score;
+      localStorage.setItem('teamrun_highscore', highScore.toString());
+    }
+  }
+}
+
+function drawPaused() {
+  drawPlaying();
+  ctx.fillStyle = 'rgba(10,10,26,0.7)';
+  ctx.fillRect(0, 0, GAME_W, GAME_H);
+  drawPixelText('PAUSED', GAME_W / 2, GAME_H / 2 - 30, 6, BRAND.white, true);
+  drawPixelText('SPACE TO CONTINUE', GAME_W / 2, GAME_H / 2 + 30, 2, BRAND.secondary, true);
+  drawPixelText('ESC TO QUIT GAME', GAME_W / 2, GAME_H / 2 + 55, 2, BRAND.red, true);
+}
+
+// ============================================================
+// STATE: LEVEL COMPLETE
+// ============================================================
+function updateLevelComplete(dt) {
+  stateTimer += dt;
+  updateParticles();
+
+  // Confetti
+  if (Math.random() < 0.3) {
+    const colors = [BRAND.primary, BRAND.accent, BRAND.gold, BRAND.green, BRAND.cyan];
+    spawnParticles(Math.random() * GAME_W, -10, colors[Math.floor(Math.random() * colors.length)], 2);
+  }
+
+  if (stateTimer > 2 && (wasJustPressed('Space') || wasJustPressed('Enter'))) {
+    if (currentLevel < 4) {
+      currentLevel++;
+      startLevel(currentLevel);
+      gameState = STATE.COUNTDOWN;
+      stateTimer = 0;
+      countdownNum = 3;
+    } else {
+      // All levels complete!
+      gameState = STATE.VICTORY;
+      stateTimer = 0;
+      menuSelection = 0;
+      if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('teamrun_highscore', highScore.toString());
+      }
+    }
+  }
+}
+
+function drawLevelComplete() {
+  ctx.fillStyle = BRAND.dark;
+  ctx.fillRect(0, 0, GAME_W, GAME_H);
+
+  drawPixelText('LEVEL ' + (currentLevel + 1) + ' COMPLETE!', GAME_W / 2, 80, 4, BRAND.green, true);
+
+  // Score breakdown
+  drawPixelText('ITEMS COLLECTED: +' + levelScore, GAME_W / 2, 170, 2, BRAND.white, true);
+  const timeBonus = Math.max(0, Math.floor((120 - levelTime) * 10));
+  drawPixelText('TIME BONUS: +' + timeBonus, GAME_W / 2, 200, 2, BRAND.gold, true);
+  drawPixelText('TOTAL SCORE: ' + score, GAME_W / 2, 240, 3, BRAND.accent, true);
+
+  // Character celebrating
+  const bounceY = Math.abs(Math.sin(stateTimer * 5)) * 20;
+  drawCharacter(charKeys[selectedChar], GAME_W / 2 - 18, 280 - bounceY, 'jump', 4);
+
+  if (stateTimer > 2 && Math.floor(stateTimer * 2) % 2 === 0) {
+    const nextText = currentLevel < 4 ? 'PRESS SPACE FOR NEXT LEVEL' : 'PRESS SPACE TO FINISH';
+    drawPixelText(nextText, GAME_W / 2, GAME_H - 40, 2, BRAND.white, true);
+  }
+
+  drawParticles();
+}
+
+// ============================================================
+// STATE: GAME OVER
+// ============================================================
+function menuNavigate(dt) {
+  // Up/Down move between rows: 0=Try Again, 1=CTA, 2+=social icons
+  // Left/Right move within the social icons row
+  if (wasJustPressed('ArrowDown') || wasJustPressed('KeyS')) {
+    sfxMenuSelect();
+    if (menuSelection < 2) {
+      menuSelection++;
+    } else {
+      // Already on social row — wrap to top
+      menuSelection = 0;
+    }
+  }
+  if (wasJustPressed('ArrowUp') || wasJustPressed('KeyW')) {
+    sfxMenuSelect();
+    if (menuSelection === 0) {
+      menuSelection = 2; // wrap to social row
+    } else if (menuSelection >= 2) {
+      menuSelection = 1;
+    } else {
+      menuSelection--;
+    }
+  }
+  if (wasJustPressed('ArrowRight') || wasJustPressed('KeyD')) {
+    sfxMenuSelect();
+    if (menuSelection >= 2) {
+      menuSelection = menuSelection < MENU_TOTAL_ITEMS - 1 ? menuSelection + 1 : 2;
+    } else {
+      menuSelection++;
+      if (menuSelection > MENU_TOTAL_ITEMS - 1) menuSelection = 0;
+    }
+  }
+  if (wasJustPressed('ArrowLeft') || wasJustPressed('KeyA')) {
+    sfxMenuSelect();
+    if (menuSelection >= 2) {
+      menuSelection = menuSelection > 2 ? menuSelection - 1 : MENU_TOTAL_ITEMS - 1;
+    } else {
+      menuSelection--;
+      if (menuSelection < 0) menuSelection = MENU_TOTAL_ITEMS - 1;
+    }
+  }
+}
+
+function menuConfirm() {
+  if (!(wasJustPressed('Space') || wasJustPressed('Enter'))) return false;
+  sfxMenuSelect();
+  if (menuSelection === 0) {
+    // Try Again / Play Again
+    gameState = STATE.CHAR_SELECT;
+    stateTimer = 0;
+    return true;
+  } else if (menuSelection === 1) {
+    // CTA
+    window.open('https://teamrollouts.com', '_blank');
+    return true;
+  } else {
+    // Social share
+    const platform = MENU_SOCIAL_PLATFORMS[menuSelection - 2];
+    shareTo(platform);
+    return true;
+  }
+}
+
+function updateGameOver(dt) {
+  stateTimer += dt;
+  updateParticles();
+
+  if (stateTimer > 1.5) {
+    menuNavigate(dt);
+    menuConfirm();
+  }
+}
+
+function drawGameOver() {
+  ctx.fillStyle = BRAND.dark;
+  ctx.fillRect(0, 0, GAME_W, GAME_H);
+
+  // Glitch effect
+  if (stateTimer < 1) {
+    for (let i = 0; i < 5; i++) {
+      const gy = Math.random() * GAME_H;
+      const gh = 2 + Math.random() * 8;
+      ctx.fillStyle = `rgba(225,112,85,${Math.random() * 0.3})`;
+      ctx.fillRect(Math.random() * 20 - 10, gy, GAME_W, gh);
+    }
+  }
+
+  const alpha = Math.min(1, stateTimer / 0.5);
+  ctx.globalAlpha = alpha;
+
+  drawPixelText('GAME OVER', GAME_W / 2, 50, 7, BRAND.red, true);
+  drawPixelText(gameOverQuip, GAME_W / 2, 110, 1.5, BRAND.accent, true);
+
+  drawPixelText('FINAL SCORE: ' + score, GAME_W / 2, 150, 3, BRAND.white, true);
+  drawPixelText('LEVEL REACHED: ' + (currentLevel + 1) + '/5', GAME_W / 2, 190, 2, BRAND.secondary, true);
+  drawPixelText('ITEMS COLLECTED: ' + totalCollected, GAME_W / 2, 220, 2, BRAND.secondary, true);
+
+  if (score >= highScore && score > 0) {
+    drawPixelText('NEW HIGH SCORE!', GAME_W / 2, 260, 2, BRAND.gold, true);
+  }
+
+  ctx.globalAlpha = 1;
+
+  if (stateTimer > 1.5) {
+    drawButton('TRY AGAIN', GAME_W / 2 - 100, 310, 200, 40, menuSelection === 0);
+    drawButton('TEAMROLLOUTS.COM', GAME_W / 2 - 120, 360, 240, 40, menuSelection === 1);
+    drawShareButtons(410, `Final Score: ${score}`);
+
+    // Navigation hint
+    drawPixelText('ARROWS TO NAVIGATE  -  SPACE TO SELECT', GAME_W / 2, GAME_H - 12, 1, BRAND.light, true);
+  }
+}
+
+// ============================================================
+// STATE: VICTORY
+// ============================================================
+function updateVictory(dt) {
+  stateTimer += dt;
+  updateParticles();
+
+  // Confetti
+  if (Math.random() < 0.4) {
+    const colors = [BRAND.primary, BRAND.accent, BRAND.gold, BRAND.green, BRAND.cyan, BRAND.white];
+    spawnParticles(Math.random() * GAME_W, -10, colors[Math.floor(Math.random() * colors.length)], 3);
+  }
+
+  if (stateTimer > 2) {
+    menuNavigate(dt);
+    menuConfirm();
+  }
+}
+
+function drawVictory() {
+  // Epic background
+  const grad = ctx.createLinearGradient(0, 0, 0, GAME_H);
+  grad.addColorStop(0, '#1a0a2e');
+  grad.addColorStop(0.5, '#2d1b69');
+  grad.addColorStop(1, '#0a0a1a');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, GAME_W, GAME_H);
+
+  // Title
+  drawPixelText('YOU DID IT!', GAME_W / 2, 30, 5, BRAND.gold, true);
+  drawPixelText('ALL 5 LEVELS COMPLETE', GAME_W / 2, 75, 2, BRAND.white, true);
+
+  // Podium
+  const podiumY = 200;
+  // #2 position
+  ctx.fillStyle = '#888';
+  ctx.fillRect(GAME_W / 2 - 100, podiumY + 30, 60, 50);
+  drawPixelText('2', GAME_W / 2 - 70, podiumY + 40, 2, BRAND.white, true);
+
+  // #1 position (player)
+  ctx.fillStyle = BRAND.gold;
+  ctx.fillRect(GAME_W / 2 - 30, podiumY, 60, 80);
+  drawPixelText('1', GAME_W / 2, podiumY + 10, 2, BRAND.dark, true);
+
+  // #3 position
+  ctx.fillStyle = '#CD7F32';
+  ctx.fillRect(GAME_W / 2 + 40, podiumY + 45, 60, 35);
+  drawPixelText('3', GAME_W / 2 + 70, podiumY + 52, 2, BRAND.white, true);
+
+  // Character on podium
+  const bounceY = Math.abs(Math.sin(stateTimer * 3)) * 10;
+  drawCharacter(charKeys[selectedChar], GAME_W / 2 - 18, podiumY - 40 - bounceY, 'jump', 3);
+
+  // Stats
+  drawPixelText('FINAL SCORE: ' + score, GAME_W / 2, podiumY + 95, 3, BRAND.accent, true);
+  drawPixelText('ITEMS: ' + totalCollected + '  DEATHS: ' + deathCount, GAME_W / 2, podiumY + 125, 1.5, BRAND.light, true);
+
+  if (score >= highScore) {
+    drawPixelText('NEW HIGH SCORE!', GAME_W / 2, podiumY + 145, 2, BRAND.gold, true);
+  }
+
+  if (stateTimer > 2) {
+    drawButton('PLAY AGAIN', GAME_W / 2 - 110, 380, 220, 40, menuSelection === 0);
+    drawButton('SEE WHAT TEAM CAN DO', GAME_W / 2 - 140, 430, 280, 40, menuSelection === 1);
+    drawShareButtons(475, `Final Score: ${score}`);
+
+    drawPixelText('ARROWS TO NAVIGATE  -  SPACE TO SELECT', GAME_W / 2, GAME_H - 15, 1, BRAND.light, true);
+  } else {
+    drawPixelText('POWERED BY TEAM - THE OS FOR MUSIC RELEASES', GAME_W / 2, GAME_H - 15, 1, BRAND.secondary, true);
+  }
+
+  drawParticles();
+}
+
+// ============================================================
+// KONAMI CODE EASTER EGG
+// ============================================================
+const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight'];
+let konamiIdx = 0;
+let ceoUnlocked = false;
+
+// Unlock flash overlay state
+let unlockFlashTimer = 0;
+let unlockFlashActive = false;
+
+function checkKonami(code) {
+  // Works on title screen AND character select
+  if (gameState !== STATE.TITLE && gameState !== STATE.CHAR_SELECT) return;
+  if (code === KONAMI[konamiIdx]) {
+    konamiIdx++;
+    if (konamiIdx === KONAMI.length) {
+      konamiIdx = 0;
+      if (!ceoUnlocked) {
+        ceoUnlocked = true;
+        // Add Label Owner character
+        CHAR_SPRITES.ceo = {
+          name: 'LABEL OWNER',
+          tagline: 'Easy mode!',
+          color1: '#FDCB6E', color2: '#F9CA24', skin: '#FFEAA7',
+          idle: [
+            '   YYYYYY   ',
+            '   YYYYYY   ',
+            '   YssYYY   ',
+            '   YssYYY   ',
+            '    ssss    ',
+            '   KKKKKK   ',
+            '   KKKKKK   ',
+            '    KKKK    ',
+            '    KKKK    ',
+            '   KK  KK   ',
+            '   KK  KK   ',
+            '   YY  YY   ',
+          ].map(r => r.split('')),
+          run1: [
+            '   YYYYYY   ',
+            '   YYYYYY   ',
+            '   YssYYY   ',
+            '   YssYYY   ',
+            '    ssss    ',
+            '    KKKK    ',
+            '   KKKKKK   ',
+            '    KKKK    ',
+            '   KK KK    ',
+            '   KK  KK   ',
+            '  YY    YY  ',
+            '            ',
+          ].map(r => r.split('')),
+          jump: [
+            '   YYYYYY   ',
+            '   YYYYYY   ',
+            '   YssYYY   ',
+            '   YssYYY   ',
+            '    ssss    ',
+            '  WWKKKKWW  ',
+            '   KKKKKK   ',
+            '    KKKK    ',
+            '    KKKK    ',
+            '   KK  KK   ',
+            '   YY  YY   ',
+            '            ',
+          ].map(r => r.split('')),
+        };
+        charKeys.push('ceo');
+
+        // Switch to char select with the new character focused
+        gameState = STATE.CHAR_SELECT;
+        selectedChar = charKeys.length - 1; // Focus on Label Owner
+        stateTimer = 0;
+
+        // Start unlock flash animation
+        unlockFlashActive = true;
+        unlockFlashTimer = 0;
+
+        // Particles + victory fanfare
+        spawnParticles(GAME_W / 2, GAME_H / 2, BRAND.gold, 50);
+        spawnParticles(GAME_W / 2 - 80, GAME_H / 2 - 40, BRAND.green, 25);
+        spawnParticles(GAME_W / 2 + 80, GAME_H / 2 - 40, BRAND.green, 25);
+        // Ascending fanfare
+        [440, 554, 659, 880, 1047].forEach((f, i) =>
+          setTimeout(() => playTone(f, 0.2, 'square', 0.1), i * 120)
+        );
+      }
+    }
+  } else {
+    konamiIdx = 0;
+  }
+}
+window.addEventListener('keydown', e => checkKonami(e.code));
+
+// Draw the unlock flash overlay (called from game loop)
+function updateAndDrawUnlockFlash(dt) {
+  if (!unlockFlashActive) return;
+  unlockFlashTimer += dt;
+  const t = unlockFlashTimer;
+
+  // Solid dark background — completely covers everything underneath
+  ctx.fillStyle = BRAND.dark;
+  ctx.fillRect(0, 0, GAME_W, GAME_H);
+
+  // Initial bright green flash (first 0.3s)
+  if (t < 0.3) {
+    ctx.fillStyle = 'rgba(217,250,135,' + (0.6 * (1 - t / 0.3)).toFixed(2) + ')';
+    ctx.fillRect(0, 0, GAME_W, GAME_H);
+  }
+
+  // Radial glow behind text
+  const grd = ctx.createRadialGradient(GAME_W / 2, GAME_H / 2 - 20, 0, GAME_W / 2, GAME_H / 2 - 20, 250);
+  grd.addColorStop(0, 'rgba(217,250,135,0.15)');
+  grd.addColorStop(1, 'rgba(217,250,135,0)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, GAME_W, GAME_H);
+
+  // Scale bounce in
+  const scale = t < 0.3 ? 4 + (1 - t / 0.3) * 4 : 4 + Math.sin(t * 3) * 0.3;
+
+  // Main text
+  drawPixelText('LABEL OWNER', GAME_W / 2, GAME_H / 2 - 60, scale, BRAND.gold, true);
+  drawPixelText('UNLOCKED!', GAME_W / 2, GAME_H / 2 + 5, scale * 0.8, BRAND.green, true);
+
+  // Subtext fades in
+  if (t > 0.5) {
+    const subAlpha = Math.min(1, (t - 0.5) / 0.3);
+    ctx.globalAlpha = subAlpha;
+    drawPixelText('FULL CONTROL + EXTRA JUMP HEIGHT', GAME_W / 2, GAME_H / 2 + 70, 2, BRAND.light, true);
+    ctx.globalAlpha = 1;
+  }
+
+  // Spawn trailing particles
+  if (Math.floor(t * 8) % 2 === 0) {
+    spawnParticles(
+      GAME_W / 2 + (Math.random() - 0.5) * 400,
+      GAME_H / 2 + (Math.random() - 0.5) * 150,
+      Math.random() > 0.5 ? BRAND.gold : BRAND.green, 2
+    );
+  }
+
+  // Scanline effect for consistency
+  ctx.fillStyle = 'rgba(0,0,0,0.04)';
+  for (let sy = 0; sy < GAME_H; sy += 3) {
+    ctx.fillRect(0, sy, GAME_W, 1);
+  }
+
+  // Dismiss on any key after 1s, or auto after 3s → goes to char select with Label Owner focused
+  if ((t > 1 && (wasJustPressed('Space') || wasJustPressed('Enter') || wasJustPressed('ArrowLeft') || wasJustPressed('ArrowRight'))) || t > 3) {
+    unlockFlashActive = false;
+  }
+}
+
+// ============================================================
+// MAIN GAME LOOP
+// ============================================================
+let lastTime = 0;
+
+function gameLoop(timestamp) {
+  const dt = Math.min(0.05, (timestamp - lastTime) / 1000);
+  lastTime = timestamp;
+
+  // Clear
+  ctx.fillStyle = BRAND.dark;
+  ctx.fillRect(0, 0, GAME_W, GAME_H);
+
+  // Update & Draw based on state
+  switch (gameState) {
+    case STATE.SPLASH:
+      updateSplash(dt);
+      drawSplash();
+      break;
+    case STATE.TITLE:
+      updateTitle(dt);
+      drawTitle();
+      break;
+    case STATE.CHAR_SELECT:
+      updateCharSelect(dt);
+      drawCharSelect();
+      break;
+    case STATE.INSTRUCTIONS:
+      updateInstructions(dt);
+      drawInstructions();
+      break;
+    case STATE.COUNTDOWN:
+      updateCountdown(dt);
+      drawCountdown();
+      break;
+    case STATE.PLAYING:
+      updatePlaying(dt);
+      drawPlaying();
+      break;
+    case STATE.PAUSED:
+      updatePaused(dt);
+      drawPaused();
+      break;
+    case STATE.LEVEL_COMPLETE:
+      updateLevelComplete(dt);
+      drawLevelComplete();
+      break;
+    case STATE.GAME_OVER:
+      updateGameOver(dt);
+      drawGameOver();
+      break;
+    case STATE.VICTORY:
+      updateVictory(dt);
+      drawVictory();
+      break;
+  }
+
+  // Scanline overlay (subtle retro effect)
+  ctx.fillStyle = 'rgba(0,0,0,0.04)';
+  for (let sy = 0; sy < GAME_H; sy += 3) {
+    ctx.fillRect(0, sy, GAME_W, 1);
+  }
+
+  // Music toggle indicator (top-right, all screens except splash)
+  if (gameState !== STATE.SPLASH) {
+    const mCol = musicEnabled ? BRAND.green : BRAND.secondary;
+    const mSymbol = musicEnabled ? '♪' : '♪';
+    // Draw speaker icon as a simple filled/unfilled indicator
+    ctx.fillStyle = mCol;
+    ctx.fillRect(GAME_W - 120, 10, 8, 10);
+    ctx.beginPath();
+    ctx.moveTo(GAME_W - 112, 8);
+    ctx.lineTo(GAME_W - 104, 3);
+    ctx.lineTo(GAME_W - 104, 27);
+    ctx.lineTo(GAME_W - 112, 22);
+    ctx.fill();
+    if (musicEnabled) {
+      // Sound waves
+      ctx.strokeStyle = mCol;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(GAME_W - 100, 15, 6, -0.8, 0.8); ctx.stroke();
+      ctx.beginPath(); ctx.arc(GAME_W - 100, 15, 11, -0.6, 0.6); ctx.stroke();
+    } else {
+      // X through speaker
+      ctx.strokeStyle = '#EF4444';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(GAME_W - 102, 6); ctx.lineTo(GAME_W - 92, 24); ctx.stroke();
+    }
+    drawPixelText('PRESS M TO MUTE', GAME_W - 82, 12, 1, BRAND.secondary, false);
+  }
+
+  // Unlock flash overlay (draws on top of everything)
+  updateAndDrawUnlockFlash(dt);
+
+  // Toggle music with M key
+  if (wasJustPressed('KeyM')) {
+    toggleMusic();
+  }
+
+  // Reset click
+  clicked = false;
+  clickX = -1;
+  clickY = -1;
+
+  requestAnimationFrame(gameLoop);
+}
+
+requestAnimationFrame(gameLoop);
+</script>
+</body>
+</html>

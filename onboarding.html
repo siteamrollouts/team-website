@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Start Your Free Trial — Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* Nyght Serif */
+@font-face { font-family: "Nyght Serif"; font-weight: 500; font-style: italic; font-display: swap; src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-MediumItalic.woff2") format("woff2"); }
+@font-face { font-family: "Nyght Serif"; font-weight: 300; font-style: italic; font-display: swap; src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-LightItalic.woff2") format("woff2"); }
+.nyght { font-family: "Nyght Serif", Georgia, serif; font-style: italic; font-weight: 300; }
+</style>
+<style>
+/* =============================================
+   RESET & TOKENS
+   ============================================= */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+html{scroll-behavior:auto;scrollbar-gutter:stable}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  color:#111110;background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+:root{
+  --black:#191919;--white:#fff;--grey:#E0E0E0;--bg:#FAFAFA;
+  --accent:#F56002;--text-secondary:#454545;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+
+/* =============================================
+   TYPOGRAPHY
+   ============================================= */
+.headline-xl{font-size:clamp(2.5rem,5.5vw,4.5rem);font-weight:300;line-height:1.05;letter-spacing:-0.03em}
+.headline-lg{font-size:clamp(2rem,4vw,3.2rem);font-weight:400;line-height:1.1;letter-spacing:-0.02em}
+.body-lg{font-size:1.125rem;font-weight:400;line-height:1.6;color:var(--text-secondary)}
+.body-sm{font-size:0.875rem;line-height:1.5}
+.label-sm{font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em}
+
+/* =============================================
+   BUTTONS
+   ============================================= */
+.btn{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-size:0.875rem;font-weight:600;padding:0.75rem 1.25rem;
+  border-radius:1.5rem;transition:background 0.3s,border-color 0.3s,color 0.3s,backdrop-filter 0.3s;
+  cursor:pointer;
+}
+.btn--primary{
+  background:var(--black);color:#fff;border:1px solid transparent;
+  transition:all 0.3s ease;
+}
+.btn--primary:hover{
+  color:#111 !important;
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-color:rgba(255,255,255,0.5);
+  box-shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+.btn--primary-light{
+  background:var(--black);color:#fff;border:1px solid transparent;
+  transition:all 0.3s ease;
+}
+.btn--primary-light:hover{
+  color:#111 !important;
+  background:rgba(0,0,0,0.05);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-color:rgba(0,0,0,0.12);
+  box-shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+.btn--outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.4)}
+.btn--outline:hover{background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:rgba(255,255,255,0.5)}
+.btn--ghost{background:transparent;color:var(--black);border:1px solid var(--grey)}
+.btn--ghost:hover{background:rgba(0,0,0,0.05);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--black)}
+
+/* =============================================
+   NAV
+   ============================================= */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:0.875rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:80rem;margin:0 auto;
+  transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.nav.nav--hidden{transform:translateY(calc(-100% - 1rem))}
+.nav__pill{
+  display:flex;align-items:center;gap:0.25rem;
+  padding:0.375rem 0.5rem;
+  border-radius:100px;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,0.1);
+  transition:background 0.35s,border-color 0.35s,backdrop-filter 0.35s;
+}
+.nav--solid .nav__pill{
+  background:rgba(255,255,255,0.95);
+  border-color:rgba(0,0,0,0.06);
+}
+.nav__logo{display:flex;align-items:center;padding:0 0.5rem}
+.nav__logo img{height:1.125rem;transition:filter 0.3s,opacity 0.3s}
+.nav__logo .logo-light{position:absolute}
+.nav__logo .logo-dark{opacity:0}
+.nav--solid .nav__logo .logo-light{opacity:0}
+.nav--solid .nav__logo .logo-dark{opacity:1;position:relative}
+.nav__link{
+  font-size:0.8125rem;font-weight:500;
+  padding:0.5rem 0.875rem;border-radius:100px;
+  color:rgba(255,255,255,0.85);white-space:nowrap;
+  display:flex;align-items:center;gap:0.25rem;
+  transition:color 0.2s,background 0.2s;
+}
+.nav__link:hover{color:#fff;background:rgba(255,255,255,0.1)}
+.nav--solid .nav__link{color:var(--text-secondary)}
+.nav--solid .nav__link:hover{color:var(--black);background:rgba(0,0,0,0.04)}
+.nav__link svg{width:10px;height:10px;opacity:0.6}
+.nav__login{
+  font-size:0.8125rem;font-weight:500;
+  padding:0.5rem 1rem;border-radius:100px;
+  color:rgba(255,255,255,0.85);white-space:nowrap;
+  border:1px solid rgba(255,255,255,0.3);
+  transition:color 0.2s,border-color 0.2s,background 0.2s;
+}
+.nav__login:hover{color:#fff;border-color:rgba(255,255,255,0.5)}
+.nav--solid .nav__login{color:var(--black);border-color:rgba(0,0,0,0.15)}
+.nav--solid .nav__login:hover{border-color:var(--black)}
+a.nav__cta{
+  font-size:0.8125rem;font-weight:600;
+  padding:0.5rem 1.125rem;border-radius:100px;
+  white-space:nowrap;text-decoration:none;
+  color:#fff;background:#111110;
+  border:1px solid transparent;
+  transition:all 0.3s ease;
+}
+a.nav__cta:hover{
+  color:#111 !important;
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-color:rgba(255,255,255,0.5);
+  box-shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+.nav--solid a.nav__cta{
+  color:var(--black);
+  background:rgba(0,0,0,0.04);
+  border:1px solid rgba(0,0,0,0.1);
+  box-shadow:0 1px 4px rgba(0,0,0,0.04);
+}
+.nav--solid a.nav__cta:hover{
+  color:var(--black);
+  background:rgba(0,0,0,0.08);
+  border-color:rgba(0,0,0,0.18);
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+.nav__divider{
+  width:1px;height:1rem;
+  background:rgba(255,255,255,0.15);margin:0 0.125rem;
+}
+.nav--solid .nav__divider{background:rgba(0,0,0,0.08)}
+.nav__dropdown{position:relative}
+.nav__dropdown>.nav__link{cursor:pointer}
+.nav__dropdown>.nav__link svg{transition:transform 0.25s}
+.nav__dropdown.is-open>.nav__link svg{transform:rotate(180deg)}
+.nav__dropdown-panel{
+  position:absolute;top:calc(100% + 0.75rem);left:0;
+  display:flex;
+  background:rgba(255,255,255,0.97);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-radius:0.75rem;
+  box-shadow:0 12px 48px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06);
+  border:1px solid rgba(0,0,0,0.06);
+  opacity:0;visibility:hidden;
+  transform:translateY(-6px);
+  transition:opacity 0.25s ease,visibility 0.25s ease,transform 0.25s ease;
+  z-index:100;min-width:36rem;overflow:hidden;
+}
+.nav__dropdown.is-open .nav__dropdown-panel{
+  opacity:1;visibility:visible;transform:translateY(0);
+}
+.nav__dropdown-left{
+  flex:1;padding:1.5rem;
+  display:flex;flex-direction:column;gap:0.25rem;
+}
+.nav__dropdown-item{
+  display:block;padding:0.75rem 1rem;border-radius:0.5rem;
+  transition:background 0.15s;
+}
+.nav__dropdown-item:hover{background:rgba(0,0,0,0.03)}
+.nav__dropdown-item-title{
+  font-size:0.875rem;font-weight:600;color:var(--black);
+  margin-bottom:0.125rem;
+}
+.nav__dropdown-item-desc{
+  font-size:0.8125rem;color:var(--text-secondary);line-height:1.4;
+}
+.nav__dropdown-right{
+  width:16rem;background:var(--black);
+  padding:1.5rem;
+  display:flex;flex-direction:column;gap:0.125rem;
+  border-radius:0 0.75rem 0.75rem 0;
+}
+.nav__dropdown-featured-label{
+  font-size:0.6875rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:0.06em;color:rgba(255,255,255,0.4);
+  padding:0.5rem 0.75rem;margin-bottom:0.25rem;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.nav__dropdown-featured-label::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,0.5);
+}
+.nav__dropdown-featured-link{
+  display:block;font-size:0.9375rem;font-weight:500;
+  color:rgba(255,255,255,0.75);padding:0.625rem 0.75rem;
+  border-radius:0.375rem;transition:color 0.15s,background 0.15s;
+}
+.nav__dropdown-featured-link:hover{
+  color:#fff;background:rgba(255,255,255,0.08);
+}
+.nav-blur-overlay{
+  position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,0.1);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity 0.35s ease,visibility 0.35s ease;
+}
+.nav-blur-overlay.is-active{opacity:1;visibility:visible}
+
+@media(max-width:768px){
+  .nav{padding:0.75rem 1rem}
+  .nav__pill--left .nav__link{display:none}
+  .nav__pill--left .nav__dropdown{display:none}
+  .nav__pill--right .nav__link{display:none}
+  .nav__pill--right .nav__divider{display:none}
+  .nav__login{display:none}
+}
+
+/* =============================================
+   ONBOARDING PAGE
+   ============================================= */
+
+/* Ambient animated gradient background — adapted from homepage engine section.
+   Fixed to the viewport, drifts on an endless loop, no scroll needed. */
+.onboarding-bg{
+  position:fixed;inset:0;
+  z-index:0;pointer-events:none;
+  overflow:hidden;
+}
+.onboarding-bg__wash{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,#f5f0ec 0%,#ece6e0 50%,#f2ede6 100%);
+}
+.onboarding-bg__blob{
+  position:absolute;
+  will-change:transform;
+}
+.onboarding-bg__blob--primary{
+  width:70%;height:90%;
+  top:-25%;right:-20%;
+  background:radial-gradient(ellipse at 50% 50%,
+    rgba(245,96,2,0.5) 0%,
+    rgba(245,96,2,0.28) 25%,
+    rgba(245,96,2,0.08) 55%,
+    rgba(245,96,2,0) 75%);
+}
+.onboarding-bg__blob--secondary{
+  width:55%;height:60%;
+  top:10%;right:-10%;
+  background:radial-gradient(ellipse at 50% 50%,
+    rgba(255,200,150,0.4) 0%,
+    rgba(255,200,150,0.18) 35%,
+    rgba(255,200,150,0) 70%);
+}
+.onboarding-bg__blob--tertiary{
+  width:55%;height:60%;
+  bottom:-15%;right:15%;
+  background:radial-gradient(ellipse at 50% 50%,
+    rgba(230,150,130,0.28) 0%,
+    rgba(230,150,130,0.12) 40%,
+    rgba(230,150,130,0) 75%);
+}
+.onboarding-bg__blob--left{
+  width:70%;height:100%;
+  top:0;left:-20%;
+  background:radial-gradient(ellipse at 50% 50%,
+    rgba(220,215,222,0.5) 0%,
+    rgba(230,225,230,0.25) 45%,
+    rgba(230,225,230,0) 80%);
+}
+
+.auth-page{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:7rem 1.5rem 3rem;
+  position:relative;
+  z-index:1;
+}
+.auth-header{
+  text-align:center;
+  margin-bottom:2rem;
+}
+.auth-header h1{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:clamp(1.75rem,3.5vw,2.25rem);
+  font-weight:300;
+  line-height:1.15;
+  letter-spacing:-0.02em;
+  color:var(--black);
+  margin-bottom:0.5rem;
+}
+.auth-header p{
+  font-size:0.9375rem;
+  color:var(--text-secondary);
+  line-height:1.5;
+}
+.auth-card{
+  background:rgba(255,255,255,0.65);
+  backdrop-filter:blur(20px) saturate(1.4);
+  -webkit-backdrop-filter:blur(20px) saturate(1.4);
+  border:1px solid rgba(255,255,255,0.5);
+  border-radius:1rem;
+  padding:3rem;
+  width:100%;
+  max-width:28rem;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.6) inset,
+    0 1px 3px rgba(0,0,0,0.04),
+    0 10px 40px rgba(0,0,0,0.06),
+    0 20px 60px rgba(0,0,0,0.04);
+}
+.form-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0.75rem;
+}
+@media(max-width:480px){
+  .form-row{grid-template-columns:1fr}
+}
+.form-group{
+  margin-bottom:1.25rem;
+}
+.promo-toggle{
+  margin-bottom:1.25rem;
+}
+.promo-toggle a{
+  font-size:0.8125rem;
+}
+.promo-field{
+  animation:fadeIn 0.25s var(--ease);
+}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(-4px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.form-group label{
+  display:block;
+  font-size:0.8125rem;
+  font-weight:500;
+  color:var(--black);
+  margin-bottom:0.375rem;
+}
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"]{
+  width:100%;
+  padding:0.75rem 1rem;
+  border:1px solid rgba(0,0,0,0.12);
+  border-radius:0.5rem;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:0.9375rem;
+  color:var(--black);
+  background:#fff;
+  outline:none;
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.form-group input:focus{
+  border-color:var(--black);
+  box-shadow:0 0 0 3px rgba(25,25,25,0.06);
+}
+.form-group input::placeholder{
+  color:rgba(0,0,0,0.3);
+}
+.password-wrapper{
+  position:relative;
+}
+.password-wrapper input{
+  padding-right:3rem;
+}
+.password-toggle{
+  position:absolute;
+  right:0.75rem;
+  top:50%;
+  transform:translateY(-50%);
+  background:none;
+  border:none;
+  cursor:pointer;
+  color:var(--text-secondary);
+  font-size:0.8125rem;
+  font-weight:500;
+  padding:0.25rem;
+  transition:color 0.2s;
+}
+.password-toggle:hover{
+  color:var(--black);
+}
+/* ─── Plan selector: 2x2 grid of clickable bubble cards ─── */
+.plan-selector{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0.625rem;
+  margin-bottom:0.875rem;
+}
+.plan-option{
+  position:relative;
+  padding:0.875rem 1rem 0.875rem;
+  background:#fff;
+  border:1.5px solid rgba(0,0,0,0.08);
+  border-radius:0.875rem;
+  cursor:pointer;
+  text-align:left;
+  font-family:inherit;
+  color:var(--black);
+  overflow:hidden;
+  transition:border-color 0.2s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease, color 0.25s ease;
+}
+.plan-option:hover{
+  border-color:rgba(0,0,0,0.2);
+  box-shadow:0 2px 12px rgba(0,0,0,0.04);
+  transform:translateY(-1px);
+}
+.plan-option--active{
+  background:#191919;
+  color:#fff;
+  border-color:#191919;
+  box-shadow:0 6px 24px rgba(0,0,0,0.18),0 1px 0 rgba(255,255,255,0.06) inset;
+}
+.plan-option--active:hover{
+  background:#111;
+  border-color:#111;
+  box-shadow:0 8px 28px rgba(0,0,0,0.22),0 1px 0 rgba(255,255,255,0.06) inset;
+}
+.plan-option:focus-visible{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(245,96,2,0.18);
+}
+.plan-option__head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:0.5rem;
+  margin-bottom:0.25rem;
+}
+.plan-option__name{
+  font-size:1.25rem;
+  font-weight:700;
+  letter-spacing:-0.02em;
+  line-height:1.15;
+}
+.plan-option__check{
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  background:transparent;
+  border:1.5px solid rgba(0,0,0,0.18);
+  flex-shrink:0;
+  position:relative;
+  transition:background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.plan-option--active .plan-option__check{
+  background:#D9FA87;
+  border-color:#D9FA87;
+  transform:scale(1);
+}
+.plan-option--active .plan-option__check::after{
+  content:'';
+  position:absolute;
+  left:50%;top:50%;
+  width:7px;height:4px;
+  border-left:1.5px solid #191919;
+  border-bottom:1.5px solid #191919;
+  transform:translate(-50%,-70%) rotate(-45deg);
+}
+.plan-option__tagline{
+  font-size:0.75rem;
+  color:rgba(0,0,0,0.55);
+  line-height:1.35;
+  margin-bottom:0.625rem;
+  /* Reserve 2 lines so all cards line up */
+  min-height:2.025rem;
+  transition:color 0.25s ease;
+}
+.plan-option--active .plan-option__tagline{
+  color:rgba(255,255,255,0.55);
+}
+.plan-option__price{
+  font-size:0.9375rem;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  line-height:1.2;
+  display:flex;
+  align-items:baseline;
+  gap:0.25rem;
+  margin-bottom:0.25rem;
+}
+.plan-option__price small{
+  font-size:0.75rem;
+  font-weight:500;
+  color:rgba(0,0,0,0.5);
+  letter-spacing:-0.005em;
+  transition:color 0.25s ease;
+}
+.plan-option--active .plan-option__price small{
+  color:rgba(255,255,255,0.55);
+}
+.plan-option__sub{
+  font-size:0.6875rem;
+  font-weight:500;
+  color:rgba(0,0,0,0.5);
+  line-height:1.4;
+  letter-spacing:-0.005em;
+  /* Reserve 2 lines so all cards align */
+  min-height:1.925rem;
+  transition:color 0.25s ease;
+}
+.plan-option--active .plan-option__sub{
+  color:rgba(255,255,255,0.6);
+}
+
+/* ─── Term selector: segmented pill ─── */
+.term-selector{
+  display:flex;
+  background:rgba(0,0,0,0.04);
+  border:1px solid rgba(0,0,0,0.04);
+  border-radius:100px;
+  padding:0.25rem;
+  margin-bottom:0.625rem;
+  transition:opacity 0.25s ease, max-height 0.3s ease, margin-bottom 0.25s ease;
+  overflow:hidden;
+}
+.term-selector[hidden]{
+  display:none;
+}
+.term-option{
+  flex:1;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.5rem;
+  padding:0.5rem 1rem;
+  background:transparent;
+  border:none;
+  border-radius:100px;
+  cursor:pointer;
+  font-family:inherit;
+  font-size:0.8125rem;
+  font-weight:600;
+  color:var(--text-secondary);
+  letter-spacing:-0.005em;
+  transition:background 0.25s ease, color 0.2s ease, box-shadow 0.25s ease;
+}
+.term-option:hover:not(.term-option--active){
+  color:var(--black);
+}
+.term-option--active{
+  background:#fff;
+  color:var(--black);
+  box-shadow:0 1px 2px rgba(0,0,0,0.06),0 2px 8px rgba(0,0,0,0.04);
+}
+.term-save{
+  font-size:0.625rem;
+  font-weight:700;
+  padding:0.15rem 0.5rem;
+  border-radius:100px;
+  background:#D9FA87;
+  color:#191919;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+  line-height:1.3;
+  transition:background 0.2s, color 0.2s;
+}
+.term-option:not(.term-option--active) .term-save{
+  background:rgba(245,96,2,0.12);
+  color:var(--accent);
+}
+
+/* Plan note — shown when Free or Enterprise is picked */
+.plan-note{
+  font-size:0.8125rem;
+  color:var(--text-secondary);
+  padding:0.75rem 0.875rem;
+  background:rgba(0,0,0,0.03);
+  border:1px solid rgba(0,0,0,0.05);
+  border-radius:0.625rem;
+  margin-bottom:0.625rem;
+  line-height:1.5;
+}
+.plan-note[hidden]{display:none}
+
+.change-plan-link{
+  display:inline-flex;
+  align-items:center;
+  gap:0.25rem;
+  font-size:0.8125rem;
+  color:var(--text-secondary);
+  text-decoration:none;
+  transition:color 0.2s, gap 0.2s;
+}
+.change-plan-link::after{
+  content:'→';
+  font-size:0.875rem;
+  transition:transform 0.2s;
+}
+.change-plan-link:hover{
+  color:var(--black);
+  gap:0.5rem;
+}
+.checkbox-group{
+  display:flex;
+  align-items:flex-start;
+  gap:0.5rem;
+  margin-bottom:1.5rem;
+}
+.checkbox-group input[type="checkbox"]{
+  margin-top:0.2rem;
+  width:1rem;
+  height:1rem;
+  accent-color:var(--black);
+  flex-shrink:0;
+}
+.checkbox-group label{
+  font-size:0.8125rem;
+  color:var(--text-secondary);
+  line-height:1.5;
+  cursor:pointer;
+}
+.checkbox-group label a{
+  color:var(--black);
+  font-weight:500;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.checkbox-group label a:hover{
+  color:var(--accent);
+}
+.btn-submit{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.5rem;
+  font-size:0.9375rem;
+  font-weight:600;
+  padding:0.875rem 1.5rem;
+  border-radius:1.5rem;
+  background:var(--black);
+  color:#fff;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:all 0.3s ease;
+}
+.btn-submit:hover{
+  color:#111 !important;
+  background:#D9FA87;
+  border-color:#D9FA87;
+  box-shadow:0 4px 16px rgba(217,250,135,0.35);
+}
+.btn-submit:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+}
+.btn-submit:disabled:hover{
+  background:var(--black);
+  color:#fff !important;
+  border-color:transparent;
+  box-shadow:none;
+  backdrop-filter:none;
+}
+.auth-footer{
+  text-align:center;
+  margin-top:1.5rem;
+}
+.auth-footer p{
+  font-size:0.875rem;
+  color:var(--text-secondary);
+}
+.auth-footer a{
+  color:var(--black);
+  font-weight:600;
+  text-decoration:underline;
+  text-underline-offset:2px;
+  transition:color 0.2s;
+}
+.auth-footer a:hover{
+  color:var(--accent);
+}
+.auth-legal{
+  text-align:center;
+  margin-top:1rem;
+  font-size:0.75rem;
+  color:rgba(0,0,0,0.35);
+  max-width:28rem;
+  line-height:1.5;
+}
+.auth-legal a{
+  color:rgba(0,0,0,0.5);
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.auth-legal a:hover{
+  color:var(--black);
+}
+.auth-wordmark{
+  margin-top:3rem;
+  text-align:center;
+}
+.auth-wordmark a{
+  display:inline-block;
+  opacity:0.15;
+  transition:opacity 0.2s;
+}
+.auth-wordmark a:hover{
+  opacity:0.3;
+}
+.auth-wordmark svg{
+  height:1.25rem;
+  width:auto;
+}
+.form-error{
+  font-size:0.75rem;
+  color:#dc3545;
+  margin-top:0.25rem;
+  display:none;
+}
+
+@media(max-width:480px){
+  .auth-card{
+    padding:2rem 1.5rem;
+    border-radius:0.75rem;
+  }
+  .auth-page{
+    padding:6rem 1rem 2rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Ambient drifting gradient (endless loop, no scroll tied) -->
+<div class="onboarding-bg" aria-hidden="true">
+  <div class="onboarding-bg__wash"></div>
+  <div class="onboarding-bg__blob onboarding-bg__blob--left" id="onbBlobLeft"></div>
+  <div class="onboarding-bg__blob onboarding-bg__blob--primary" id="onbBlob1"></div>
+  <div class="onboarding-bg__blob onboarding-bg__blob--secondary" id="onbBlob2"></div>
+  <div class="onboarding-bg__blob onboarding-bg__blob--tertiary" id="onbBlobT"></div>
+</div>
+
+<div id="team-nav" data-theme="light"></div>
+
+<main class="auth-page">
+  <div class="auth-header">
+    <h1>Start your free trial</h1>
+    <p>60 days of full access. No credit card required.</p>
+  </div>
+
+  <!-- TODO: Wire form POST to Team platform API + HubSpot -->
+  <!-- TODO: Promo code field needs to parse code in submission URL to platform for validation -->
+  <form class="auth-card" id="onboardingForm" action="#" method="POST" data-hubspot-form="onboarding">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="firstName">First name</label>
+        <input type="text" id="firstName" name="first_name" placeholder="Jane" required>
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last name</label>
+        <input type="text" id="lastName" name="last_name" placeholder="Doe" required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email address</label>
+      <input type="email" id="email" name="email" placeholder="you@yourlabel.com" required>
+    </div>
+
+    <div class="form-group">
+      <label for="orgName" id="orgLabel">Organization name</label>
+      <input type="text" id="orgName" name="organization" placeholder="Your label, company, or team name">
+    </div>
+
+    <div class="form-group">
+      <label>Choose your plan</label>
+      <div class="plan-selector" role="radiogroup" aria-label="Plan">
+        <button type="button" class="plan-option" data-plan="free" role="radio" aria-checked="false">
+          <div class="plan-option__head">
+            <span class="plan-option__name">Free</span>
+            <span class="plan-option__check" aria-hidden="true"></span>
+          </div>
+          <div class="plan-option__tagline">Solo artists shipping their first releases</div>
+          <div class="plan-option__price" data-price></div>
+          <div class="plan-option__sub" data-sub></div>
+        </button>
+        <button type="button" class="plan-option" data-plan="pro" role="radio" aria-checked="false">
+          <div class="plan-option__head">
+            <span class="plan-option__name">Pro</span>
+            <span class="plan-option__check" aria-hidden="true"></span>
+          </div>
+          <div class="plan-option__tagline">Independent artists and power users</div>
+          <div class="plan-option__price" data-price></div>
+          <div class="plan-option__sub" data-sub></div>
+        </button>
+        <button type="button" class="plan-option plan-option--active" data-plan="team" role="radio" aria-checked="true">
+          <div class="plan-option__head">
+            <span class="plan-option__name">Team</span>
+            <span class="plan-option__check" aria-hidden="true"></span>
+          </div>
+          <div class="plan-option__tagline">Labels and management teams</div>
+          <div class="plan-option__price" data-price></div>
+          <div class="plan-option__sub" data-sub></div>
+        </button>
+        <button type="button" class="plan-option" data-plan="enterprise" role="radio" aria-checked="false">
+          <div class="plan-option__head">
+            <span class="plan-option__name">Enterprise</span>
+            <span class="plan-option__check" aria-hidden="true"></span>
+          </div>
+          <div class="plan-option__tagline">Major labels and custom deployments</div>
+          <div class="plan-option__price" data-price></div>
+          <div class="plan-option__sub" data-sub></div>
+        </button>
+      </div>
+
+      <div class="term-selector" role="radiogroup" aria-label="Billing period" id="termSelector">
+        <button type="button" class="term-option term-option--active" data-term="yearly" role="radio" aria-checked="true">
+          Yearly
+          <span class="term-save">Save 20%</span>
+        </button>
+        <button type="button" class="term-option" data-term="monthly" role="radio" aria-checked="false">
+          Monthly
+        </button>
+      </div>
+
+      <div class="plan-note" id="planNote" hidden></div>
+
+      <a href="pricing.html" class="change-plan-link">Explore plans</a>
+    </div>
+
+    <!-- Promo code (hidden by default) -->
+    <div class="promo-toggle">
+      <a href="#" id="promoToggle" class="change-plan-link">Got a promo code?</a>
+    </div>
+    <div class="form-group promo-field" id="promoField" style="display:none;">
+      <label for="promoCode">Promo code</label>
+      <input type="text" id="promoCode" name="promo_code" placeholder="Enter your code">
+    </div>
+
+    <input type="hidden" name="plan" id="hiddenPlan" value="team">
+    <input type="hidden" name="period" id="hiddenPeriod" value="yearly">
+
+    <div class="checkbox-group">
+      <input type="checkbox" id="agreeTerms" name="agree_terms" required>
+      <label for="agreeTerms">I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>, and consent to receiving product updates, tips, and occasional marketing communications. You can unsubscribe at any time.</label>
+    </div>
+
+    <button type="submit" class="btn-submit" id="submitBtn">Start my first release</button>
+  </form>
+
+  <div class="auth-footer">
+    <p>Already have an account? <a href="sign-in.html">Sign in</a></p>
+  </div>
+
+  <p class="auth-legal">By creating an account, you agree to our <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></p>
+
+  <div class="auth-wordmark">
+    <a href="homepage.html">
+      <svg viewBox="0 0 8334 2771" style="height:1.25rem;width:auto"><path d="M1258.71,2769.17c-69.47,0-125.871-620.411-125.871-1384.58 0-764.172 56.401-1384.58 125.871-1384.58l251.743,0c69.47,0 125.871,620.411 125.871,1384.58 0,764.173-56.401,1384.58-125.871,1384.58l-251.743,0Zm-503.485,0c-69.47,0-125.871-620.411-125.871-1384.58 0-764.172 56.401-1384.58 125.871-1384.58l251.743,0l0,2769.17l-251.743,0Zm-377.613,0c-69.471,0-125.872-620.411-125.872-1384.58 0-764.172 56.401-1384.58 125.872-1384.58l125.871,0l0,2769.17l-125.871,0Zm-251.743,0c-69.47,0-125.871-620.411-125.871-1384.58 0-764.172 56.401-1384.58 125.871-1384.58l0,2769.17Zm1888.07,0l-251.742,0l0-2769.17l251.742,0c69.471,0 125.872,620.411 125.872,1384.58 0,764.173-56.401,1384.58-125.872,1384.58Zm377.614,0l-125.871,0l0-2769.17l125.871,0c69.47,0 125.871,620.411 125.871,1384.58 0,764.173-56.401,1384.58-125.871,1384.58Zm251.742,0l0-2769.17c69.471,0 125.872,620.411 125.872,1384.58 0,764.173-56.401,1384.58-125.872,1384.58Z" fill="var(--black)"/><path d="M3025.94,1146.71l0-164.311l194.88,0l0-212.076l179.596-124.188l0,336.264l261.752,0l0,164.311l-261.752,0l0,519.682c0,223.539 40.123,261.751 261.752,261.751l0,171.954l-26.749,0c-326.711,0-414.599-95.53-414.599-431.795l0-521.592l-194.88,0Zm1346.97,976.314c-357.281,0-590.373-248.377-590.373-575.089 0-332.443 248.377-588.463 580.82-588.463 326.712,0 573.179,231.182 573.179,567.447l0,76.423l-976.314,0c24.838,212.076 187.238,357.281 412.688,357.281 177.686,0 305.695-91.708 372.566-236.913l154.758,82.155c-101.261,198.702-269.393,317.159-527.324,317.159Zm-9.553-1001.15c-198.701,0-351.549,133.741-393.582,319.069l781.433,0c-32.48-198.702-171.953-319.069-387.851-319.069Zm1303.03,1001.15c-313.337,0-569.357-248.377-569.357-580.821 0-334.354 252.199-582.731 569.357-582.731 158.58,0 320.98,76.424 410.778,208.255l0-185.328l179.596,0l0,1117.7l-179.596,0l0-189.149c-43.944,66.871-105.083,120.367-181.506,156.669-74.514,36.301-150.937,55.407-229.272,55.407Zm17.196-168.132c229.271,0 406.956-183.417 406.956-414.599 0-229.272-177.685-414.599-406.956-414.599-223.54,0-403.136,185.327-403.136,414.599 0,231.182 179.596,414.599 403.136,414.599Zm829.197,145.205l0-1117.7l179.596,0l0,156.669c74.513-112.725 196.791-179.596 357.281-179.596 198.702,0 332.443,89.798 395.493,227.361 74.513-137.563 219.718-227.361 403.135-227.361 315.248,0 485.291,191.06 485.291,481.47l0,659.155l-183.417,0l0-661.066c0-189.149-118.457-319.069-317.158-319.069-179.596,0-320.98,124.189-320.98,336.265l0,643.87l-183.417,0l0-678.261c0-183.417-114.636-301.874-305.695-301.874-189.149,0-328.622,129.92-328.622,351.549l0,628.586l-181.507,0Z" fill="var(--black)"/></svg>
+    </a>
+  </div>
+</main>
+
+<script src="components/nav.js"></script>
+<script src="components/cookie-consent.js"></script>
+<script>
+(function() {
+  // Plan config — prices mirror pricing.html
+  // Every paid plan is $0 for the 60-day trial, then the regular rate.
+  const PLANS = {
+    free: {
+      name: 'Free',
+      hasPeriod: false,
+      cta: 'Start my first release',
+      note: 'Free forever. No credit card, no billing.',
+      // mainPrice / sub: shown on the plan bubble itself
+      main: () => ({ price: '$0', unit: 'forever' }),
+      sub: () => 'No credit card required',
+    },
+    pro: {
+      name: 'Pro',
+      price: { yearly: 19.99, monthly: 24.99 },
+      hasPeriod: true,
+      cta: 'Start my first release',
+      main: () => ({ price: '$0', unit: 'for 60 days' }),
+      sub: (term) => `Then $${PLANS.pro.price[term].toFixed(2)}/mo, billed ${term}`,
+    },
+    team: {
+      name: 'Team',
+      price: { yearly: 51.99, monthly: 64.99 },
+      hasPeriod: true,
+      cta: 'Start my first release',
+      main: () => ({ price: '$0', unit: 'for 60 days' }),
+      sub: (term) => `Then $${PLANS.team.price[term].toFixed(2)}/mo per seat, billed ${term}`,
+    },
+    enterprise: {
+      name: 'Enterprise',
+      hasPeriod: false,
+      cta: 'Request Enterprise access',
+      note: "Enterprise pricing is tailored to your roster and workflow. Submit your details and our team will reach out.",
+      main: () => ({ price: 'Custom', unit: '' }),
+      sub: () => 'Tailored to your roster',
+    },
+  };
+
+  // State
+  let currentPlan = 'team';
+  let currentTerm = 'yearly';
+
+  // Elements
+  const planOptions = document.querySelectorAll('.plan-option');
+  const termOptions = document.querySelectorAll('.term-option');
+  const termSelector = document.getElementById('termSelector');
+  const planNote = document.getElementById('planNote');
+  const submitBtn = document.getElementById('submitBtn');
+  const hiddenPlan = document.getElementById('hiddenPlan');
+  const hiddenPeriod = document.getElementById('hiddenPeriod');
+  const orgLabel = document.getElementById('orgLabel');
+  const orgInput = document.getElementById('orgName');
+
+  function renderPrices() {
+    planOptions.forEach(opt => {
+      const key = opt.getAttribute('data-plan');
+      const plan = PLANS[key];
+      const priceEl = opt.querySelector('[data-price]');
+      const subEl = opt.querySelector('[data-sub]');
+      if (!priceEl || !subEl) return;
+      const { price, unit } = plan.main(currentTerm);
+      priceEl.innerHTML = unit
+        ? `${price} <small>${unit}</small>`
+        : price;
+      subEl.textContent = plan.sub(currentTerm);
+    });
+  }
+
+  function renderPlanState() {
+    planOptions.forEach(opt => {
+      const active = opt.getAttribute('data-plan') === currentPlan;
+      opt.classList.toggle('plan-option--active', active);
+      opt.setAttribute('aria-checked', active ? 'true' : 'false');
+    });
+
+    const plan = PLANS[currentPlan];
+    if (plan.hasPeriod) {
+      termSelector.hidden = false;
+      planNote.hidden = true;
+    } else {
+      termSelector.hidden = true;
+      if (plan.note) {
+        planNote.textContent = plan.note;
+        planNote.hidden = false;
+      } else {
+        planNote.hidden = true;
+      }
+    }
+
+    submitBtn.textContent = plan.cta;
+    hiddenPlan.value = currentPlan;
+    hiddenPeriod.value = currentTerm;
+
+    // Free plan re-labels Organization → Artist name
+    if (currentPlan === 'free') {
+      orgLabel.textContent = 'Artist name';
+      orgInput.placeholder = 'Your artist or stage name';
+      orgInput.name = 'artist_name';
+    } else {
+      orgLabel.textContent = 'Organization name';
+      orgInput.placeholder = 'Your label, company, or team name';
+      orgInput.name = 'organization';
+    }
+  }
+
+  function renderTermState() {
+    termOptions.forEach(opt => {
+      const active = opt.getAttribute('data-term') === currentTerm;
+      opt.classList.toggle('term-option--active', active);
+      opt.setAttribute('aria-checked', active ? 'true' : 'false');
+    });
+    hiddenPeriod.value = currentTerm;
+  }
+
+  // Click handlers
+  planOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+      const newPlan = opt.getAttribute('data-plan');
+      if (newPlan === currentPlan) return;
+      currentPlan = newPlan;
+      renderPlanState();
+      renderPrices();
+    });
+  });
+  termOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+      const newTerm = opt.getAttribute('data-term');
+      if (newTerm === currentTerm) return;
+      currentTerm = newTerm;
+      renderTermState();
+      renderPrices();
+    });
+  });
+
+  // Keyboard: arrow keys between plan bubbles for accessibility
+  function wireArrowKeys(nodeList, values, onChange) {
+    nodeList.forEach((node, i) => {
+      node.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+        e.preventDefault();
+        const forward = e.key === 'ArrowRight' || e.key === 'ArrowDown';
+        const next = (i + (forward ? 1 : -1) + nodeList.length) % nodeList.length;
+        nodeList[next].focus();
+        onChange(values[next]);
+      });
+    });
+  }
+  wireArrowKeys(planOptions, Array.from(planOptions).map(o => o.getAttribute('data-plan')), (p) => {
+    currentPlan = p; renderPlanState(); renderPrices();
+  });
+  wireArrowKeys(termOptions, Array.from(termOptions).map(o => o.getAttribute('data-term')), (t) => {
+    currentTerm = t; renderTermState(); renderPrices();
+  });
+
+  // Initialize from URL params (?plan=team&period=yearly)
+  const params = new URLSearchParams(window.location.search);
+  const urlPlan = (params.get('plan') || 'team').toLowerCase();
+  const urlPeriod = (params.get('period') || 'yearly').toLowerCase();
+  if (PLANS[urlPlan]) currentPlan = urlPlan;
+  if (urlPeriod === 'monthly' || urlPeriod === 'yearly') currentTerm = urlPeriod;
+
+  renderPlanState();
+  renderTermState();
+  renderPrices();
+
+  // Promo code toggle (unchanged behavior)
+  const promoToggle = document.getElementById('promoToggle');
+  const promoField = document.getElementById('promoField');
+  if (promoToggle) {
+    promoToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      promoField.style.display = 'block';
+      promoToggle.parentElement.style.display = 'none';
+      document.getElementById('promoCode').focus();
+    });
+  }
+
+  // Ambient gradient — endless drift (no scroll dependency).
+  // Each blob follows its own sine-wave path at a unique phase/frequency so
+  // the combined motion never repeats the same frame. Mouse parallax layered
+  // on top for a bit of liveliness on desktop.
+  (function initGradientLoop() {
+    const b1 = document.getElementById('onbBlob1');
+    const b2 = document.getElementById('onbBlob2');
+    const bT = document.getElementById('onbBlobT');
+    const bL = document.getElementById('onbBlobLeft');
+    if (!b1) return;
+    let mx = 0, my = 0, tmx = 0, tmy = 0;
+    window.addEventListener('mousemove', (e) => {
+      tmx = (e.clientX / window.innerWidth - 0.5) * 2;
+      tmy = (e.clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+    const start = performance.now();
+    function tick(now) {
+      const t = (now - start) * 0.00015;
+      mx += (tmx - mx) * 0.04;
+      my += (tmy - my) * 0.04;
+      if (b1) b1.style.transform = `translate(${Math.sin(t * 0.9) * 40 + mx * 30}px, ${Math.cos(t * 0.7) * 30 + my * 25}px)`;
+      if (b2) b2.style.transform = `translate(${Math.sin(t * 1.2 + 1.5) * 35 + mx * -22}px, ${Math.cos(t * 0.5 + 0.8) * 28 + my * 16}px)`;
+      if (bT) bT.style.transform = `translate(${Math.sin(t * 0.6 + 2.2) * 30 + mx * 18}px, ${Math.cos(t * 1.1 + 3.1) * 35 + my * -22}px)`;
+      if (bL) bL.style.transform = `translate(${Math.sin(t * 0.5 + 4.0) * 45 + mx * -30}px, ${Math.cos(t * 0.8 + 2.5) * 25 + my * -15}px)`;
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+
+  // Form submit
+  const form = document.getElementById('onboardingForm');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!document.getElementById('agreeTerms').checked) return;
+    const originalLabel = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = currentPlan === 'enterprise' ? 'Sending request…' : 'Setting up your workspace…';
+    // TODO: POST to Team platform API + HubSpot.
+    // Enterprise should route to a separate lead workflow on the backend.
+    setTimeout(function() {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalLabel;
+    }, 3000);
+  });
+})();
+</script>
+
+</body>
+</html>

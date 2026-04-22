@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise — Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "Nyght Serif"; font-weight: 500; font-style: italic; font-display: swap; src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-MediumItalic.woff2") format("woff2"); }
+@font-face { font-family: "Nyght Serif"; font-weight: 300; font-style: italic; font-display: swap; src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-LightItalic.woff2") format("woff2"); }
+.nyght { font-family: "Nyght Serif", Georgia, serif; font-style: italic; font-weight: 300; }
+</style>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+html{scroll-behavior:smooth;scrollbar-gutter:stable}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:#111110;background:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+:root{--black:#191919;--white:#fff;--grey:#E0E0E0;--bg:#FAFAFA;--accent:#F56002;--text-secondary:#454545;--ease:cubic-bezier(0.16,1,0.3,1)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;font-weight:600;padding:0.75rem 1.25rem;border-radius:1.5rem;transition:all 0.3s ease;cursor:pointer}
+.btn--primary{background:var(--black);color:#fff;border:1px solid transparent}
+.btn--primary:hover{color:#111 !important;background:rgba(255,255,255,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.btn--primary-light{background:var(--black);color:#fff;border:1px solid transparent}
+.btn--primary-light:hover{color:#111 !important;background:rgba(0,0,0,0.05);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(0,0,0,0.12);box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.btn--outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.4)}
+.btn--outline:hover{background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:rgba(255,255,255,0.5)}
+.btn--ghost{background:transparent;color:var(--black);border:1px solid var(--grey)}
+.btn--ghost:hover{background:rgba(0,0,0,0.05);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--black)}
+.btn--white{background:#fff;color:var(--black);border:1px solid transparent}
+.btn--white:hover{background:rgba(255,255,255,0.85);box-shadow:0 2px 12px rgba(0,0,0,0.15)}
+.btn--green{background:#D9FA87;color:var(--black);border:1px solid transparent}
+.btn--green:hover{background:rgba(255,255,255,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.1)}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0.875rem 2rem;display:flex;align-items:center;justify-content:space-between;max-width:80rem;margin:0 auto;transition:transform 0.35s cubic-bezier(0.4,0,0.2,1)}
+.nav.nav--hidden{transform:translateY(calc(-100% - 1rem))}
+.nav__pill{display:flex;align-items:center;gap:0.25rem;padding:0.375rem 0.5rem;border-radius:100px;background:rgba(255,255,255,0.12);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1);transition:background 0.35s,border-color 0.35s}
+.nav--solid .nav__pill{background:rgba(255,255,255,0.95);border-color:rgba(0,0,0,0.06)}
+.nav__logo{display:flex;align-items:center;padding:0 0.5rem}
+.nav__logo img{height:1.125rem;transition:filter 0.3s,opacity 0.3s}
+.nav__logo .logo-light{position:absolute}
+.nav__logo .logo-dark{opacity:0}
+.nav--solid .nav__logo .logo-light{opacity:0}
+.nav--solid .nav__logo .logo-dark{opacity:1;position:relative}
+.nav__link{font-size:0.8125rem;font-weight:500;padding:0.5rem 0.875rem;border-radius:100px;color:rgba(255,255,255,0.85);white-space:nowrap;display:flex;align-items:center;gap:0.25rem;transition:color 0.2s,background 0.2s}
+.nav__link:hover{color:#fff;background:rgba(255,255,255,0.1)}
+.nav--solid .nav__link{color:var(--text-secondary)}
+.nav--solid .nav__link:hover{color:var(--black);background:rgba(0,0,0,0.04)}
+.nav__link svg{width:10px;height:10px;opacity:0.6}
+.nav__login{font-size:0.8125rem;font-weight:500;padding:0.5rem 1rem;border-radius:100px;color:rgba(255,255,255,0.85);white-space:nowrap;border:1px solid rgba(255,255,255,0.3);transition:color 0.2s,border-color 0.2s,background 0.2s}
+.nav__login:hover{color:#fff;border-color:rgba(255,255,255,0.5)}
+.nav--solid .nav__login{color:var(--black);border-color:rgba(0,0,0,0.15)}
+.nav--solid .nav__login:hover{border-color:var(--black)}
+a.nav__cta{font-size:0.8125rem;font-weight:600;padding:0.5rem 1.125rem;border-radius:100px;white-space:nowrap;text-decoration:none;color:#fff;background:#111110;border:1px solid transparent;transition:all 0.3s ease}
+a.nav__cta:hover{color:#111 !important;background:rgba(255,255,255,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.nav--solid a.nav__cta{color:var(--black);background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.1);box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.nav--solid a.nav__cta:hover{color:var(--black);background:rgba(0,0,0,0.08);border-color:rgba(0,0,0,0.18);box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.nav__divider{width:1px;height:1rem;background:rgba(255,255,255,0.15);margin:0 0.125rem}
+.nav--solid .nav__divider{background:rgba(0,0,0,0.08)}
+.nav__dropdown{position:relative}
+.nav__dropdown>.nav__link{cursor:pointer}
+.nav__dropdown>.nav__link svg{transition:transform 0.25s}
+.nav__dropdown.is-open>.nav__link svg{transform:rotate(180deg)}
+.nav__dropdown-panel{position:absolute;top:calc(100% + 0.75rem);left:0;display:flex;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:0.75rem;box-shadow:0 12px 48px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.06);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity 0.25s ease,visibility 0.25s ease,transform 0.25s ease;z-index:100;min-width:36rem;overflow:hidden}
+.nav__dropdown.is-open .nav__dropdown-panel{opacity:1;visibility:visible;transform:translateY(0)}
+.nav__dropdown-left{flex:1;padding:1.5rem;display:flex;flex-direction:column;gap:0.25rem}
+.nav__dropdown-item{display:block;padding:0.75rem 1rem;border-radius:0.5rem;transition:background 0.15s}
+.nav__dropdown-item:hover{background:rgba(0,0,0,0.03)}
+.nav__dropdown-item-title{font-size:0.875rem;font-weight:600;color:var(--black);margin-bottom:0.125rem}
+.nav__dropdown-item-desc{font-size:0.8125rem;color:var(--text-secondary);line-height:1.4}
+.nav__dropdown-right{width:16rem;background:var(--black);padding:1.5rem;display:flex;flex-direction:column;gap:0.125rem;border-radius:0 0.75rem 0.75rem 0}
+.nav__dropdown-featured-label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.4);padding:0.5rem 0.75rem;margin-bottom:0.25rem;display:flex;align-items:center;gap:0.5rem}
+.nav__dropdown-featured-label::before{content:'';width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.5)}
+.nav__dropdown-featured-link{display:block;font-size:0.9375rem;font-weight:500;color:rgba(255,255,255,0.75);padding:0.625rem 0.75rem;border-radius:0.375rem;transition:color 0.15s,background 0.15s}
+.nav__dropdown-featured-link:hover{color:#fff;background:rgba(255,255,255,0.08)}
+.nav-blur-overlay{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.1);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity 0.35s ease,visibility 0.35s ease}
+.nav-blur-overlay.is-active{opacity:1;visibility:visible}
+@media(max-width:768px){
+  .nav{padding:0.75rem 1rem}
+  .nav__pill--left .nav__link,.nav__pill--left .nav__dropdown{display:none}
+  .nav__pill--right .nav__link,.nav__pill--right .nav__divider{display:none}
+  .nav__login{display:none}
+}
+
+
+/* =============================================
+   ENTERPRISE PAGE
+   ============================================= */
+
+/* Hero pill */
+.hero-pill{
+  display:inline-block;
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.06em;
+  padding:0.375rem 0.875rem;border-radius:0.375rem;
+  color:#fff;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.25);
+  margin-bottom:1.5rem;
+}
+
+/* Metadata pills */
+.metadata-pill{
+  display:inline-block;
+  width:auto;
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.06em;
+  padding:0.375rem 0.875rem;border-radius:0.375rem;
+  background:#D9FA87;color:var(--black);
+  margin-bottom:0.75rem;
+}
+
+/* Section label */
+.section-label{
+  font-size:0.6875rem;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--accent);
+  display:inline-flex;align-items:center;gap:0.5rem;
+  margin-bottom:1rem;
+}
+.section-label::before{
+  content:'';width:0.375rem;height:0.375rem;border-radius:50%;
+  background:var(--accent);
+}
+
+/* Hero with background image + overlay */
+.icp-hero{
+  position:relative;
+  color:#fff;
+  min-height:80vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:8rem 2rem 6rem;
+  overflow:hidden;
+}
+.icp-hero__bg{
+  position:absolute;inset:0;z-index:0;
+}
+.icp-hero__bg img{
+  width:100%;height:100%;object-fit:cover;
+}
+.icp-hero__overlay{
+  position:absolute;inset:0;z-index:1;
+  background:rgba(0,0,0,0.7);
+}
+.icp-hero__inner{
+  max-width:48rem;position:relative;z-index:2;
+  transition:opacity 0.1s linear,transform 0.1s linear;
+  will-change:opacity,transform;
+}
+.icp-hero h1{
+  font-size:clamp(2.5rem,5.5vw,4rem);
+  font-weight:300;line-height:1.08;
+  letter-spacing:-0.03em;
+  margin-bottom:1.25rem;
+}
+.icp-hero h1 .nyght{font-weight:300}
+.icp-hero p{
+  font-size:1.0625rem;line-height:1.65;
+  color:rgba(255,255,255,0.85);
+  max-width:36rem;margin:0 auto 2rem;
+}
+.icp-hero__buttons{
+  display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;
+}
+
+/* Why Enterprise — centered intro */
+.why-enterprise{
+  padding:6rem 2rem;
+  background:#fff;
+}
+.why-enterprise__inner{
+  max-width:38rem;margin:0 auto;text-align:center;
+}
+.why-enterprise__inner h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+  margin-bottom:1.25rem;
+}
+.why-enterprise__inner h2 .nyght{font-weight:300}
+.why-enterprise__inner p{
+  font-size:1.0625rem;line-height:1.65;
+  color:var(--text-secondary);
+}
+
+/* Pain/Solution — Alternating 2-col */
+.pain-section{
+  padding:6rem 2rem;
+  background:#fff;
+}
+.pain-section--alt{background:var(--bg)}
+.pain-section__inner{
+  max-width:72rem;margin:0 auto;
+}
+.pain-section__header{
+  text-align:center;max-width:38rem;margin:0 auto 4rem;
+}
+.pain-section__header h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+  margin-bottom:0.5rem;
+}
+.pain-section__header h2 .nyght{font-weight:300}
+.pain-section__header p{
+  font-size:1.0625rem;line-height:1.65;
+  color:var(--text-secondary);
+  margin-top:0.75rem;
+}
+
+.pain-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3rem;
+  align-items:center;
+  margin-bottom:5rem;
+}
+.pain-row:last-child{margin-bottom:0}
+.pain-row--flipped .pain-row__text{order:2}
+.pain-row--flipped .pain-row__panel{order:1}
+
+.pain-row__text{display:flex;flex-direction:column;align-items:flex-start;gap:0.75rem}
+.pain-row__text .section-label{margin-bottom:0.25rem}
+.pain-row__text h3{
+  font-size:clamp(1.5rem,3vw,2rem);
+  font-weight:500;line-height:1.15;
+  letter-spacing:-0.02em;
+}
+.pain-row__text p{
+  font-size:1rem;line-height:1.65;
+  color:var(--text-secondary);
+  max-width:28rem;
+}
+
+.pain-row__panel{
+  background:linear-gradient(135deg,#fafafa,#f0f0ea);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:1rem;
+  padding:2.5rem;
+  aspect-ratio:4/3;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+
+/* Mock UI — Dashboard status cards */
+.mock-dashboard{width:100%;display:flex;flex-direction:column;gap:0.75rem}
+.mock-dashboard__row{display:flex;gap:0.75rem}
+.mock-dashboard__card{
+  flex:1;
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.625rem;
+  padding:1rem;
+  display:flex;flex-direction:column;gap:0.375rem;
+}
+.mock-dashboard__card-title{font-size:0.6875rem;font-weight:600;color:rgba(0,0,0,0.35);text-transform:uppercase;letter-spacing:0.04em}
+.mock-dashboard__card-value{font-size:1.25rem;font-weight:700;color:var(--black)}
+.mock-dashboard__pill{
+  display:inline-flex;align-items:center;gap:0.25rem;
+  font-size:0.625rem;font-weight:600;
+  padding:0.2rem 0.5rem;border-radius:100px;
+  width:fit-content;
+}
+.mock-dashboard__pill--green{background:rgba(16,185,129,0.1);color:#059669}
+.mock-dashboard__pill--amber{background:rgba(245,158,11,0.1);color:#d97706}
+.mock-dashboard__pill--blue{background:rgba(59,130,246,0.1);color:#2563eb}
+
+/* Mock UI — Audit log */
+.mock-audit{width:100%;display:flex;flex-direction:column;gap:0.625rem}
+.mock-audit__row{
+  display:flex;align-items:center;gap:0.75rem;
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.625rem;
+  padding:0.75rem 1rem;
+}
+.mock-audit__check{
+  width:1.25rem;height:1.25rem;border-radius:50%;flex-shrink:0;
+  background:#D9FA87;
+  display:flex;align-items:center;justify-content:center;
+}
+.mock-audit__check::after{
+  content:'';
+  width:5px;height:8px;
+  border:solid var(--black);border-width:0 2px 2px 0;
+  transform:rotate(45deg);
+  margin-top:-1px;
+}
+.mock-audit__content{flex:1;display:flex;flex-direction:column;gap:0.125rem}
+.mock-audit__action{font-size:0.8125rem;color:var(--black);font-weight:500}
+.mock-audit__meta{font-size:0.6875rem;color:var(--text-secondary)}
+.mock-audit__time{font-size:0.6875rem;color:var(--text-secondary);flex-shrink:0;white-space:nowrap}
+
+/* Mock UI — Template cards */
+.mock-templates{width:100%;display:flex;flex-direction:column;gap:0.625rem}
+.mock-templates__card{
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.625rem;
+  padding:1rem 1.25rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.mock-templates__card-title{font-size:0.875rem;font-weight:600;color:var(--black)}
+.mock-templates__card-meta{font-size:0.75rem;color:var(--text-secondary)}
+
+/* Security Callout — two-column */
+.security-callout{
+  padding:6rem 2rem;
+  background:var(--bg);
+  border-top:1px solid rgba(0,0,0,0.06);
+  border-bottom:1px solid rgba(0,0,0,0.06);
+}
+.security-callout__inner{
+  max-width:72rem;margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  align-items:flex-start;
+}
+.security-callout__headline h2{
+  font-size:clamp(1.75rem,3.5vw,2.25rem);
+  font-weight:400;line-height:1.15;
+  letter-spacing:-0.02em;
+  color:var(--black);
+}
+.security-callout__headline h2 .nyght{font-weight:300}
+.security-callout__copy p{
+  font-size:1rem;line-height:1.65;
+  color:var(--text-secondary);
+  margin-bottom:1.5rem;
+}
+.security-callout__link{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-size:0.875rem;font-weight:600;
+  color:var(--black);
+  transition:color 0.25s var(--ease),gap 0.25s var(--ease);
+  text-decoration:none;
+}
+.security-callout__link:hover{color:#059669;gap:0.75rem}
+.security-callout__link svg{
+  width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;
+  transition:transform 0.25s var(--ease);
+}
+.security-callout__link:hover svg{transform:translateX(4px)}
+
+@media(max-width:768px){
+  .security-callout__inner{grid-template-columns:1fr;gap:1.5rem}
+}
+
+/* What's Included — Feature grid */
+.included-section{
+  padding:6rem 2rem;
+  background:#fff;
+}
+.included-section__inner{
+  max-width:72rem;margin:0 auto;
+}
+.included-section__header{
+  text-align:center;max-width:38rem;margin:0 auto 3.5rem;
+}
+.included-section__header h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+}
+.included-section__header h2 .nyght{font-weight:300}
+.feature-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+}
+.feature-block{
+  padding:2rem 1.75rem 1.75rem;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:1rem;
+  background:#fff;
+  position:relative;
+  overflow:hidden;
+  transition:box-shadow 0.3s var(--ease),border-color 0.3s;
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.5s var(--ease),transform 0.5s var(--ease),box-shadow 0.3s,border-color 0.3s;
+}
+.feature-block.is-visible{opacity:1;transform:translateY(0)}
+.feature-block:nth-child(2).is-visible{transition-delay:0.06s}
+.feature-block:nth-child(3).is-visible{transition-delay:0.12s}
+.feature-block:nth-child(4).is-visible{transition-delay:0.18s}
+.feature-block:nth-child(5).is-visible{transition-delay:0.24s}
+.feature-block:nth-child(6).is-visible{transition-delay:0.3s}
+.feature-block:hover{
+  border-color:rgba(0,0,0,0.1);
+  box-shadow:0 8px 40px rgba(0,0,0,0.06);
+}
+.feature-block__accent{
+  width:2rem;height:3px;border-radius:2px;
+  background:#D9FA87;margin-bottom:1.25rem;
+}
+.feature-block__title{
+  font-family:"Nyght Serif",Georgia,serif;
+  font-style:italic;font-weight:300;
+  font-size:1.25rem;line-height:1.2;
+  color:var(--black);
+  margin-bottom:0.5rem;
+}
+.feature-block__desc{
+  font-size:0.875rem;line-height:1.6;
+  color:var(--text-secondary);
+}
+
+/* Bridge to Product Pages — lime green */
+.bridge-section{
+  padding:5rem 2rem;
+  background:#D9FA87;
+  color:var(--black);
+}
+.bridge-section__inner{
+  max-width:72rem;margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  align-items:flex-start;
+}
+.bridge-section__headline h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+  color:var(--black);
+}
+.bridge-section__headline h2 .nyght{font-weight:300}
+.bridge-section__copy p{
+  font-size:1.0625rem;line-height:1.7;
+  color:rgba(25,25,25,0.6);
+  margin-bottom:2rem;
+}
+.bridge-section__links{
+  display:flex;flex-direction:column;gap:1rem;
+}
+.bridge-section__link{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-size:1rem;font-weight:600;
+  color:var(--black);
+  transition:gap 0.25s var(--ease);
+  text-decoration:none;
+}
+.bridge-section__link:hover{gap:0.75rem}
+.bridge-section__link:hover .bridge-link-text{text-decoration:underline}
+.bridge-section__link svg{
+  width:16px;height:16px;stroke:var(--black);fill:none;stroke-width:2;
+  transition:transform 0.25s var(--ease);
+  text-decoration:none !important;
+}
+.bridge-section__link:hover svg{transform:translateX(4px)}
+
+@media(max-width:768px){
+  .bridge-section__inner{grid-template-columns:1fr;gap:1.5rem}
+}
+
+/* Final CTA */
+.final-cta{
+  padding:4rem 2rem 4rem;background:#fff;
+}
+.final-cta__card{
+  max-width:72rem;margin:0 auto;text-align:center;
+  padding:5rem 3rem;background:#fff;
+  border:1px solid rgba(0,0,0,0.08);border-radius:1rem;
+  box-shadow:0 4px 32px rgba(0,0,0,0.04);
+}
+.final-cta h2{
+  font-size:clamp(1.75rem,4vw,2.75rem);
+  font-weight:300;letter-spacing:-0.02em;
+  margin-bottom:1rem;line-height:1.1;
+}
+.final-cta__sub{
+  font-size:1.0625rem;line-height:1.65;
+  color:var(--text-secondary);
+  max-width:32rem;margin:0 auto 2rem;
+}
+.final-cta__buttons{
+  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
+  margin-bottom:1rem;
+}
+.final-cta__note{
+  font-size:0.8125rem;color:var(--text-secondary);
+}
+
+/* Who It's For — Role columns */
+.roles-section{
+  padding:5rem 2rem;
+  background:var(--black);
+  color:#fff;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.roles-section__inner{
+  max-width:72rem;margin:0 auto;
+}
+.roles-section__header{
+  text-align:center;margin-bottom:3rem;
+}
+.roles-section__header h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+  color:#fff;
+}
+.roles-section__header h2 .nyght{font-weight:300}
+.roles-grid{
+  display:grid;
+  grid-template-columns:1fr 1px 1fr 1px 1fr 1px 1fr;
+  gap:0;
+}
+.roles-divider{
+  background:rgba(255,255,255,0.1);
+  width:1px;
+  align-self:stretch;
+}
+.role-item{
+  display:flex;flex-direction:column;
+  align-items:center;text-align:center;
+  padding:1.5rem 2rem;
+}
+.role-item__title{
+  font-family:"Nyght Serif",Georgia,serif;
+  font-style:italic;font-weight:300;
+  font-size:1.5rem;margin-bottom:0.5rem;
+  color:#fff;
+}
+.role-item__desc{
+  font-size:0.9375rem;line-height:1.55;
+  color:rgba(255,255,255,0.5);
+  max-width:14rem;
+  margin-bottom:1rem;
+}
+.role-item__link{
+  margin-top:auto;
+  font-size:0.8125rem;font-weight:600;
+  color:#D9FA87;
+  display:inline-flex;align-items:center;gap:0.375rem;
+  transition:color 0.25s,gap 0.25s;
+  text-decoration:none;
+}
+.role-item__link:hover{color:#fff;gap:0.625rem}
+.role-item__link svg{
+  width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;
+  transition:transform 0.25s;
+}
+.role-item__link:hover svg{transform:translateX(3px)}
+
+/* Responsive */
+@media(max-width:768px){
+  .icp-hero{min-height:auto;padding:7rem 1.5rem 4rem}
+  .icp-hero h1{font-size:2.25rem}
+  .icp-hero__buttons{flex-direction:column;align-items:center}
+  .icp-hero__buttons .btn{width:100%;max-width:18rem;justify-content:center}
+
+  .pain-row{grid-template-columns:1fr;gap:2rem}
+  .pain-row--flipped .pain-row__text{order:1}
+  .pain-row--flipped .pain-row__panel{order:2}
+  .pain-row__panel{aspect-ratio:auto;padding:2rem;min-height:14rem}
+
+  .feature-grid{grid-template-columns:1fr}
+
+  .roles-grid{grid-template-columns:1fr;gap:0}
+  .roles-divider{width:100%;height:1px;align-self:auto}
+  .role-item{padding:1.5rem 1rem}
+
+  .bridge-section{padding:4rem 1.5rem}
+
+  .final-cta__card{padding:3rem 2rem}
+  .final-cta__buttons{flex-direction:column;align-items:center}
+}
+@media(min-width:769px) and (max-width:1024px){
+  .roles-grid{grid-template-columns:1fr 1px 1fr;gap:0}
+  .feature-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<div id="team-nav" data-theme="dark"></div>
+
+<!-- Hero -->
+<section class="icp-hero" id="heroSection">
+  <div class="icp-hero__bg">
+    <img src="assets/hero-bg-new.png" alt="" loading="eager">
+  </div>
+  <div class="icp-hero__overlay"></div>
+  <div class="icp-hero__inner">
+    <span class="hero-pill">Enterprise</span>
+    <h1>Scale without compromise.<br><span class="nyght">Security without sacrifice.</span></h1>
+    <p>For major labels, distributors, and music companies that need enterprise-grade controls, dedicated support, and the confidence that their IP is protected at every level.</p>
+    <div class="icp-hero__buttons">
+      <a href="demo.html" class="btn btn--green">Book a demo</a>
+      <a href="contact.html?interest=enterprise" class="btn btn--outline">Talk to us</a>
+    </div>
+  </div>
+</section>
+
+<!-- Why Enterprise -->
+<section class="why-enterprise">
+  <div class="why-enterprise__inner">
+    <h2>Built for the complexity<br><span class="nyght">of scale</span></h2>
+    <p>When you're managing hundreds of releases across dozens of artists, you need more than a project management tool. You need infrastructure that scales with your operation and doesn't slow you down.</p>
+  </div>
+</section>
+
+<!-- Enterprise Capabilities — Alternating 2-col -->
+<section class="pain-section pain-section--alt">
+  <div class="pain-section__inner">
+    <div class="pain-section__header">
+      <h2>Unlock your releases with Enterprise</h2>
+    </div>
+
+    <!-- SSO & Identity: Text left, Panel right -->
+    <div class="pain-row">
+      <div class="pain-row__text">
+        <span class="metadata-pill">Authentication</span>
+        <h3>Single sign-on that works with your existing systems</h3>
+        <p>SAML 2.0 SSO integration with your identity provider. SCIM provisioning for automated user management. Your IT team controls access — Team handles the rest.</p>
+      </div>
+      <div class="pain-row__panel">
+        <div class="mock-dashboard">
+          <div class="mock-dashboard__row">
+            <div class="mock-dashboard__card">
+              <div class="mock-dashboard__card-title">SSO</div>
+              <div class="mock-dashboard__card-value">Connected</div>
+              <div class="mock-dashboard__pill mock-dashboard__pill--green">Active</div>
+            </div>
+            <div class="mock-dashboard__card">
+              <div class="mock-dashboard__card-title">SCIM</div>
+              <div class="mock-dashboard__card-value">Active</div>
+              <div class="mock-dashboard__pill mock-dashboard__pill--green">Syncing</div>
+            </div>
+          </div>
+          <div class="mock-dashboard__row">
+            <div class="mock-dashboard__card">
+              <div class="mock-dashboard__card-title">Users</div>
+              <div class="mock-dashboard__card-value">342</div>
+              <div class="mock-dashboard__pill mock-dashboard__pill--blue">Synced</div>
+            </div>
+            <div class="mock-dashboard__card">
+              <div class="mock-dashboard__card-title">Providers</div>
+              <div class="mock-dashboard__card-value">Okta</div>
+              <div class="mock-dashboard__pill mock-dashboard__pill--green">Connected</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Governance & Compliance: FLIPPED -->
+    <div class="pain-row pain-row--flipped">
+      <div class="pain-row__text">
+        <span class="metadata-pill">Governance</span>
+        <h3>Complete visibility and control over every action</h3>
+        <p>Comprehensive audit logs, role-based access controls with granular permissions per release, and multi-tiered approval workflows. Know who did what, when, and on which release.</p>
+      </div>
+      <div class="pain-row__panel">
+        <div class="mock-audit">
+          <div class="mock-audit__row">
+            <div class="mock-audit__check"></div>
+            <div class="mock-audit__content">
+              <div class="mock-audit__action">Sarah M. approved artwork</div>
+              <div class="mock-audit__meta">Mara / Golden Hour</div>
+            </div>
+            <div class="mock-audit__time">2m ago</div>
+          </div>
+          <div class="mock-audit__row">
+            <div class="mock-audit__check"></div>
+            <div class="mock-audit__content">
+              <div class="mock-audit__action">Jake R. submitted to DSPs</div>
+              <div class="mock-audit__meta">Ash Velo / First Light EP</div>
+            </div>
+            <div class="mock-audit__time">15m ago</div>
+          </div>
+          <div class="mock-audit__row">
+            <div class="mock-audit__check"></div>
+            <div class="mock-audit__content">
+              <div class="mock-audit__action">Admin updated permissions</div>
+              <div class="mock-audit__meta">Marketing team</div>
+            </div>
+            <div class="mock-audit__time">1h ago</div>
+          </div>
+          <div class="mock-audit__row">
+            <div class="mock-audit__check"></div>
+            <div class="mock-audit__content">
+              <div class="mock-audit__action">System backup completed</div>
+              <div class="mock-audit__meta">All accounts</div>
+            </div>
+            <div class="mock-audit__time">3h ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Workflows: Text left, Panel right -->
+    <div class="pain-row">
+      <div class="pain-row__text">
+        <span class="metadata-pill">Flexibility</span>
+        <h3>Configure Team to match how your organization works</h3>
+        <p>Custom approval flows, release templates per team or department, configurable notification rules, and flexible billing. Enterprise that's flexible and customized to you.</p>
+      </div>
+      <div class="pain-row__panel">
+        <div class="mock-templates">
+          <div class="mock-templates__card">
+            <div>
+              <div class="mock-templates__card-title">Single Release Template</div>
+              <div class="mock-templates__card-meta">14 tasks · 6 weeks</div>
+            </div>
+          </div>
+          <div class="mock-templates__card">
+            <div>
+              <div class="mock-templates__card-title">EP Campaign</div>
+              <div class="mock-templates__card-meta">22 tasks · 10 weeks</div>
+            </div>
+          </div>
+          <div class="mock-templates__card">
+            <div>
+              <div class="mock-templates__card-title">Album Launch</div>
+              <div class="mock-templates__card-meta">35 tasks · 16 weeks</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Security Callout -->
+<section class="security-callout">
+  <div class="security-callout__inner">
+    <div class="security-callout__headline">
+      <h2>Enterprise-grade <span class="nyght">security</span></h2>
+    </div>
+    <div class="security-callout__copy">
+      <p>AES-256 encryption and per-account data isolation. TeamMate AI learns your context to get smarter for you — but your data is never shared across accounts or used to train models for anyone else. Your unreleased content is protected by design.</p>
+      <a href="security.html" class="security-callout__link">Read more about our security <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- What's Included -->
+<section class="included-section">
+  <div class="included-section__inner">
+    <div class="included-section__header">
+      <h2>Everything in Team<br><span class="nyght">plus so much more</span></h2>
+    </div>
+    <div class="feature-grid">
+
+      <div class="feature-block">
+        <div class="feature-block__accent"></div>
+        <div class="feature-block__title">Dedicated Support</div>
+        <div class="feature-block__desc">A named account manager who knows your operation. Priority response times and quarterly business reviews.</div>
+      </div>
+
+      <div class="feature-block">
+        <div class="feature-block__accent"></div>
+        <div class="feature-block__title">Custom Onboarding</div>
+        <div class="feature-block__desc">White-glove setup for your team. Data migration, workflow configuration, and training sessions.</div>
+      </div>
+
+      <div class="feature-block">
+        <div class="feature-block__accent"></div>
+        <div class="feature-block__title">SLA Guarantee</div>
+        <div class="feature-block__desc">99.9% uptime SLA with proactive monitoring and incident response.</div>
+      </div>
+
+      <div class="feature-block">
+        <div class="feature-block__accent"></div>
+        <div class="feature-block__title">Custom Billing</div>
+        <div class="feature-block__desc">Annual contracts, volume pricing, and flexible payment terms. We'll build a plan that works for your organization.</div>
+      </div>
+
+      <div class="feature-block">
+        <div class="feature-block__accent"></div>
+        <div class="feature-block__title">API Access</div>
+        <div class="feature-block__desc">Connect Team to your existing tools and data pipelines. RESTful API with comprehensive documentation.</div>
+      </div>
+
+      <div class="feature-block">
+        <div class="feature-block__accent"></div>
+        <div class="feature-block__title">Priority Features</div>
+        <div class="feature-block__desc">Influence the roadmap. Enterprise customers get early access to new features and direct input on development priorities.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta">
+  <div class="final-cta__card">
+    <h2>Let's build a plan<br><span class="nyght">that works for you</span></h2>
+    <p class="final-cta__sub">Customized setup, dedicated support, and security protocols that meets your unique requirements.</p>
+    <div class="final-cta__buttons">
+      <a href="demo.html" class="btn btn--green">Book a demo</a>
+      <a href="contact.html?interest=enterprise" class="btn btn--ghost">Contact us</a>
+    </div>
+    <p class="final-cta__note">Talk to a founder, not a sales rep.</p>
+  </div>
+</section>
+
+<!-- Bridge to Product Pages -->
+<section class="bridge-section">
+  <div class="bridge-section__inner">
+    <div class="bridge-section__headline">
+      <h2>Ready to see Team<br><span class="nyght">in action?</span></h2>
+    </div>
+    <div class="bridge-section__copy">
+      <p>Explore how Release Orchestration and Release Intelligence work together to power your entire operation.</p>
+      <div class="bridge-section__links">
+        <a href="orchestration.html" class="bridge-section__link"><span class="bridge-link-text">Explore Release Orchestration</span> <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+        <a href="intelligence.html" class="bridge-section__link"><span class="bridge-link-text">Explore Release Intelligence</span> <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Who It's For — Role cards -->
+<section class="roles-section">
+  <div class="roles-section__inner">
+    <div class="roles-section__header">
+      <h2>Designed for<br><span class="nyght">how you work</span></h2>
+    </div>
+    <div class="roles-grid">
+      <a href="for-artists.html" class="role-item">
+        <div class="role-item__title">For Artists</div>
+        <div class="role-item__desc">Your release, structured. No more winging it.</div>
+        <div class="role-item__link">Learn more <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+      </a>
+      <div class="roles-divider"></div>
+      <a href="for-managers.html" class="role-item">
+        <div class="role-item__title">For Managers</div>
+        <div class="role-item__desc">Every artist's rollout. One dashboard.</div>
+        <div class="role-item__link">Learn more <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+      </a>
+      <div class="roles-divider"></div>
+      <a href="for-labels.html" class="role-item">
+        <div class="role-item__title">For Labels</div>
+        <div class="role-item__desc">Scale your release process. Not your headcount.</div>
+        <div class="role-item__link">Learn more <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+      </a>
+      <div class="roles-divider"></div>
+      <a href="for-partners.html" class="role-item">
+        <div class="role-item__title">For Partners</div>
+        <div class="role-item__desc">See your deliverables. Hit your deadlines.</div>
+        <div class="role-item__link">Learn more <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<div id="team-footer"></div>
+
+<script src="components/nav.js"></script>
+<script src="components/footer.js"></script>
+<script src="components/cookie-consent.js"></script>
+
+<!-- Nav solid on scroll + Hero fade -->
+<script>
+(function() {
+  var nav = document.getElementById('nav');
+  var hero = document.getElementById('heroSection');
+  var heroInner = hero ? hero.querySelector('.icp-hero__inner') : null;
+  if (!nav || !hero) return;
+
+  function check() {
+    var heroBottom = hero.getBoundingClientRect().bottom;
+    var heroH = hero.offsetHeight;
+    var scrolled = window.scrollY;
+
+    if (heroBottom < 60) nav.classList.add('nav--solid');
+    else nav.classList.remove('nav--solid');
+
+    if (heroInner) {
+      var progress = Math.min(1, scrolled / (heroH * 0.5));
+      heroInner.style.opacity = 1 - progress;
+      heroInner.style.transform = 'translateY(' + (progress * 40) + 'px)';
+    }
+  }
+  window.addEventListener('scroll', check, { passive: true });
+  check();
+})();
+</script>
+
+<!-- Panel scroll animations -->
+<script>
+(function() {
+  // Shared panel animation function
+  window._animatePanel = function(panel) {
+    if (!panel) return;
+    panel.querySelectorAll('.mock-dashboard__card').forEach(function(card, i) {
+      card.style.opacity = '0'; card.style.transform = 'translateY(12px)';
+      card.style.transition = 'opacity 0.4s ease ' + (0.06 + i * 0.08) + 's, transform 0.4s ease ' + (0.06 + i * 0.08) + 's';
+      setTimeout(function() { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 20);
+    });
+    panel.querySelectorAll('.mock-audit__row').forEach(function(row, i) {
+      row.style.opacity = '0'; row.style.transform = 'translateX(-12px)';
+      row.style.transition = 'opacity 0.35s ease ' + (0.05 + i * 0.1) + 's, transform 0.35s ease ' + (0.05 + i * 0.1) + 's';
+      setTimeout(function() { row.style.opacity = '1'; row.style.transform = 'translateX(0)'; }, 20);
+    });
+    panel.querySelectorAll('.mock-templates__card').forEach(function(card, i) {
+      card.style.opacity = '0'; card.style.transform = 'translateY(8px)';
+      card.style.transition = 'opacity 0.35s ease ' + (0.05 + i * 0.1) + 's, transform 0.35s ease ' + (0.05 + i * 0.1) + 's';
+      setTimeout(function() { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 20);
+    });
+  };
+
+  // Observe panels
+  if ('IntersectionObserver' in window) {
+    var animObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) window._animatePanel(e.target);
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.pain-row__panel').forEach(function(p) { animObserver.observe(p); });
+
+    // Feature blocks scroll reveal
+    var featureObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) e.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.feature-block').forEach(function(b) { featureObs.observe(b); });
+  }
+})();
+</script>
+
+</body>
+</html>

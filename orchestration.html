@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Release Orchestration — Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "Nyght Serif"; font-weight: 500; font-style: italic; font-display: swap; src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-MediumItalic.woff2") format("woff2"); }
+@font-face { font-family: "Nyght Serif"; font-weight: 300; font-style: italic; font-display: swap; src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-LightItalic.woff2") format("woff2"); }
+.nyght { font-family: "Nyght Serif", Georgia, serif; font-style: italic; font-weight: 300; }
+</style>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+html{scroll-behavior:smooth;scrollbar-gutter:stable}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:#111110;background:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+:root{--black:#191919;--white:#fff;--grey:#E0E0E0;--bg:#FAFAFA;--accent:#F56002;--text-secondary:#454545;--ease:cubic-bezier(0.16,1,0.3,1)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;font-weight:600;padding:0.75rem 1.25rem;border-radius:1.5rem;transition:all 0.3s ease;cursor:pointer}
+.btn--primary{background:var(--black);color:#fff;border:1px solid transparent}
+.btn--primary:hover{color:#111 !important;background:rgba(255,255,255,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.btn--primary-light{background:var(--black);color:#fff;border:1px solid transparent}
+.btn--primary-light:hover{color:#111 !important;background:rgba(0,0,0,0.05);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(0,0,0,0.12);box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.btn--outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.4)}
+.btn--outline:hover{background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:rgba(255,255,255,0.5)}
+.btn--ghost{background:transparent;color:var(--black);border:1px solid var(--grey)}
+.btn--ghost:hover{background:rgba(0,0,0,0.05);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--black)}
+.btn--white{background:#fff;color:var(--black);border:1px solid transparent}
+.btn--white:hover{background:rgba(255,255,255,0.85);box-shadow:0 2px 12px rgba(0,0,0,0.15)}
+.btn--green{background:#D9FA87;color:var(--black);border:1px solid transparent}
+.btn--green:hover{background:rgba(255,255,255,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.1)}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0.875rem 2rem;display:flex;align-items:center;justify-content:space-between;max-width:80rem;margin:0 auto;transition:transform 0.35s cubic-bezier(0.4,0,0.2,1)}
+.nav.nav--hidden{transform:translateY(calc(-100% - 1rem))}
+.nav__pill{display:flex;align-items:center;gap:0.25rem;padding:0.375rem 0.5rem;border-radius:100px;background:rgba(255,255,255,0.12);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1);transition:background 0.35s,border-color 0.35s}
+.nav--solid .nav__pill{background:rgba(255,255,255,0.95);border-color:rgba(0,0,0,0.06)}
+.nav__logo{display:flex;align-items:center;padding:0 0.5rem}
+.nav__logo img{height:1.125rem;transition:filter 0.3s,opacity 0.3s}
+.nav__logo .logo-light{position:absolute}
+.nav__logo .logo-dark{opacity:0}
+.nav--solid .nav__logo .logo-light{opacity:0}
+.nav--solid .nav__logo .logo-dark{opacity:1;position:relative}
+.nav__link{font-size:0.8125rem;font-weight:500;padding:0.5rem 0.875rem;border-radius:100px;color:rgba(255,255,255,0.85);white-space:nowrap;display:flex;align-items:center;gap:0.25rem;transition:color 0.2s,background 0.2s}
+.nav__link:hover{color:#fff;background:rgba(255,255,255,0.1)}
+.nav--solid .nav__link{color:var(--text-secondary)}
+.nav--solid .nav__link:hover{color:var(--black);background:rgba(0,0,0,0.04)}
+.nav__link svg{width:10px;height:10px;opacity:0.6}
+.nav__login{font-size:0.8125rem;font-weight:500;padding:0.5rem 1rem;border-radius:100px;color:rgba(255,255,255,0.85);white-space:nowrap;border:1px solid rgba(255,255,255,0.3);transition:color 0.2s,border-color 0.2s,background 0.2s}
+.nav__login:hover{color:#fff;border-color:rgba(255,255,255,0.5)}
+.nav--solid .nav__login{color:var(--black);border-color:rgba(0,0,0,0.15)}
+.nav--solid .nav__login:hover{border-color:var(--black)}
+a.nav__cta{font-size:0.8125rem;font-weight:600;padding:0.5rem 1.125rem;border-radius:100px;white-space:nowrap;text-decoration:none;color:#fff;background:#111110;border:1px solid transparent;transition:all 0.3s ease}
+a.nav__cta:hover{color:#111 !important;background:rgba(255,255,255,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.nav--solid a.nav__cta{color:var(--black);background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.1);box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.nav--solid a.nav__cta:hover{color:var(--black);background:rgba(0,0,0,0.08);border-color:rgba(0,0,0,0.18);box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.nav__divider{width:1px;height:1rem;background:rgba(255,255,255,0.15);margin:0 0.125rem}
+.nav--solid .nav__divider{background:rgba(0,0,0,0.08)}
+.nav__dropdown{position:relative}
+.nav__dropdown>.nav__link{cursor:pointer}
+.nav__dropdown>.nav__link svg{transition:transform 0.25s}
+.nav__dropdown.is-open>.nav__link svg{transform:rotate(180deg)}
+.nav__dropdown-panel{position:absolute;top:calc(100% + 0.75rem);left:0;display:flex;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:0.75rem;box-shadow:0 12px 48px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.06);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity 0.25s ease,visibility 0.25s ease,transform 0.25s ease;z-index:100;min-width:36rem;overflow:hidden}
+.nav__dropdown.is-open .nav__dropdown-panel{opacity:1;visibility:visible;transform:translateY(0)}
+.nav__dropdown-left{flex:1;padding:1.5rem;display:flex;flex-direction:column;gap:0.25rem}
+.nav__dropdown-item{display:block;padding:0.75rem 1rem;border-radius:0.5rem;transition:background 0.15s}
+.nav__dropdown-item:hover{background:rgba(0,0,0,0.03)}
+.nav__dropdown-item-title{font-size:0.875rem;font-weight:600;color:var(--black);margin-bottom:0.125rem}
+.nav__dropdown-item-desc{font-size:0.8125rem;color:var(--text-secondary);line-height:1.4}
+.nav__dropdown-right{width:16rem;background:var(--black);padding:1.5rem;display:flex;flex-direction:column;gap:0.125rem;border-radius:0 0.75rem 0.75rem 0}
+.nav__dropdown-featured-label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.4);padding:0.5rem 0.75rem;margin-bottom:0.25rem;display:flex;align-items:center;gap:0.5rem}
+.nav__dropdown-featured-label::before{content:'';width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.5)}
+.nav__dropdown-featured-link{display:block;font-size:0.9375rem;font-weight:500;color:rgba(255,255,255,0.75);padding:0.625rem 0.75rem;border-radius:0.375rem;transition:color 0.15s,background 0.15s}
+.nav__dropdown-featured-link:hover{color:#fff;background:rgba(255,255,255,0.08)}
+.nav-blur-overlay{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.1);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity 0.35s ease,visibility 0.35s ease}
+.nav-blur-overlay.is-active{opacity:1;visibility:visible}
+@media(max-width:768px){
+  .nav{padding:0.75rem 1rem}
+  .nav__pill--left .nav__link,.nav__pill--left .nav__dropdown{display:none}
+  .nav__pill--right .nav__link,.nav__pill--right .nav__divider{display:none}
+  .nav__login{display:none}
+}
+
+
+/* =============================================
+   PRODUCT PAGE — RELEASE ORCHESTRATION
+   ============================================= */
+
+/* Section label (reusable) */
+.section-label{
+  font-size:0.6875rem;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--accent);
+  display:inline-flex;align-items:center;gap:0.5rem;
+  margin-bottom:1rem;
+}
+.section-label::before{
+  content:'';width:0.375rem;height:0.375rem;border-radius:50%;
+  background:var(--accent);
+}
+.section-label--light{color:rgba(255,255,255,0.5)}
+.section-label--light::before{background:rgba(255,255,255,0.4)}
+
+/* Metadata pills */
+.metadata-pill{
+  display:inline-block;
+  width:auto;
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.06em;
+  padding:0.375rem 0.875rem;border-radius:0.375rem;
+  background:#D9FA87;color:var(--black);
+  margin-bottom:0.75rem;
+}
+
+/* ICP / Product nav pills */
+.icp-nav{
+  display:flex;gap:0.375rem;justify-content:center;
+  margin-bottom:1.5rem;
+}
+.icp-nav__pill{
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.06em;
+  padding:0.375rem 0.875rem;border-radius:0.375rem;
+  color:rgba(255,255,255,0.5);
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  transition:all 0.25s var(--ease);
+}
+.icp-nav__pill:hover{
+  color:#fff;
+  background:rgba(255,255,255,0.12);
+  border-color:rgba(255,255,255,0.2);
+}
+.icp-nav__pill--active{
+  color:#fff;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-color:rgba(255,255,255,0.25);
+}
+.icp-nav__pill--active:hover{
+  color:#fff;
+  background:rgba(255,255,255,0.18);
+}
+
+/* Hero with background image + overlay */
+.icp-hero{
+  position:relative;
+  color:#fff;
+  min-height:80vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:8rem 2rem 6rem;
+  overflow:hidden;
+}
+.icp-hero__bg{
+  position:absolute;inset:0;z-index:0;
+}
+.icp-hero__bg img{
+  width:100%;height:100%;object-fit:cover;
+}
+.icp-hero__overlay{
+  position:absolute;inset:0;z-index:1;
+  background:rgba(0,0,0,0.7);
+}
+.icp-hero__inner{
+  max-width:48rem;position:relative;z-index:2;
+  transition:opacity 0.1s linear,transform 0.1s linear;
+  will-change:opacity,transform;
+}
+.icp-hero h1{
+  font-size:clamp(2.5rem,5.5vw,4rem);
+  font-weight:300;line-height:1.08;
+  letter-spacing:-0.03em;
+  margin-bottom:1.25rem;
+}
+.icp-hero h1 .nyght{font-weight:300}
+.icp-hero p{
+  font-size:1.0625rem;line-height:1.65;
+  color:rgba(255,255,255,0.85);
+  max-width:36rem;margin:0 auto 2rem;
+}
+.icp-hero__buttons{
+  display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;
+}
+
+/* Problem Statement — word-by-word scroll */
+.problem-section{
+  position:relative;
+  background:#fff;
+}
+.problem-scroll{
+  height:400vh;
+  position:relative;
+}
+.problem-viewport{
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:2rem;
+  overflow:hidden;
+}
+/* Animated gradient background */
+.problem-gradient{
+  position:absolute;inset:0;z-index:0;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 1s ease;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,0.5) 15%,rgba(0,0,0,1) 38%,rgba(0,0,0,1) 62%,rgba(0,0,0,0.5) 85%,transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,0.5) 15%,rgba(0,0,0,1) 38%,rgba(0,0,0,1) 62%,rgba(0,0,0,0.5) 85%,transparent 100%);
+}
+.problem-gradient.is-visible{opacity:1}
+.problem-gradient__wash{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,#f5f0ec 0%,#ece6e0 50%,#f2ede6 100%);
+}
+.problem-gradient__blob{
+  position:absolute;
+  will-change:transform;
+  transition:transform 2s cubic-bezier(0.22,1,0.36,1);
+}
+.problem-gradient__blob--1{
+  width:80%;height:80%;
+  top:-20%;right:-15%;
+  background:radial-gradient(ellipse at 50% 50%,rgba(245,96,2,0.4) 0%,rgba(245,96,2,0.15) 30%,rgba(245,96,2,0) 65%);
+}
+.problem-gradient__blob--2{
+  width:60%;height:60%;
+  top:25%;left:-15%;
+  background:radial-gradient(ellipse at 50% 50%,rgba(217,250,135,0.3) 0%,rgba(217,250,135,0.1) 35%,rgba(217,250,135,0) 70%);
+}
+.problem-gradient__blob--3{
+  width:50%;height:50%;
+  bottom:-10%;right:20%;
+  background:radial-gradient(ellipse at 50% 50%,rgba(220,215,222,0.4) 0%,rgba(230,225,230,0.15) 45%,rgba(230,225,230,0) 80%);
+}
+.problem-section__inner{
+  max-width:42rem;margin:0 auto;text-align:center;
+}
+.problem-section__inner h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+  margin-bottom:2rem;
+}
+.problem-section__inner h2 .nyght{font-weight:300}
+.problem-para{
+  font-size:1.125rem;
+  line-height:1.75;
+  color:var(--text-secondary);
+  position:absolute;
+  left:0;right:0;
+  text-align:center;
+  opacity:0;
+  transition:none;
+}
+.problem-para .word{
+  display:inline-block;
+  opacity:0.1;
+  transition:opacity 0.15s ease;
+  margin-right:0.25em;
+}
+.problem-para .word.is-visible{
+  opacity:1;
+}
+
+/* Pain/Solution — Alternating 2-col */
+.pain-section{
+  padding:6rem 2rem;
+  background:#fff;
+}
+.pain-section--alt{background:var(--bg)}
+.pain-section__inner{
+  max-width:72rem;margin:0 auto;
+}
+.pain-section__header{
+  text-align:center;max-width:38rem;margin:0 auto 4rem;
+}
+.pain-section__header h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+  margin-bottom:0.5rem;
+}
+.pain-section__header h2 .nyght{font-weight:300}
+.pain-section__header p{
+  font-size:1.0625rem;line-height:1.65;
+  color:var(--text-secondary);
+  margin-top:0.75rem;
+}
+
+.pain-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3rem;
+  align-items:center;
+  margin-bottom:5rem;
+}
+.pain-row:last-child{margin-bottom:0}
+.pain-row--flipped .pain-row__text{order:2}
+.pain-row--flipped .pain-row__panel{order:1}
+
+.pain-row__text{display:flex;flex-direction:column;align-items:flex-start;gap:0.75rem}
+.pain-row__text .section-label{margin-bottom:0.25rem}
+.pain-row__text h3{
+  font-size:clamp(1.5rem,3vw,2rem);
+  font-weight:500;line-height:1.15;
+  letter-spacing:-0.02em;
+}
+.pain-row__text p{
+  font-size:1rem;line-height:1.65;
+  color:var(--text-secondary);
+  max-width:28rem;
+}
+
+.pain-row__panel{
+  background:linear-gradient(135deg,#fafafa,#f0f0ea);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:1rem;
+  padding:2.5rem;
+  aspect-ratio:4/3;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+
+/* Mock UI — Gantt/timeline */
+.mock-gantt{width:100%;display:flex;flex-direction:column;gap:0.75rem}
+.mock-gantt__row{display:flex;align-items:center;gap:0.75rem}
+.mock-gantt__label{font-size:0.6875rem;font-weight:600;color:rgba(0,0,0,0.4);width:3.5rem;flex-shrink:0;text-align:right}
+.mock-gantt__track{flex:1;height:0.5rem;background:rgba(0,0,0,0.04);border-radius:100px;position:relative}
+.mock-gantt__bar{position:absolute;top:0;height:100%;border-radius:100px}
+
+/* Mock UI — Dashboard status */
+.mock-dashboard{width:100%;display:flex;flex-direction:column;gap:0.75rem}
+.mock-dashboard__row{display:flex;gap:0.75rem}
+.mock-dashboard__card{
+  flex:1;
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.625rem;
+  padding:1rem;
+  display:flex;flex-direction:column;gap:0.375rem;
+}
+.mock-dashboard__card-title{font-size:0.6875rem;font-weight:600;color:rgba(0,0,0,0.35);text-transform:uppercase;letter-spacing:0.04em}
+.mock-dashboard__card-value{font-size:1.25rem;font-weight:700;color:var(--black)}
+.mock-dashboard__pill{
+  display:inline-flex;align-items:center;gap:0.25rem;
+  font-size:0.625rem;font-weight:600;
+  padding:0.2rem 0.5rem;border-radius:100px;
+  width:fit-content;
+}
+.mock-dashboard__pill--green{background:rgba(16,185,129,0.1);color:#059669}
+.mock-dashboard__pill--amber{background:rgba(245,158,11,0.1);color:#d97706}
+.mock-dashboard__pill--red{background:rgba(239,68,68,0.1);color:#dc2626}
+.mock-dashboard__pill--blue{background:rgba(59,130,246,0.1);color:#2563eb}
+
+/* Mock UI — Collaboration */
+.mock-collab{width:100%;display:flex;flex-direction:column;gap:0.625rem}
+.mock-collab__row{
+  display:flex;align-items:center;gap:0.75rem;
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.625rem;
+  padding:0.75rem 1rem;
+}
+.mock-collab__avatar{
+  width:2rem;height:2rem;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.625rem;font-weight:700;color:#fff;
+}
+.mock-collab__task{flex:1;font-size:0.8125rem;color:var(--black);font-weight:500}
+.mock-collab__check{
+  width:1.25rem;height:1.25rem;border-radius:50%;flex-shrink:0;
+  border:2px solid rgba(0,0,0,0.12);
+}
+.mock-collab__check--done{
+  border-color:#059669;background:#059669;
+  position:relative;
+}
+.mock-collab__check--done::after{
+  content:'';position:absolute;
+  top:3px;left:5px;
+  width:5px;height:8px;
+  border:solid #fff;border-width:0 2px 2px 0;
+  transform:rotate(45deg);
+}
+
+/* Features Carousel */
+.features-section{
+  padding:6rem 2rem;
+  background:var(--bg);
+}
+.features-section__inner{
+  max-width:72rem;margin:0 auto;
+}
+.features-section__header{
+  text-align:center;max-width:38rem;margin:0 auto 1rem;
+}
+.features-section__header h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+}
+.features-section__sub{
+  text-align:center;
+  font-size:1.0625rem;
+  color:var(--text-secondary);
+  margin-bottom:3.5rem;
+}
+
+.features-spotlight{
+  max-width:72rem;margin:0 auto;
+  display:grid;grid-template-columns:minmax(0,18rem) 1fr;
+  gap:2.5rem;align-items:start;
+}
+
+/* Feature list (left) */
+.features-list{
+  display:flex;flex-direction:column;gap:0.375rem;
+  position:sticky;top:6rem;
+}
+.feature-card{
+  display:flex;flex-direction:column;align-items:flex-start;
+  text-align:left;cursor:pointer;
+  padding:1rem 1.125rem;border-radius:0.75rem;
+  background:transparent;border:1px solid transparent;
+  font-family:inherit;color:inherit;
+  transition:background 0.25s,border-color 0.25s;
+  position:relative;
+}
+.feature-card:hover{background:rgba(0,0,0,0.03)}
+.feature-card.is-active{
+  background:#fff;border-color:rgba(0,0,0,0.08);
+  box-shadow:0 2px 12px rgba(0,0,0,0.04);
+}
+.feature-card__title{
+  display:flex;align-items:center;gap:0.5rem;
+  font-size:0.9375rem;font-weight:600;color:var(--black);
+  margin-bottom:0.25rem;
+}
+.feature-card__marker{
+  width:6px;height:6px;border-radius:50%;flex-shrink:0;
+  background:var(--grey);transition:background 0.25s,transform 0.25s;
+}
+.feature-card.is-active .feature-card__marker{
+  background:#D9FA87;transform:scale(1.4);
+}
+.feature-card__desc{
+  font-size:0.8125rem;line-height:1.5;
+  color:var(--text-secondary);
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height 0.35s ease,opacity 0.25s ease,margin 0.25s ease;
+}
+.feature-card.is-active .feature-card__desc{
+  max-height:8rem;opacity:1;margin-top:0.25rem;
+}
+
+/* Mobile-only inline preview */
+.feature-card__preview-mobile{
+  display:none;width:100%;margin-top:1rem;
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height 0.4s ease,opacity 0.3s ease;
+}
+.feature-card.is-active .feature-card__preview-mobile{
+  max-height:24rem;opacity:1;
+}
+
+/* Preview panel (right) */
+.features-preview{
+  position:relative;
+  aspect-ratio:4/3;max-height:32rem;
+  background:linear-gradient(135deg,#fafafa,#f0f0ea);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:1rem;
+  overflow:hidden;
+}
+.features-preview__panel{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:2.5rem;
+  opacity:0;transform:scale(0.96);
+  transition:opacity 0.4s ease,transform 0.4s ease;
+  pointer-events:none;
+}
+.features-preview__panel.is-active{
+  opacity:1;transform:scale(1);pointer-events:auto;
+}
+.features-preview__panel-label{
+  position:absolute;bottom:1.25rem;left:1.5rem;
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.08em;
+  color:rgba(0,0,0,0.35);
+}
+
+/* Feature preview mock UIs */
+/* Timeline (gantt) */
+.fp-timeline{width:100%;display:flex;flex-direction:column;gap:0.875rem}
+.fp-timeline__row{display:flex;align-items:center;gap:0.75rem}
+.fp-timeline__label{font-size:0.6875rem;font-weight:600;color:rgba(0,0,0,0.4);width:4rem;flex-shrink:0;text-align:right}
+.fp-timeline__track{flex:1;height:0.5rem;background:rgba(0,0,0,0.04);border-radius:100px;position:relative}
+.fp-timeline__bar{position:absolute;top:0;height:100%;border-radius:100px}
+
+/* Tasks */
+.fp-tasks{width:100%;display:flex;flex-direction:column;gap:0.5rem}
+.fp-tasks__row{
+  display:flex;align-items:center;gap:0.75rem;
+  background:#fff;border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.5rem;padding:0.625rem 0.875rem;
+}
+.fp-tasks__check{
+  width:1.125rem;height:1.125rem;border-radius:4px;flex-shrink:0;
+  border:2px solid rgba(0,0,0,0.15);
+}
+.fp-tasks__check--done{border-color:#059669;background:#059669;position:relative}
+.fp-tasks__check--done::after{
+  content:'';position:absolute;top:2px;left:4px;
+  width:4px;height:7px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
+}
+.fp-tasks__label{flex:1;font-size:0.8125rem;color:var(--black);font-weight:500}
+.fp-tasks__label--done{text-decoration:line-through;opacity:0.5}
+.fp-tasks__assignee{
+  width:1.5rem;height:1.5rem;border-radius:50%;
+  font-size:0.5rem;font-weight:700;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* Budget */
+.fp-budget{width:100%;display:flex;flex-direction:column;gap:1rem}
+.fp-budget__bar-group{display:flex;flex-direction:column;gap:0.625rem}
+.fp-budget__bar-row{display:flex;align-items:center;gap:0.75rem}
+.fp-budget__bar-label{font-size:0.6875rem;font-weight:600;color:rgba(0,0,0,0.4);width:5rem;flex-shrink:0;text-align:right}
+.fp-budget__bar-track{flex:1;height:1.25rem;background:rgba(0,0,0,0.04);border-radius:0.25rem;position:relative;overflow:hidden}
+.fp-budget__bar-fill{height:100%;border-radius:0.25rem}
+.fp-budget__bar-value{font-size:0.6875rem;font-weight:700;color:var(--black);width:3rem;flex-shrink:0}
+.fp-budget__total{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:0.75rem;border-top:1px solid rgba(0,0,0,0.06);
+  font-size:0.8125rem;font-weight:600;color:var(--black);
+}
+
+/* Command center */
+.fp-command{width:100%;display:flex;flex-direction:column;gap:0.625rem}
+.fp-command__row{display:flex;gap:0.625rem}
+.fp-command__card{
+  flex:1;background:#fff;border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.5rem;padding:0.75rem;
+  display:flex;flex-direction:column;gap:0.25rem;
+}
+.fp-command__card-artist{font-size:0.75rem;font-weight:600;color:var(--black)}
+.fp-command__card-release{font-size:0.6875rem;color:var(--text-secondary)}
+.fp-command__card-status{
+  display:inline-flex;align-items:center;gap:0.25rem;
+  font-size:0.5625rem;font-weight:600;padding:0.15rem 0.4rem;
+  border-radius:100px;width:fit-content;margin-top:0.125rem;
+}
+
+/* Report */
+.fp-report{width:100%;display:flex;flex-direction:column;gap:0.75rem}
+.fp-report__header{
+  background:#fff;border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.5rem;padding:1rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.fp-report__header-title{font-size:0.875rem;font-weight:600;color:var(--black)}
+.fp-report__header-date{font-size:0.6875rem;color:var(--text-secondary)}
+.fp-report__body{display:flex;flex-direction:column;gap:0.5rem}
+.fp-report__line{height:0.5rem;border-radius:100px;background:rgba(0,0,0,0.06)}
+.fp-report__line--short{width:60%}
+.fp-report__line--med{width:80%}
+.fp-report__stats{display:flex;gap:0.75rem;margin-top:0.25rem}
+.fp-report__stat{
+  flex:1;background:#fff;border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.5rem;padding:0.625rem;text-align:center;
+}
+.fp-report__stat-value{font-size:1rem;font-weight:700;color:var(--black)}
+.fp-report__stat-label{font-size:0.5625rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;font-weight:600}
+
+/* File list mock */
+.fp-files{width:100%;display:flex;flex-direction:column;gap:0.5rem}
+.fp-files__row{
+  display:flex;align-items:center;gap:0.75rem;
+  background:#fff;border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.5rem;padding:0.625rem 0.875rem;
+}
+.fp-files__icon{
+  width:2rem;height:2rem;border-radius:0.375rem;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.5rem;font-weight:700;color:#fff;text-transform:uppercase;
+}
+.fp-files__info{flex:1;display:flex;flex-direction:column;gap:0.125rem}
+.fp-files__name{font-size:0.8125rem;font-weight:500;color:var(--black)}
+.fp-files__meta{font-size:0.6875rem;color:var(--text-secondary)}
+
+/* Checklist mock */
+.fp-checklist{width:100%;display:flex;flex-direction:column;gap:0.5rem}
+.fp-checklist__row{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.5rem 0;
+}
+.fp-checklist__check{
+  width:1.125rem;height:1.125rem;border-radius:4px;flex-shrink:0;
+  border:2px solid rgba(0,0,0,0.15);
+}
+.fp-checklist__check--done{border-color:#059669;background:#059669;position:relative}
+.fp-checklist__check--done::after{
+  content:'';position:absolute;top:2px;left:4px;
+  width:4px;height:7px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
+}
+.fp-checklist__label{flex:1;font-size:0.8125rem;color:var(--black);font-weight:500}
+.fp-checklist__label--done{text-decoration:line-through;opacity:0.5}
+
+/* Who It's For — Role columns */
+.roles-section{
+  padding:5rem 2rem;
+  background:var(--black);
+  color:#fff;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.roles-section__inner{
+  max-width:72rem;margin:0 auto;
+}
+.roles-section__header{
+  text-align:center;margin-bottom:3rem;
+}
+.roles-section__header h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+  color:#fff;
+}
+.roles-section__header h2 .nyght{font-weight:300}
+.roles-grid{
+  display:grid;
+  grid-template-columns:1fr 1px 1fr 1px 1fr 1px 1fr;
+  gap:0;
+}
+.roles-divider{
+  background:rgba(255,255,255,0.1);
+  width:1px;
+  align-self:stretch;
+}
+.role-item{
+  display:flex;flex-direction:column;
+  align-items:center;text-align:center;
+  padding:1.5rem 2rem;
+}
+.role-item__title{
+  font-family:"Nyght Serif",Georgia,serif;
+  font-style:italic;font-weight:300;
+  font-size:1.5rem;margin-bottom:0.5rem;
+  color:#fff;
+}
+.role-item__desc{
+  font-size:0.9375rem;line-height:1.55;
+  color:rgba(255,255,255,0.5);
+  max-width:14rem;
+  margin-bottom:1rem;
+}
+.role-item__link{
+  margin-top:auto;
+  font-size:0.8125rem;font-weight:600;
+  color:#D9FA87;
+  display:inline-flex;align-items:center;gap:0.375rem;
+  transition:color 0.25s,gap 0.25s;
+  text-decoration:none;
+}
+.role-item__link:hover{color:#fff;gap:0.625rem}
+.role-item__link svg{
+  width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;
+  transition:transform 0.25s;
+}
+.role-item__link:hover svg{transform:translateX(3px)}
+
+/* Bridge to Intelligence — lime green section */
+.bridge-section{
+  padding:5rem 2rem;
+  background:#D9FA87;
+  color:var(--black);
+}
+.bridge-section__inner{
+  max-width:72rem;margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  align-items:flex-start;
+}
+.bridge-section__headline h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+  color:var(--black);
+}
+.bridge-section__headline h2 .nyght{font-weight:300}
+.bridge-section__copy p{
+  font-size:1.0625rem;line-height:1.7;
+  color:rgba(25,25,25,0.6);
+  margin-bottom:2rem;
+}
+.bridge-section__link{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-size:1rem;font-weight:600;
+  color:var(--black);
+  transition:gap 0.25s var(--ease);
+  text-decoration:none;
+}
+.bridge-section__link:hover{gap:0.75rem}
+.bridge-section__link:hover .bridge-link-text{text-decoration:underline}
+.bridge-section__link svg{
+  width:16px;height:16px;stroke:var(--black);fill:none;stroke-width:2;
+  transition:transform 0.25s var(--ease);
+  text-decoration:none !important;
+}
+.bridge-section__link:hover svg{transform:translateX(4px)}
+
+@media(max-width:768px){
+  .bridge-section__inner{grid-template-columns:1fr;gap:1.5rem}
+}
+
+/* Final CTA */
+.final-cta{
+  padding:4rem 2rem 4rem;background:#fff;
+}
+.final-cta__card{
+  max-width:72rem;margin:0 auto;text-align:center;
+  padding:5rem 3rem;background:#fff;
+  border:1px solid rgba(0,0,0,0.08);border-radius:1rem;
+  box-shadow:0 4px 32px rgba(0,0,0,0.04);
+}
+.final-cta h2{
+  font-size:clamp(1.75rem,4vw,2.75rem);
+  font-weight:300;letter-spacing:-0.02em;
+  margin-bottom:1.5rem;line-height:1.1;
+}
+.final-cta__buttons{
+  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
+  margin-bottom:1rem;
+}
+.final-cta__note{
+  font-size:0.8125rem;color:var(--text-secondary);
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .icp-hero{min-height:auto;padding:7rem 1.5rem 4rem}
+  .icp-hero h1{font-size:2.25rem}
+  .icp-hero__buttons{flex-direction:column;align-items:center}
+  .icp-hero__buttons .btn{width:100%;max-width:18rem;justify-content:center}
+
+  .problem-section{padding:4rem 1.5rem}
+
+  .pain-row{grid-template-columns:1fr;gap:2rem}
+  .pain-row--flipped .pain-row__text{order:1}
+  .pain-row--flipped .pain-row__panel{order:2}
+  .pain-row__panel{aspect-ratio:auto;padding:2rem;min-height:14rem}
+
+  .features-spotlight{grid-template-columns:1fr}
+  .features-list{position:static}
+  .features-preview.desktop-preview{display:none}
+  .feature-card__preview-mobile{display:block}
+
+  .roles-grid{grid-template-columns:1fr;gap:0}
+  .roles-divider{width:100%;height:1px;align-self:auto}
+  .role-item{padding:1.5rem 1rem}
+  .problem-scroll{height:300vh}
+
+  .bridge-section{padding:4rem 1.5rem}
+
+  .final-cta__card{padding:3rem 2rem}
+  .final-cta__buttons{flex-direction:column;align-items:center}
+}
+@media(min-width:769px) and (max-width:1024px){
+  .roles-grid{grid-template-columns:1fr 1px 1fr;gap:0}
+}
+</style>
+</head>
+<body>
+
+<!-- Nav (dark hero, transitions to solid on scroll) -->
+<div id="team-nav" data-theme="dark"></div>
+
+<!-- Hero -->
+<section class="icp-hero" id="heroSection">
+  <div class="icp-hero__bg">
+    <img src="assets/hero-bg-new.png" alt="" loading="eager">
+  </div>
+  <div class="icp-hero__overlay"></div>
+  <div class="icp-hero__inner">
+    <div class="icp-nav">
+      <a href="orchestration.html" class="icp-nav__pill icp-nav__pill--active">Release Orchestration</a>
+      <a href="intelligence.html" class="icp-nav__pill">Release Intelligence</a>
+    </div>
+    <h1>No more<br><span class="nyght">square pegs, round holes</span></h1>
+    <p>Every tool used to manage releases today was created for something else. Team was designed specifically for rollouts. Every feature, every workflow, every view, built from the ground up for the way music actually ships.</p>
+    <div class="icp-hero__buttons">
+      <a href="onboarding.html?plan=pro&period=yearly" class="btn btn--green">Start your free trial</a>
+      <a href="demo.html" class="btn btn--outline">Book a demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- Problem Statement -->
+<section class="problem-section" id="problemSection">
+  <div class="problem-gradient" id="problemGradient">
+    <div class="problem-gradient__wash"></div>
+    <div class="problem-gradient__blob problem-gradient__blob--1" id="problemBlob1"></div>
+    <div class="problem-gradient__blob problem-gradient__blob--2" id="problemBlob2"></div>
+    <div class="problem-gradient__blob problem-gradient__blob--3" id="problemBlob3"></div>
+  </div>
+  <div class="problem-scroll">
+    <div class="problem-viewport">
+      <div class="problem-section__inner" style="position:relative;z-index:1">
+        <h2>You've been using<br><span class="nyght">the wrong tools</span></h2>
+        <div style="position:relative;min-height:6rem">
+          <p class="problem-para" data-para="0">Spreadsheets weren't built for release timelines. Notion wasn't built for DSP submissions. Monday.com doesn't know what a rollout plan is. You've spent years forcing general-purpose tools to do a music-specific job.</p>
+          <p class="problem-para" data-para="1">The result? Missed deadlines. Lost assets. Release day panic. And a whole lot of time wasted on tool management instead of release management.</p>
+          <p class="problem-para" data-para="2">Team is different. Not because we bolted music features onto a project management tool. But because we started with the release and built everything around it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Release Lifecycle — Alternating 2-col -->
+<section class="pain-section pain-section--alt">
+  <div class="pain-section__inner">
+    <div class="pain-section__header">
+      <span class="metadata-pill">The Release Lifecycle</span>
+      <h2>One platform. <span class="nyght">Every phase.</span></h2>
+      <p>From first demo to post-release analytics — every step lives in Team</p>
+    </div>
+
+    <!-- Pre-Release: Text left, Panel right -->
+    <div class="pain-row">
+      <div class="pain-row__text">
+        <span class="metadata-pill">Pre-Release</span>
+        <h3>Set your release date. Team builds your plan</h3>
+        <p>Team generates your timeline, assigns tasks, and tracks every deliverable. Templates built for singles, EPs, and albums. No more wondering what needs to happen next.</p>
+      </div>
+      <div class="pain-row__panel">
+        <div class="fp-timeline">
+          <div class="fp-timeline__row"><div class="fp-timeline__label">Metadata</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:0%;width:30%;background:linear-gradient(90deg,#F56002,#ff8533)"></div></div></div>
+          <div class="fp-timeline__row"><div class="fp-timeline__label">Artwork</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:5%;width:35%;background:linear-gradient(90deg,#3B82F6,#60a5fa)"></div></div></div>
+          <div class="fp-timeline__row"><div class="fp-timeline__label">Pre-save</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:25%;width:40%;background:linear-gradient(90deg,#8B5CF6,#a78bfa)"></div></div></div>
+          <div class="fp-timeline__row"><div class="fp-timeline__label">Press</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:35%;width:45%;background:linear-gradient(90deg,#EC4899,#f472b6)"></div></div></div>
+          <div class="fp-timeline__row"><div class="fp-timeline__label">Social</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:50%;width:35%;background:linear-gradient(90deg,#10B981,#34d399)"></div></div></div>
+          <div class="fp-timeline__row"><div class="fp-timeline__label">DSP Pitch</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:15%;width:50%;background:linear-gradient(90deg,#FAD604,#fbe046)"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Release Week: FLIPPED -->
+    <div class="pain-row pain-row--flipped">
+      <div class="pain-row__text">
+        <span class="metadata-pill">Release Week</span>
+        <h3>The most critical 7 days. Fully coordinated</h3>
+        <p>DSPs, social, press, ads — every channel running in sync. Team keeps the chaos organised so your launch day is a launch, not a scramble.</p>
+      </div>
+      <div class="pain-row__panel">
+        <div class="fp-command">
+          <div class="fp-command__row">
+            <div class="fp-command__card"><div class="fp-command__card-artist">Active Release</div><div class="fp-command__card-release">Golden Hour — Mara</div><div class="fp-command__card-status mock-dashboard__pill--green">On Track</div></div>
+            <div class="fp-command__card"><div class="fp-command__card-artist">DSP Status</div><div class="fp-command__card-release">All platforms</div><div class="fp-command__card-status mock-dashboard__pill--green">Live</div></div>
+          </div>
+          <div class="fp-command__row">
+            <div class="fp-command__card"><div class="fp-command__card-artist">Social Campaign</div><div class="fp-command__card-release">12 posts queued</div><div class="fp-command__card-status mock-dashboard__pill--blue">Scheduled</div></div>
+            <div class="fp-command__card"><div class="fp-command__card-artist">Press Outreach</div><div class="fp-command__card-release">8 outlets contacted</div><div class="fp-command__card-status mock-dashboard__pill--amber">In Progress</div></div>
+          </div>
+          <div class="fp-command__row">
+            <div class="fp-command__card"><div class="fp-command__card-artist">Ad Spend</div><div class="fp-command__card-release">Meta + TikTok</div><div class="fp-command__card-status mock-dashboard__pill--green">On Track</div></div>
+            <div class="fp-command__card"><div class="fp-command__card-artist">Playlist Pitches</div><div class="fp-command__card-release">5 editorial lists</div><div class="fp-command__card-status mock-dashboard__pill--amber">Pending</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Post-Release: Text left, Panel right -->
+    <div class="pain-row">
+      <div class="pain-row__text">
+        <span class="metadata-pill">Post-Release</span>
+        <h3>The release is live. Now learn from it</h3>
+        <p>Track performance, generate reports for your team or your label, and feed insights into your next release. Every campaign makes the next one smarter.</p>
+      </div>
+      <div class="pain-row__panel">
+        <div class="fp-report">
+          <div class="fp-report__header"><div class="fp-report__header-title">Post-Release Report</div><div class="fp-report__header-date">Week 1</div></div>
+          <div class="fp-report__stats">
+            <div class="fp-report__stat"><div class="fp-report__stat-value">248k</div><div class="fp-report__stat-label">Streams</div></div>
+            <div class="fp-report__stat"><div class="fp-report__stat-value">12.4k</div><div class="fp-report__stat-label">Saves</div></div>
+            <div class="fp-report__stat"><div class="fp-report__stat-value">34</div><div class="fp-report__stat-label">Playlist Adds</div></div>
+            <div class="fp-report__stat"><div class="fp-report__stat-value">$4.2k</div><div class="fp-report__stat-label">Campaign Spend</div></div>
+          </div>
+          <div class="fp-report__body">
+            <div class="fp-report__line"></div>
+            <div class="fp-report__line fp-report__line--med"></div>
+            <div class="fp-report__line fp-report__line--short"></div>
+            <div class="fp-report__line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Features Carousel -->
+<section class="features-section" id="featuresSection">
+  <div class="features-section__inner">
+    <div class="features-section__header">
+      <h2>Built for releases. <span class="nyght">Nothing else.</span></h2>
+    </div>
+    <p class="features-section__sub">Every feature exists because a release needs it</p>
+
+    <div class="features-spotlight">
+      <!-- Left: feature cards -->
+      <div class="features-list" role="tablist">
+
+        <button class="feature-card is-active" data-feature="timeline" role="tab" aria-selected="true">
+          <div class="feature-card__title"><span class="feature-card__marker"></span>Release Timeline</div>
+          <div class="feature-card__desc">Your entire rollout mapped visually. Drag, drop, adjust. See every deadline across every phase.</div>
+          <div class="feature-card__preview-mobile">
+            <div class="features-preview">
+              <div class="features-preview__panel is-active">
+                <div class="fp-timeline">
+                  <div class="fp-timeline__row"><div class="fp-timeline__label">Artwork</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:5%;width:40%;background:linear-gradient(90deg,#F56002,#ff8533)"></div></div></div>
+                  <div class="fp-timeline__row"><div class="fp-timeline__label">Pre-save</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:20%;width:45%;background:linear-gradient(90deg,#3B82F6,#60a5fa)"></div></div></div>
+                  <div class="fp-timeline__row"><div class="fp-timeline__label">Press</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:40%;width:45%;background:linear-gradient(90deg,#8B5CF6,#a78bfa)"></div></div></div>
+                  <div class="fp-timeline__row"><div class="fp-timeline__label">Socials</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:55%;width:35%;background:linear-gradient(90deg,#EC4899,#f472b6)"></div></div></div>
+                  <div class="fp-timeline__row"><div class="fp-timeline__label">Release</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:70%;width:25%;background:linear-gradient(90deg,#FAD604,#fbe046)"></div></div></div>
+                </div>
+                <div class="features-preview__panel-label">Timeline</div>
+              </div>
+            </div>
+          </div>
+        </button>
+
+        <button class="feature-card" data-feature="tasks" role="tab" aria-selected="false">
+          <div class="feature-card__title"><span class="feature-card__marker"></span>Task Management</div>
+          <div class="feature-card__desc">Not generic tasks. Release tasks. Pre-populated templates, role-based assignments, and deadline tracking that knows the difference between a playlist pitch and a press release.</div>
+          <div class="feature-card__preview-mobile">
+            <div class="features-preview">
+              <div class="features-preview__panel is-active">
+                <div class="fp-tasks">
+                  <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">Submit to DSPs</div><div class="fp-tasks__assignee" style="background:#F56002">KF</div></div>
+                  <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">Pitch editorial playlists</div><div class="fp-tasks__assignee" style="background:#3B82F6">JK</div></div>
+                  <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Schedule social content</div><div class="fp-tasks__assignee" style="background:#8B5CF6">AR</div></div>
+                  <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Upload press assets</div><div class="fp-tasks__assignee" style="background:#10B981">SL</div></div>
+                </div>
+                <div class="features-preview__panel-label">Tasks</div>
+              </div>
+            </div>
+          </div>
+        </button>
+
+        <button class="feature-card" data-feature="rollout" role="tab" aria-selected="false">
+          <div class="feature-card__title"><span class="feature-card__marker"></span>Rollout Plan</div>
+          <div class="feature-card__desc">AI-generated strategy documents tailored to your genre, audience, and goals. Not a blank page — a blueprint.</div>
+          <div class="feature-card__preview-mobile">
+            <div class="features-preview">
+              <div class="features-preview__panel is-active">
+                <div class="fp-tasks">
+                  <div class="fp-tasks__row"><div class="fp-tasks__check" style="border-color:#D9FA87;background:#D9FA87;position:relative;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 12 12" style="width:8px;height:8px;stroke:#191919;stroke-width:2.5;fill:none"><polyline points="2 6 5 9 10 3"/></svg></div><div class="fp-tasks__label" style="text-decoration:line-through;opacity:0.5">Set up pre-save campaign</div></div>
+                  <div class="fp-tasks__row"><div class="fp-tasks__check" style="border-color:#D9FA87;background:#D9FA87;position:relative;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 12 12" style="width:8px;height:8px;stroke:#191919;stroke-width:2.5;fill:none"><polyline points="2 6 5 9 10 3"/></svg></div><div class="fp-tasks__label" style="text-decoration:line-through;opacity:0.5">Draft press release</div></div>
+                  <div class="fp-tasks__row"><div class="fp-tasks__check" style="border-color:#D9FA87;background:#D9FA87;position:relative;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 12 12" style="width:8px;height:8px;stroke:#191919;stroke-width:2.5;fill:none"><polyline points="2 6 5 9 10 3"/></svg></div><div class="fp-tasks__label" style="text-decoration:line-through;opacity:0.5">Submit to editorial playlists</div></div>
+                  <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Create social content calendar</div></div>
+                  <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Schedule release day posts</div></div>
+                  <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Plan post-release follow-up</div></div>
+                </div>
+                <div class="features-preview__panel-label">Rollout Plan</div>
+              </div>
+            </div>
+          </div>
+        </button>
+
+        <button class="feature-card" data-feature="budget" role="tab" aria-selected="false">
+          <div class="feature-card__title"><span class="feature-card__marker"></span>Budget Tracking</div>
+          <div class="feature-card__desc">Track spend across production, marketing, PR, and distribution. Per-release, per-artist, or across your entire roster.</div>
+          <div class="feature-card__preview-mobile">
+            <div class="features-preview">
+              <div class="features-preview__panel is-active">
+                <div class="fp-budget">
+                  <div class="fp-budget__bar-group">
+                    <div class="fp-budget__bar-row"><div class="fp-budget__bar-label">Production</div><div class="fp-budget__bar-track"><div class="fp-budget__bar-fill" style="width:65%;background:linear-gradient(90deg,#F56002,#ff8533)"></div></div><div class="fp-budget__bar-value">$12k</div></div>
+                    <div class="fp-budget__bar-row"><div class="fp-budget__bar-label">Marketing</div><div class="fp-budget__bar-track"><div class="fp-budget__bar-fill" style="width:45%;background:linear-gradient(90deg,#3B82F6,#60a5fa)"></div></div><div class="fp-budget__bar-value">$8k</div></div>
+                    <div class="fp-budget__bar-row"><div class="fp-budget__bar-label">PR</div><div class="fp-budget__bar-track"><div class="fp-budget__bar-fill" style="width:28%;background:linear-gradient(90deg,#8B5CF6,#a78bfa)"></div></div><div class="fp-budget__bar-value">$5k</div></div>
+                    <div class="fp-budget__bar-row"><div class="fp-budget__bar-label">Distribution</div><div class="fp-budget__bar-track"><div class="fp-budget__bar-fill" style="width:16%;background:linear-gradient(90deg,#10B981,#34d399)"></div></div><div class="fp-budget__bar-value">$3k</div></div>
+                  </div>
+                  <div class="fp-budget__total"><span>Total</span><span>$28k</span></div>
+                </div>
+                <div class="features-preview__panel-label">Budget</div>
+              </div>
+            </div>
+          </div>
+        </button>
+
+        <button class="feature-card" data-feature="assets" role="tab" aria-selected="false">
+          <div class="feature-card__title"><span class="feature-card__marker"></span>Asset Library</div>
+          <div class="feature-card__desc">Every file, every version, every approval — in one place. AI-parsed contracts, searchable metadata, version history.</div>
+          <div class="feature-card__preview-mobile">
+            <div class="features-preview">
+              <div class="features-preview__panel is-active">
+                <div class="fp-files">
+                  <div class="fp-files__row"><div class="fp-files__icon" style="background:#EC4899">PNG</div><div class="fp-files__info"><div class="fp-files__name">Album Artwork v3.png</div><div class="fp-files__meta">4.2 MB</div></div></div>
+                  <div class="fp-files__row"><div class="fp-files__icon" style="background:#3B82F6">DOC</div><div class="fp-files__info"><div class="fp-files__name">Press Release.docx</div><div class="fp-files__meta">128 KB</div></div></div>
+                  <div class="fp-files__row"><div class="fp-files__icon" style="background:#F56002">PDF</div><div class="fp-files__info"><div class="fp-files__name">EPK.pdf</div><div class="fp-files__meta">2.1 MB</div></div></div>
+                  <div class="fp-files__row"><div class="fp-files__icon" style="background:#8B5CF6">ZIP</div><div class="fp-files__info"><div class="fp-files__name">Social Kit.zip</div><div class="fp-files__meta">18 MB</div></div></div>
+                </div>
+                <div class="features-preview__panel-label">Assets</div>
+              </div>
+            </div>
+          </div>
+        </button>
+
+        <button class="feature-card" data-feature="collab" role="tab" aria-selected="false">
+          <div class="feature-card__title"><span class="feature-card__marker"></span>Collaboration</div>
+          <div class="feature-card__desc">Invite anyone into a release. They see what they need — their tasks, their deadlines, their assets. Nothing more, nothing less.</div>
+          <div class="feature-card__preview-mobile">
+            <div class="features-preview">
+              <div class="features-preview__panel is-active">
+                <div class="mock-collab">
+                  <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#F56002">MG</div><div class="mock-collab__task">Review campaign brief</div><div class="mock-collab__check mock-collab__check--done"></div></div>
+                  <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#3B82F6">AR</div><div class="mock-collab__task">Upload press assets</div><div class="mock-collab__check mock-collab__check--done"></div></div>
+                  <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#8B5CF6">PR</div><div class="mock-collab__task">Draft playlist pitch</div><div class="mock-collab__check"></div></div>
+                  <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#10B981">CR</div><div class="mock-collab__task">Submit artwork</div><div class="mock-collab__check"></div></div>
+                </div>
+                <div class="features-preview__panel-label">Collaboration</div>
+              </div>
+            </div>
+          </div>
+        </button>
+
+      </div>
+
+      <!-- Right: Desktop preview panel -->
+      <div class="features-preview desktop-preview" aria-hidden="true">
+
+        <div class="features-preview__panel is-active" data-feature="timeline">
+          <div class="fp-timeline">
+            <div class="fp-timeline__row"><div class="fp-timeline__label">Artwork</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:5%;width:40%;background:linear-gradient(90deg,#F56002,#ff8533)"></div></div></div>
+            <div class="fp-timeline__row"><div class="fp-timeline__label">Pre-save</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:20%;width:45%;background:linear-gradient(90deg,#3B82F6,#60a5fa)"></div></div></div>
+            <div class="fp-timeline__row"><div class="fp-timeline__label">Press</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:40%;width:45%;background:linear-gradient(90deg,#8B5CF6,#a78bfa)"></div></div></div>
+            <div class="fp-timeline__row"><div class="fp-timeline__label">Socials</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:55%;width:35%;background:linear-gradient(90deg,#EC4899,#f472b6)"></div></div></div>
+            <div class="fp-timeline__row"><div class="fp-timeline__label">Release</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:70%;width:25%;background:linear-gradient(90deg,#FAD604,#fbe046)"></div></div></div>
+          </div>
+          <div class="features-preview__panel-label">Timeline</div>
+        </div>
+
+        <div class="features-preview__panel" data-feature="tasks">
+          <div class="fp-tasks">
+            <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">Submit to DSPs</div><div class="fp-tasks__assignee" style="background:#F56002">KF</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">Pitch editorial playlists</div><div class="fp-tasks__assignee" style="background:#3B82F6">JK</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Schedule social content</div><div class="fp-tasks__assignee" style="background:#8B5CF6">AR</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Upload press assets</div><div class="fp-tasks__assignee" style="background:#10B981">SL</div></div>
+          </div>
+          <div class="features-preview__panel-label">Tasks</div>
+        </div>
+
+        <div class="features-preview__panel" data-feature="rollout">
+          <div class="fp-tasks">
+            <div class="fp-tasks__row"><div class="fp-tasks__check" style="border-color:#D9FA87;background:#D9FA87;position:relative;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 12 12" style="width:8px;height:8px;stroke:#191919;stroke-width:2.5;fill:none"><polyline points="2 6 5 9 10 3"/></svg></div><div class="fp-tasks__label" style="text-decoration:line-through;opacity:0.5">Set up pre-save campaign</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check" style="border-color:#D9FA87;background:#D9FA87;position:relative;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 12 12" style="width:8px;height:8px;stroke:#191919;stroke-width:2.5;fill:none"><polyline points="2 6 5 9 10 3"/></svg></div><div class="fp-tasks__label" style="text-decoration:line-through;opacity:0.5">Draft press release</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check" style="border-color:#D9FA87;background:#D9FA87;position:relative;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 12 12" style="width:8px;height:8px;stroke:#191919;stroke-width:2.5;fill:none"><polyline points="2 6 5 9 10 3"/></svg></div><div class="fp-tasks__label" style="text-decoration:line-through;opacity:0.5">Submit to editorial playlists</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Create social content calendar</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Schedule release day posts</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Plan post-release follow-up</div></div>
+          </div>
+          <div class="features-preview__panel-label">Rollout Plan</div>
+        </div>
+
+        <div class="features-preview__panel" data-feature="budget">
+          <div class="fp-budget">
+            <div class="fp-budget__bar-group">
+              <div class="fp-budget__bar-row"><div class="fp-budget__bar-label">Production</div><div class="fp-budget__bar-track"><div class="fp-budget__bar-fill" style="width:65%;background:linear-gradient(90deg,#F56002,#ff8533)"></div></div><div class="fp-budget__bar-value">$12k</div></div>
+              <div class="fp-budget__bar-row"><div class="fp-budget__bar-label">Marketing</div><div class="fp-budget__bar-track"><div class="fp-budget__bar-fill" style="width:45%;background:linear-gradient(90deg,#3B82F6,#60a5fa)"></div></div><div class="fp-budget__bar-value">$8k</div></div>
+              <div class="fp-budget__bar-row"><div class="fp-budget__bar-label">PR</div><div class="fp-budget__bar-track"><div class="fp-budget__bar-fill" style="width:28%;background:linear-gradient(90deg,#8B5CF6,#a78bfa)"></div></div><div class="fp-budget__bar-value">$5k</div></div>
+              <div class="fp-budget__bar-row"><div class="fp-budget__bar-label">Distribution</div><div class="fp-budget__bar-track"><div class="fp-budget__bar-fill" style="width:16%;background:linear-gradient(90deg,#10B981,#34d399)"></div></div><div class="fp-budget__bar-value">$3k</div></div>
+            </div>
+            <div class="fp-budget__total"><span>Total</span><span>$28k</span></div>
+          </div>
+          <div class="features-preview__panel-label">Budget</div>
+        </div>
+
+        <div class="features-preview__panel" data-feature="assets">
+          <div class="fp-files">
+            <div class="fp-files__row"><div class="fp-files__icon" style="background:#EC4899">PNG</div><div class="fp-files__info"><div class="fp-files__name">Album Artwork v3.png</div><div class="fp-files__meta">4.2 MB</div></div></div>
+            <div class="fp-files__row"><div class="fp-files__icon" style="background:#3B82F6">DOC</div><div class="fp-files__info"><div class="fp-files__name">Press Release.docx</div><div class="fp-files__meta">128 KB</div></div></div>
+            <div class="fp-files__row"><div class="fp-files__icon" style="background:#F56002">PDF</div><div class="fp-files__info"><div class="fp-files__name">EPK.pdf</div><div class="fp-files__meta">2.1 MB</div></div></div>
+            <div class="fp-files__row"><div class="fp-files__icon" style="background:#8B5CF6">ZIP</div><div class="fp-files__info"><div class="fp-files__name">Social Kit.zip</div><div class="fp-files__meta">18 MB</div></div></div>
+          </div>
+          <div class="features-preview__panel-label">Assets</div>
+        </div>
+
+        <div class="features-preview__panel" data-feature="collab">
+          <div class="mock-collab">
+            <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#F56002">MG</div><div class="mock-collab__task">Review campaign brief</div><div class="mock-collab__check mock-collab__check--done"></div></div>
+            <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#3B82F6">AR</div><div class="mock-collab__task">Upload press assets</div><div class="mock-collab__check mock-collab__check--done"></div></div>
+            <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#8B5CF6">PR</div><div class="mock-collab__task">Draft playlist pitch</div><div class="mock-collab__check"></div></div>
+            <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#10B981">CR</div><div class="mock-collab__task">Submit artwork</div><div class="mock-collab__check"></div></div>
+          </div>
+          <div class="features-preview__panel-label">Collaboration</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta">
+  <div class="final-cta__card">
+    <h2>Ready to run your releases<br><span class="nyght">the right way?</span></h2>
+    <div class="final-cta__buttons">
+      <a href="onboarding.html?plan=pro&period=yearly" class="btn btn--green">Start your free trial</a>
+      <a href="demo.html" class="btn btn--ghost">Book a demo</a>
+    </div>
+    <p class="final-cta__note">60-day free trial. No credit card required.</p>
+  </div>
+</section>
+
+<!-- Bridge to Intelligence -->
+<section class="bridge-section">
+  <div class="bridge-section__inner">
+    <div class="bridge-section__headline">
+      <h2>A plan is only as good as<br><span class="nyght">the thinking behind it</span></h2>
+    </div>
+    <div class="bridge-section__copy">
+      <p>Release Orchestration gives you the tools to execute. Release Intelligence gives you the context to execute brilliantly. Together, they're the complete operating system for music releases.</p>
+      <a href="intelligence.html" class="bridge-section__link"><span class="bridge-link-text">Explore Release Intelligence</span> <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- Who It's For — Role cards -->
+<section class="roles-section">
+  <div class="roles-section__inner">
+    <div class="roles-section__header">
+      <h2>Designed for<br><span class="nyght">how you work</span></h2>
+    </div>
+    <div class="roles-grid">
+      <a href="for-artists.html" class="role-item">
+        <div class="role-item__title">For Artists</div>
+        <div class="role-item__desc">Your release, structured. No more winging it.</div>
+        <div class="role-item__link">Learn more <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+      </a>
+      <div class="roles-divider"></div>
+      <a href="for-managers.html" class="role-item">
+        <div class="role-item__title">For Managers</div>
+        <div class="role-item__desc">Every artist's rollout. One dashboard.</div>
+        <div class="role-item__link">Learn more <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+      </a>
+      <div class="roles-divider"></div>
+      <a href="for-labels.html" class="role-item">
+        <div class="role-item__title">For Labels</div>
+        <div class="role-item__desc">Scale your release process. Not your headcount.</div>
+        <div class="role-item__link">Learn more <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+      </a>
+      <div class="roles-divider"></div>
+      <a href="for-partners.html" class="role-item">
+        <div class="role-item__title">For Partners</div>
+        <div class="role-item__desc">See your deliverables. Hit your deadlines.</div>
+        <div class="role-item__link">Learn more <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<div id="team-footer"></div>
+
+<script src="components/nav.js"></script>
+<script src="components/footer.js"></script>
+<script src="components/cookie-consent.js"></script>
+
+<!-- Nav solid on scroll + Hero fade -->
+<script>
+(function() {
+  var nav = document.getElementById('nav');
+  var hero = document.getElementById('heroSection');
+  var heroInner = hero ? hero.querySelector('.icp-hero__inner') : null;
+  if (!nav || !hero) return;
+
+  function check() {
+    var heroBottom = hero.getBoundingClientRect().bottom;
+    var heroH = hero.offsetHeight;
+    var scrolled = window.scrollY;
+
+    if (heroBottom < 60) nav.classList.add('nav--solid');
+    else nav.classList.remove('nav--solid');
+
+    if (heroInner) {
+      var progress = Math.min(1, scrolled / (heroH * 0.5));
+      heroInner.style.opacity = 1 - progress;
+      heroInner.style.transform = 'translateY(' + (progress * 40) + 'px)';
+    }
+  }
+  window.addEventListener('scroll', check, { passive: true });
+  check();
+})();
+</script>
+
+<!-- Problem Section — word-by-word scroll -->
+<script>
+(function() {
+  var section = document.getElementById('problemSection');
+  if (!section) return;
+  var scroll = section.querySelector('.problem-scroll');
+  var paras = section.querySelectorAll('.problem-para');
+  var numParas = paras.length;
+
+  // Split each paragraph into word spans
+  paras.forEach(function(p) {
+    var text = p.textContent.trim();
+    var words = text.split(/\s+/);
+    p.innerHTML = '';
+    words.forEach(function(w) {
+      var span = document.createElement('span');
+      span.className = 'word';
+      span.textContent = w;
+      p.appendChild(span);
+    });
+  });
+
+  function update() {
+    var rect = scroll.getBoundingClientRect();
+    var scrollH = scroll.offsetHeight;
+    var viewH = window.innerHeight;
+    var scrolled = -rect.top;
+    var totalRange = scrollH - viewH;
+    if (totalRange <= 0) return;
+    var progress = Math.max(0, Math.min(1, scrolled / totalRange));
+
+    // Divide progress into segments
+    var segSize = 1 / numParas;
+
+    paras.forEach(function(p, i) {
+      var segStart = i * segSize;
+      var segEnd = segStart + segSize;
+      var words = p.querySelectorAll('.word');
+
+      if (progress >= segStart && progress < segEnd) {
+        // Active paragraph
+        p.style.opacity = '1';
+        p.style.position = 'relative';
+        var subProgress = (progress - segStart) / segSize;
+        var totalWords = words.length;
+        var wordsToShow = Math.floor(subProgress * totalWords);
+        words.forEach(function(w, wi) {
+          if (wi <= wordsToShow) {
+            w.classList.add('is-visible');
+          } else {
+            w.classList.remove('is-visible');
+          }
+        });
+      } else if (progress >= segEnd) {
+        // Completed paragraph — show all words
+        p.style.opacity = '1';
+        p.style.position = 'relative';
+        words.forEach(function(w) { w.classList.add('is-visible'); });
+        // But hide if a later paragraph is active
+        if (i < numParas - 1) {
+          // Find which para is active
+          var activeIdx = Math.min(numParas - 1, Math.floor(progress / segSize));
+          if (i < activeIdx) {
+            p.style.opacity = '0';
+            p.style.position = 'absolute';
+          }
+        }
+      } else {
+        // Not yet reached
+        p.style.opacity = '0';
+        p.style.position = 'absolute';
+        words.forEach(function(w) { w.classList.remove('is-visible'); });
+      }
+    });
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+</script>
+
+<!-- Features Carousel — vanilla JS -->
+<script>
+(function initFeatures() {
+  var section = document.getElementById('featuresSection');
+  if (!section) return;
+  var cards = section.querySelectorAll('.feature-card');
+  var desktopPreview = section.querySelector('.features-spotlight > .features-preview');
+  var panels = desktopPreview
+    ? desktopPreview.querySelectorAll(':scope > .features-preview__panel')
+    : [];
+
+  var currentIdx = 0;
+  var autoTimer = null;
+  var userInteracted = false;
+  var isTouchDevice = !window.matchMedia('(hover: hover)').matches;
+  var isHovering = false;
+
+  function activate(idx) {
+    cards.forEach(function(c, i) {
+      c.classList.toggle('is-active', i === idx);
+      c.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+    });
+    panels.forEach(function(p, i) {
+      p.classList.toggle('is-active', i === idx);
+    });
+    currentIdx = idx;
+    // Animate the newly active panel
+    if (panels[idx] && window._animatePanel) {
+      setTimeout(function() { window._animatePanel(panels[idx]); }, 50);
+    }
+    // Also animate the mobile inline preview
+    var mobilePanel = cards[idx] && cards[idx].querySelector('.feature-card__preview-mobile .features-preview__panel');
+    if (mobilePanel && window._animatePanel) {
+      setTimeout(function() { window._animatePanel(mobilePanel); }, 50);
+    }
+  }
+
+  function startAuto() {
+    stopAuto();
+    autoTimer = setInterval(function() {
+      if (!userInteracted && !isHovering) {
+        activate((currentIdx + 1) % cards.length);
+      }
+    }, 5000);
+  }
+  function stopAuto() {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  }
+
+  cards.forEach(function(card, i) {
+    card.addEventListener('click', function() {
+      userInteracted = true;
+      stopAuto();
+      activate(i);
+    });
+    if (!isTouchDevice) {
+      card.addEventListener('mouseenter', function() {
+        isHovering = true;
+        activate(i);
+      });
+      card.addEventListener('mouseleave', function() {
+        isHovering = false;
+      });
+    }
+  });
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          if (!userInteracted) startAuto();
+        } else {
+          stopAuto();
+        }
+      });
+    }, { threshold: 0.3 });
+    observer.observe(section);
+  } else {
+    startAuto();
+  }
+})();
+</script>
+
+<!-- Problem gradient + blob mouse-follow + lifecycle/features scroll animations -->
+<script>
+(function() {
+  // Gradient visibility — fade in/out based on scroll position in problem section
+  var problemSection = document.getElementById('problemSection');
+  var gradient = document.getElementById('problemGradient');
+  if (problemSection && gradient) {
+    var blob1 = document.getElementById('problemBlob1');
+    var blob2 = document.getElementById('problemBlob2');
+    var blob3 = document.getElementById('problemBlob3');
+
+    // Show/hide gradient based on section visibility
+    if ('IntersectionObserver' in window) {
+      var gradObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          gradient.classList.toggle('is-visible', e.isIntersecting);
+        });
+      }, { threshold: 0.05 });
+      gradObs.observe(problemSection);
+    }
+
+    // Mouse-follow for blobs
+    var tx = 0, ty = 0, cx = 0, cy = 0;
+    window.addEventListener('mousemove', function(e) {
+      var rect = problemSection.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        tx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+        ty = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+      }
+    }, { passive: true });
+    (function tick() {
+      cx += (tx - cx) * 0.03;
+      cy += (ty - cy) * 0.03;
+      if (blob1) blob1.style.transform = 'translate(' + (cx * 40) + 'px,' + (cy * 30) + 'px)';
+      if (blob2) blob2.style.transform = 'translate(' + (cx * -35) + 'px,' + (cy * 25) + 'px)';
+      if (blob3) blob3.style.transform = 'translate(' + (cx * 20) + 'px,' + (cy * -25) + 'px)';
+      requestAnimationFrame(tick);
+    })();
+  }
+
+  // Shared panel animation function — reusable for lifecycle + carousel
+  window._animatePanel = function(panel) {
+    if (!panel) return;
+    panel.querySelectorAll('.fp-timeline__bar, .mock-gantt__bar').forEach(function(bar, i) {
+      bar.style.transform = 'scaleX(0)';
+      bar.style.transformOrigin = 'left';
+      bar.style.transition = 'transform 0.7s var(--ease) ' + (0.1 + i * 0.08) + 's';
+      setTimeout(function() { bar.style.transform = 'scaleX(1)'; }, 20);
+    });
+    panel.querySelectorAll('.fp-tasks__row').forEach(function(row, i) {
+      row.style.opacity = '0'; row.style.transform = 'translateY(8px)';
+      row.style.transition = 'opacity 0.35s ease ' + (0.05 + i * 0.08) + 's, transform 0.35s ease ' + (0.05 + i * 0.08) + 's';
+      setTimeout(function() { row.style.opacity = '1'; row.style.transform = 'translateY(0)'; }, 20);
+    });
+    panel.querySelectorAll('.mock-dashboard__card, .fp-command__card').forEach(function(card, i) {
+      card.style.opacity = '0'; card.style.transform = 'translateY(12px)';
+      card.style.transition = 'opacity 0.4s ease ' + (0.06 + i * 0.08) + 's, transform 0.4s ease ' + (0.06 + i * 0.08) + 's';
+      setTimeout(function() { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 20);
+    });
+    panel.querySelectorAll('.fp-budget__bar-fill').forEach(function(bar, i) {
+      bar.style.transform = 'scaleX(0)'; bar.style.transformOrigin = 'left';
+      bar.style.transition = 'transform 0.7s var(--ease) ' + (0.1 + i * 0.1) + 's';
+      setTimeout(function() { bar.style.transform = 'scaleX(1)'; }, 20);
+    });
+    panel.querySelectorAll('.fp-report__line').forEach(function(line, i) {
+      line.style.transform = 'scaleX(0)'; line.style.transformOrigin = 'left';
+      line.style.transition = 'transform 0.5s ease ' + (0.1 + i * 0.06) + 's';
+      setTimeout(function() { line.style.transform = 'scaleX(1)'; }, 20);
+    });
+    panel.querySelectorAll('.fp-report__stat').forEach(function(stat, i) {
+      stat.style.opacity = '0'; stat.style.transform = 'scale(0.9)';
+      stat.style.transition = 'opacity 0.35s ease ' + (0.2 + i * 0.08) + 's, transform 0.35s ease ' + (0.2 + i * 0.08) + 's';
+      setTimeout(function() { stat.style.opacity = '1'; stat.style.transform = 'scale(1)'; }, 20);
+    });
+    panel.querySelectorAll('.mock-collab__row').forEach(function(row, i) {
+      row.style.opacity = '0'; row.style.transform = 'translateX(-12px)';
+      row.style.transition = 'opacity 0.35s ease ' + (0.05 + i * 0.1) + 's, transform 0.35s ease ' + (0.05 + i * 0.1) + 's';
+      setTimeout(function() { row.style.opacity = '1'; row.style.transform = 'translateX(0)'; }, 20);
+    });
+    panel.querySelectorAll('.fp-chat__row').forEach(function(row, i) {
+      row.style.opacity = '0'; row.style.transform = 'translateY(8px)';
+      row.style.transition = 'opacity 0.35s ease ' + (0.1 + i * 0.3) + 's, transform 0.35s ease ' + (0.1 + i * 0.3) + 's';
+      setTimeout(function() { row.style.opacity = '1'; row.style.transform = 'translateY(0)'; }, 20);
+    });
+    var chatInput = panel.querySelector('.fp-chat__input');
+    if (chatInput) {
+      chatInput.style.opacity = '0'; chatInput.style.transform = 'translateY(6px)';
+      chatInput.style.transition = 'opacity 0.3s ease 0.7s, transform 0.3s ease 0.7s';
+      setTimeout(function() { chatInput.style.opacity = '1'; chatInput.style.transform = 'translateY(0)'; }, 20);
+    }
+  };
+
+  // Observe lifecycle panels
+  if ('IntersectionObserver' in window) {
+    var animObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) window._animatePanel(e.target);
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.pain-row__panel').forEach(function(p) { animObserver.observe(p); });
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Partners — Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "Nyght Serif"; font-weight: 500; font-style: italic; font-display: swap; src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-MediumItalic.woff2") format("woff2"); }
+@font-face { font-family: "Nyght Serif"; font-weight: 300; font-style: italic; font-display: swap; src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-LightItalic.woff2") format("woff2"); }
+.nyght { font-family: "Nyght Serif", Georgia, serif; font-style: italic; font-weight: 300; }
+</style>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+html{scroll-behavior:smooth;scrollbar-gutter:stable}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:#111110;background:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+:root{--black:#191919;--white:#fff;--grey:#E0E0E0;--bg:#FAFAFA;--accent:#F56002;--text-secondary:#454545;--ease:cubic-bezier(0.16,1,0.3,1)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;font-weight:600;padding:0.75rem 1.25rem;border-radius:1.5rem;transition:all 0.3s ease;cursor:pointer}
+.btn--primary{background:var(--black);color:#fff;border:1px solid transparent}
+.btn--primary:hover{color:#111 !important;background:rgba(255,255,255,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.btn--primary-light{background:var(--black);color:#fff;border:1px solid transparent}
+.btn--primary-light:hover{color:#111 !important;background:rgba(0,0,0,0.05);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(0,0,0,0.12);box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.btn--outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.4)}
+.btn--outline:hover{background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:rgba(255,255,255,0.5)}
+.btn--ghost{background:transparent;color:var(--black);border:1px solid var(--grey)}
+.btn--ghost:hover{background:rgba(0,0,0,0.05);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--black)}
+.btn--white{background:#fff;color:var(--black);border:1px solid transparent}
+.btn--white:hover{background:rgba(255,255,255,0.85);box-shadow:0 2px 12px rgba(0,0,0,0.15)}
+.btn--green{background:#D9FA87;color:var(--black);border:1px solid transparent}
+.btn--green:hover{background:rgba(255,255,255,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.1)}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0.875rem 2rem;display:flex;align-items:center;justify-content:space-between;max-width:80rem;margin:0 auto;transition:transform 0.35s cubic-bezier(0.4,0,0.2,1)}
+.nav.nav--hidden{transform:translateY(calc(-100% - 1rem))}
+.nav__pill{display:flex;align-items:center;gap:0.25rem;padding:0.375rem 0.5rem;border-radius:100px;background:rgba(255,255,255,0.12);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1);transition:background 0.35s,border-color 0.35s}
+.nav--solid .nav__pill{background:rgba(255,255,255,0.95);border-color:rgba(0,0,0,0.06)}
+.nav__logo{display:flex;align-items:center;padding:0 0.5rem}
+.nav__logo img{height:1.125rem;transition:filter 0.3s,opacity 0.3s}
+.nav__logo .logo-light{position:absolute}
+.nav__logo .logo-dark{opacity:0}
+.nav--solid .nav__logo .logo-light{opacity:0}
+.nav--solid .nav__logo .logo-dark{opacity:1;position:relative}
+.nav__link{font-size:0.8125rem;font-weight:500;padding:0.5rem 0.875rem;border-radius:100px;color:rgba(255,255,255,0.85);white-space:nowrap;display:flex;align-items:center;gap:0.25rem;transition:color 0.2s,background 0.2s}
+.nav__link:hover{color:#fff;background:rgba(255,255,255,0.1)}
+.nav--solid .nav__link{color:var(--text-secondary)}
+.nav--solid .nav__link:hover{color:var(--black);background:rgba(0,0,0,0.04)}
+.nav__link svg{width:10px;height:10px;opacity:0.6}
+.nav__login{font-size:0.8125rem;font-weight:500;padding:0.5rem 1rem;border-radius:100px;color:rgba(255,255,255,0.85);white-space:nowrap;border:1px solid rgba(255,255,255,0.3);transition:color 0.2s,border-color 0.2s,background 0.2s}
+.nav__login:hover{color:#fff;border-color:rgba(255,255,255,0.5)}
+.nav--solid .nav__login{color:var(--black);border-color:rgba(0,0,0,0.15)}
+.nav--solid .nav__login:hover{border-color:var(--black)}
+a.nav__cta{font-size:0.8125rem;font-weight:600;padding:0.5rem 1.125rem;border-radius:100px;white-space:nowrap;text-decoration:none;color:#fff;background:#111110;border:1px solid transparent;transition:all 0.3s ease}
+a.nav__cta:hover{color:#111 !important;background:rgba(255,255,255,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.nav--solid a.nav__cta{color:var(--black);background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.1);box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.nav--solid a.nav__cta:hover{color:var(--black);background:rgba(0,0,0,0.08);border-color:rgba(0,0,0,0.18);box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.nav__divider{width:1px;height:1rem;background:rgba(255,255,255,0.15);margin:0 0.125rem}
+.nav--solid .nav__divider{background:rgba(0,0,0,0.08)}
+.nav__dropdown{position:relative}
+.nav__dropdown>.nav__link{cursor:pointer}
+.nav__dropdown>.nav__link svg{transition:transform 0.25s}
+.nav__dropdown.is-open>.nav__link svg{transform:rotate(180deg)}
+.nav__dropdown-panel{position:absolute;top:calc(100% + 0.75rem);left:0;display:flex;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:0.75rem;box-shadow:0 12px 48px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.06);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity 0.25s ease,visibility 0.25s ease,transform 0.25s ease;z-index:100;min-width:36rem;overflow:hidden}
+.nav__dropdown.is-open .nav__dropdown-panel{opacity:1;visibility:visible;transform:translateY(0)}
+.nav__dropdown-left{flex:1;padding:1.5rem;display:flex;flex-direction:column;gap:0.25rem}
+.nav__dropdown-item{display:block;padding:0.75rem 1rem;border-radius:0.5rem;transition:background 0.15s}
+.nav__dropdown-item:hover{background:rgba(0,0,0,0.03)}
+.nav__dropdown-item-title{font-size:0.875rem;font-weight:600;color:var(--black);margin-bottom:0.125rem}
+.nav__dropdown-item-desc{font-size:0.8125rem;color:var(--text-secondary);line-height:1.4}
+.nav__dropdown-right{width:16rem;background:var(--black);padding:1.5rem;display:flex;flex-direction:column;gap:0.125rem;border-radius:0 0.75rem 0.75rem 0}
+.nav__dropdown-featured-label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.4);padding:0.5rem 0.75rem;margin-bottom:0.25rem;display:flex;align-items:center;gap:0.5rem}
+.nav__dropdown-featured-label::before{content:'';width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.5)}
+.nav__dropdown-featured-link{display:block;font-size:0.9375rem;font-weight:500;color:rgba(255,255,255,0.75);padding:0.625rem 0.75rem;border-radius:0.375rem;transition:color 0.15s,background 0.15s}
+.nav__dropdown-featured-link:hover{color:#fff;background:rgba(255,255,255,0.08)}
+.nav-blur-overlay{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.1);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity 0.35s ease,visibility 0.35s ease}
+.nav-blur-overlay.is-active{opacity:1;visibility:visible}
+@media(max-width:768px){
+  .nav{padding:0.75rem 1rem}
+  .nav__pill--left .nav__link,.nav__pill--left .nav__dropdown{display:none}
+  .nav__pill--right .nav__link,.nav__pill--right .nav__divider{display:none}
+  .nav__login{display:none}
+}
+
+
+/* =============================================
+   ICP PAGE — FOR PARTNERS
+   ============================================= */
+
+/* Section label (reusable) */
+.section-label{
+  font-size:0.6875rem;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--accent);
+  display:inline-flex;align-items:center;gap:0.5rem;
+  margin-bottom:1rem;
+}
+.section-label::before{
+  content:'';width:0.375rem;height:0.375rem;border-radius:50%;
+  background:var(--accent);
+}
+.section-label--light{color:rgba(255,255,255,0.5)}
+.section-label--light::before{background:rgba(255,255,255,0.4)}
+
+/* Metadata pills */
+.metadata-pill{
+  display:inline-block;
+  width:auto;
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.06em;
+  padding:0.375rem 0.875rem;border-radius:0.375rem;
+  background:#D9FA87;color:var(--black);
+  margin-bottom:0.75rem;
+}
+
+/* ICP hero nav pills */
+.icp-nav{
+  display:flex;gap:0.375rem;justify-content:center;
+  margin-bottom:1.5rem;
+}
+.icp-nav__pill{
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.06em;
+  padding:0.375rem 0.875rem;border-radius:0.375rem;
+  color:rgba(255,255,255,0.5);
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  transition:all 0.25s var(--ease);
+}
+.icp-nav__pill:hover{
+  color:#fff;
+  background:rgba(255,255,255,0.12);
+  border-color:rgba(255,255,255,0.2);
+}
+.icp-nav__pill--active{
+  color:#fff;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-color:rgba(255,255,255,0.25);
+}
+.icp-nav__pill--active:hover{
+  color:#fff;
+  background:rgba(255,255,255,0.18);
+}
+
+/* ── Hero with background image + overlay ── */
+.icp-hero{
+  position:relative;
+  color:#fff;
+  min-height:80vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:8rem 2rem 6rem;
+  overflow:hidden;
+}
+.icp-hero__bg{
+  position:absolute;inset:0;z-index:0;
+}
+.icp-hero__bg img{
+  width:100%;height:100%;object-fit:cover;
+}
+.icp-hero__overlay{
+  position:absolute;inset:0;z-index:1;
+  background:rgba(0,0,0,0.7);
+}
+.icp-hero__inner{
+  max-width:48rem;position:relative;z-index:2;
+  transition:opacity 0.1s linear,transform 0.1s linear;
+  will-change:opacity,transform;
+}
+.icp-hero h1{
+  font-size:clamp(2.5rem,5.5vw,4rem);
+  font-weight:300;line-height:1.08;
+  letter-spacing:-0.03em;
+  margin-bottom:1.25rem;
+}
+.icp-hero h1 .nyght{font-weight:300}
+.icp-hero p{
+  font-size:1.0625rem;line-height:1.65;
+  color:rgba(255,255,255,0.55);
+  max-width:36rem;margin:0 auto 2rem;
+}
+.icp-hero__buttons{
+  display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;
+}
+
+/* ── Pain/Solution — Alternating 2-col ── */
+.pain-section{
+  padding:6rem 2rem;
+  background:#fff;
+}
+.pain-section__inner{
+  max-width:72rem;margin:0 auto;
+}
+.pain-section__header{
+  text-align:center;max-width:38rem;margin:0 auto 4rem;
+}
+.pain-section__header h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+  margin-bottom:0.5rem;
+}
+.pain-section__header h2 .nyght{font-weight:300}
+
+.pain-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3rem;
+  align-items:center;
+  margin-bottom:5rem;
+}
+.pain-row:last-child{margin-bottom:0}
+.pain-row--flipped .pain-row__text{order:2}
+.pain-row--flipped .pain-row__panel{order:1}
+
+.pain-row__text{display:flex;flex-direction:column;align-items:flex-start;gap:0.75rem}
+.pain-row__text .section-label{margin-bottom:0.25rem}
+.pain-row__text h3{
+  font-size:clamp(1.5rem,3vw,2rem);
+  font-weight:500;line-height:1.15;
+  letter-spacing:-0.02em;
+}
+.pain-row__text p{
+  font-size:1rem;line-height:1.65;
+  color:var(--text-secondary);
+  max-width:28rem;
+}
+
+.pain-row__panel{
+  background:linear-gradient(135deg,#fafafa,#f0f0ea);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:1rem;
+  padding:2.5rem;
+  aspect-ratio:4/3;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+
+/* Mock UI — Dashboard status */
+.mock-dashboard{width:100%;display:flex;flex-direction:column;gap:0.75rem}
+.mock-dashboard__row{display:flex;gap:0.75rem}
+.mock-dashboard__card{
+  flex:1;
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.625rem;
+  padding:1rem;
+  display:flex;flex-direction:column;gap:0.375rem;
+}
+.mock-dashboard__card-title{font-size:0.6875rem;font-weight:600;color:rgba(0,0,0,0.35);text-transform:uppercase;letter-spacing:0.04em}
+.mock-dashboard__card-value{font-size:1.25rem;font-weight:700;color:var(--black)}
+.mock-dashboard__pill{
+  display:inline-flex;align-items:center;gap:0.25rem;
+  font-size:0.625rem;font-weight:600;
+  padding:0.2rem 0.5rem;border-radius:100px;
+  width:fit-content;
+}
+.mock-dashboard__pill--green{background:rgba(16,185,129,0.1);color:#059669}
+.mock-dashboard__pill--amber{background:rgba(245,158,11,0.1);color:#d97706}
+.mock-dashboard__pill--red{background:rgba(239,68,68,0.1);color:#dc2626}
+
+/* ── Features Section ── */
+.features-section{
+  padding:6rem 2rem;
+  background:var(--bg);
+}
+.features-section__inner{
+  max-width:72rem;margin:0 auto;
+}
+.features-section__header{
+  text-align:center;max-width:38rem;margin:0 auto 1rem;
+}
+.features-section__header h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+}
+.features-section__sub{
+  text-align:center;
+  font-size:1.0625rem;
+  color:var(--text-secondary);
+  margin-bottom:3.5rem;
+}
+
+/* Feature preview mock UIs */
+/* Timeline (gantt) */
+.fp-timeline{width:100%;display:flex;flex-direction:column;gap:0.875rem}
+.fp-timeline__row{display:flex;align-items:center;gap:0.75rem}
+.fp-timeline__label{font-size:0.6875rem;font-weight:600;color:rgba(0,0,0,0.4);width:4rem;flex-shrink:0;text-align:right}
+.fp-timeline__track{flex:1;height:0.5rem;background:rgba(0,0,0,0.04);border-radius:100px;position:relative}
+.fp-timeline__bar{position:absolute;top:0;height:100%;border-radius:100px}
+
+/* Tasks */
+.fp-tasks{width:100%;display:flex;flex-direction:column;gap:0.5rem}
+.fp-tasks__row{
+  display:flex;align-items:center;gap:0.75rem;
+  background:#fff;border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.5rem;padding:0.625rem 0.875rem;
+}
+.fp-tasks__check{
+  width:1.125rem;height:1.125rem;border-radius:4px;flex-shrink:0;
+  border:2px solid rgba(0,0,0,0.15);
+}
+.fp-tasks__check--done{border-color:#059669;background:#059669;position:relative}
+.fp-tasks__check--done::after{
+  content:'';position:absolute;top:2px;left:4px;
+  width:4px;height:7px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
+}
+.fp-tasks__label{flex:1;font-size:0.8125rem;color:var(--black);font-weight:500}
+.fp-tasks__label--done{text-decoration:line-through;opacity:0.5}
+.fp-tasks__assignee{
+  width:1.5rem;height:1.5rem;border-radius:50%;
+  font-size:0.5rem;font-weight:700;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* Command center */
+.fp-command{width:100%;display:flex;flex-direction:column;gap:0.625rem}
+.fp-command__row{display:flex;gap:0.625rem}
+.fp-command__card{
+  flex:1;background:#fff;border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.5rem;padding:0.75rem;
+  display:flex;flex-direction:column;gap:0.25rem;
+}
+.fp-command__card-artist{font-size:0.75rem;font-weight:600;color:var(--black)}
+.fp-command__card-release{font-size:0.6875rem;color:var(--text-secondary)}
+.fp-command__card-status{
+  display:inline-flex;align-items:center;gap:0.25rem;
+  font-size:0.5625rem;font-weight:600;padding:0.15rem 0.4rem;
+  border-radius:100px;width:fit-content;margin-top:0.125rem;
+}
+
+/* Gantt chart */
+.mock-gantt{width:100%;display:flex;flex-direction:column;gap:0.75rem}
+.mock-gantt__row{display:flex;align-items:center;gap:0.75rem}
+.mock-gantt__label{font-size:0.6875rem;font-weight:600;color:rgba(0,0,0,0.4);width:3.5rem;flex-shrink:0;text-align:right}
+.mock-gantt__track{flex:1;height:0.5rem;background:rgba(0,0,0,0.04);border-radius:100px;position:relative}
+.mock-gantt__bar{position:absolute;top:0;height:100%;border-radius:100px}
+
+/* Collaboration rows */
+.mock-collab{width:100%;display:flex;flex-direction:column;gap:0.625rem}
+.mock-collab__row{
+  display:flex;align-items:center;gap:0.75rem;
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.625rem;
+  padding:0.75rem 1rem;
+}
+.mock-collab__avatar{
+  width:2rem;height:2rem;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.625rem;font-weight:700;color:#fff;
+}
+.mock-collab__task{flex:1;font-size:0.8125rem;color:var(--black);font-weight:500}
+.mock-collab__check{
+  width:1.25rem;height:1.25rem;border-radius:50%;flex-shrink:0;
+  border:2px solid rgba(0,0,0,0.12);
+}
+.mock-collab__check--done{
+  border-color:#059669;background:#059669;
+  position:relative;
+}
+.mock-collab__check--done::after{
+  content:'';position:absolute;
+  top:3px;left:5px;
+  width:5px;height:8px;
+  border:solid #fff;border-width:0 2px 2px 0;
+  transform:rotate(45deg);
+}
+
+/* Chat */
+.fp-chat{width:100%;display:flex;flex-direction:column;gap:0.75rem}
+.fp-chat__row{display:flex;gap:0.625rem;align-items:flex-start}
+.fp-chat__row--user{justify-content:flex-end}
+.fp-chat__avatar{
+  width:1.75rem;height:1.75rem;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.5rem;font-weight:700;color:#fff;
+}
+.fp-chat__bubble{
+  max-width:75%;padding:0.625rem 0.875rem;
+  border-radius:0.75rem;font-size:0.8125rem;line-height:1.5;
+}
+.fp-chat__bubble--user{background:var(--black);color:#fff;border-bottom-right-radius:0.25rem}
+.fp-chat__bubble--ai{background:#fff;color:var(--black);border:1px solid rgba(0,0,0,0.06);border-bottom-left-radius:0.25rem}
+.fp-chat__input{
+  background:#fff;border:1px solid rgba(0,0,0,0.08);
+  border-radius:100px;padding:0.625rem 1rem;
+  font-size:0.75rem;color:rgba(0,0,0,0.35);
+  margin-top:0.25rem;
+}
+
+/* Budget */
+.fp-budget{width:100%;display:flex;flex-direction:column;gap:1rem}
+.fp-budget__bar-group{display:flex;flex-direction:column;gap:0.625rem}
+.fp-budget__bar-row{display:flex;align-items:center;gap:0.75rem}
+.fp-budget__bar-label{font-size:0.6875rem;font-weight:600;color:rgba(0,0,0,0.4);width:5rem;flex-shrink:0;text-align:right}
+.fp-budget__bar-track{flex:1;height:1.25rem;background:rgba(0,0,0,0.04);border-radius:0.25rem;position:relative;overflow:hidden}
+.fp-budget__bar-fill{height:100%;border-radius:0.25rem}
+.fp-budget__bar-value{font-size:0.6875rem;font-weight:700;color:var(--black);width:3rem;flex-shrink:0}
+.fp-budget__total{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:0.75rem;border-top:1px solid rgba(0,0,0,0.06);
+  font-size:0.8125rem;font-weight:600;color:var(--black);
+}
+
+/* Report */
+.fp-report{width:100%;display:flex;flex-direction:column;gap:0.75rem}
+.fp-report__header{
+  background:#fff;border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.5rem;padding:1rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.fp-report__header-title{font-size:0.875rem;font-weight:600;color:var(--black)}
+.fp-report__header-date{font-size:0.6875rem;color:var(--text-secondary)}
+.fp-report__body{display:flex;flex-direction:column;gap:0.5rem}
+.fp-report__line{height:0.5rem;border-radius:100px;background:rgba(0,0,0,0.06)}
+.fp-report__line--short{width:60%}
+.fp-report__line--med{width:80%}
+.fp-report__stats{display:flex;gap:0.75rem;margin-top:0.25rem}
+.fp-report__stat{
+  flex:1;background:#fff;border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.5rem;padding:0.625rem;text-align:center;
+}
+.fp-report__stat-value{font-size:1rem;font-weight:700;color:var(--black)}
+.fp-report__stat-label{font-size:0.5625rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;font-weight:600}
+
+/* Analytics dashboard 2x2 grid */
+.analytics-grid{
+  width:100%;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:0.625rem;
+}
+.analytics-tile{
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.625rem;
+  padding:0.875rem;
+  display:flex;flex-direction:column;
+  gap:0.375rem;
+  overflow:hidden;
+}
+.analytics-tile__label{
+  font-size:0.5625rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.04em;
+  color:rgba(0,0,0,0.35);
+}
+.analytics-tile__value{
+  font-size:1.375rem;font-weight:700;color:var(--black);
+  line-height:1;
+}
+/* Streams — vertical bar chart */
+.analytics-bars{
+  display:flex;align-items:flex-end;gap:3px;
+  height:3rem;margin-top:auto;
+}
+.analytics-bars__bar{
+  flex:1;border-radius:2px 2px 0 0;
+  background:linear-gradient(180deg,#059669,#34d399);
+  min-width:0;
+}
+/* Saves — hearts grid */
+.analytics-hearts{
+  display:flex;gap:2px;flex-wrap:wrap;margin-top:auto;
+}
+.analytics-hearts__heart{
+  width:0.625rem;height:0.625rem;
+  color:#EC4899;
+  transition:opacity 0.15s,transform 0.15s;
+}
+.analytics-hearts__heart svg{width:100%;height:100%;fill:currentColor}
+
+/* Animatable elements */
+.anim-bar{transition:height 0.6s var(--ease);height:0 !important}
+.anim-bar.is-animated{height:var(--h) !important}
+.anim-fade{opacity:0;transform:translateY(8px);transition:opacity 0.35s ease,transform 0.35s ease}
+.anim-fade.is-animated{opacity:1;transform:translateY(0)}
+.anim-scale{opacity:0;transform:scale(0);transition:opacity 0.25s ease,transform 0.3s var(--ease)}
+.anim-scale.is-animated{opacity:1;transform:scale(1)}
+.anim-slide{opacity:0;transform:translateX(-12px);transition:opacity 0.35s ease,transform 0.35s ease}
+.anim-slide.is-animated{opacity:1;transform:translateX(0)}
+.anim-bar-h{transform:scaleX(0);transform-origin:left;transition:transform 0.7s var(--ease)}
+.anim-bar-h.is-animated{transform:scaleX(1)}
+.anim-check{opacity:0;transform:scale(0.5);transition:opacity 0.2s,transform 0.25s var(--ease)}
+.anim-check.is-animated{opacity:1;transform:scale(1)}
+/* Playlists — small tags */
+.analytics-tags{
+  display:flex;flex-wrap:wrap;gap:0.25rem;margin-top:auto;
+}
+.analytics-tags__tag{
+  font-size:0.5rem;font-weight:500;
+  padding:0.2rem 0.5rem;border-radius:0.25rem;
+  background:rgba(0,0,0,0.04);color:var(--text-secondary);
+  white-space:nowrap;
+}
+/* Reach — large count-up number */
+.analytics-reach{
+  font-size:2rem;font-weight:800;
+  color:var(--black);letter-spacing:-0.03em;
+  line-height:1;margin-top:auto;
+}
+
+/* ── Partner Tabs ── */
+.partner-tabs{
+  display:flex;gap:0.5rem;justify-content:center;
+  margin-bottom:2.5rem;
+  flex-wrap:wrap;
+}
+.partner-tab{
+  font-size:0.8125rem;font-weight:600;
+  padding:0.625rem 1.25rem;border-radius:100px;
+  border:1px solid rgba(0,0,0,0.12);
+  background:transparent;color:var(--text-secondary);
+  cursor:pointer;
+  transition:all 0.25s var(--ease);
+}
+.partner-tab:hover{color:var(--black);border-color:rgba(0,0,0,0.25)}
+.partner-tab.is-active{
+  background:var(--black);color:#fff;border-color:var(--black);
+}
+.partner-panel{display:none}
+.partner-panel.is-active{
+  display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;
+  align-items:start;
+  animation:partnerFadeUp 0.45s var(--ease);
+}
+@keyframes partnerFadeUp{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.partner-panel__features{
+  display:flex;flex-direction:column;gap:1.25rem;
+}
+.partner-panel__feature{
+  padding:1rem 1.25rem;
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.75rem;
+  cursor:pointer;
+  transition:all 0.25s var(--ease);
+}
+.partner-panel__feature:hover{
+  border-color:rgba(0,0,0,0.15);
+  transform:translateX(4px);
+}
+.partner-panel__feature.is-active{
+  background:#fff;border-color:rgba(0,0,0,0.12);
+  box-shadow:0 2px 12px rgba(0,0,0,0.04);
+}
+.partner-panel__feature.is-active h4::before{
+  content:'';display:inline-block;
+  width:6px;height:6px;border-radius:50%;
+  background:#D9FA87;margin-right:0.5rem;
+  vertical-align:middle;
+}
+.partner-panel__feature h4{
+  font-size:0.875rem;font-weight:600;color:var(--black);
+  margin-bottom:0.25rem;
+}
+.partner-panel__feature p{
+  font-size:0.8125rem;color:var(--text-secondary);line-height:1.5;
+}
+.partner-panel__preview{
+  position:relative;
+  aspect-ratio:4/3;max-height:32rem;
+  background:linear-gradient(135deg,#fafafa,#f0f0ea);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:1rem;
+  overflow:hidden;
+  padding:2.5rem;
+}
+.partner-preview-item{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:2.5rem;
+  opacity:0;transform:scale(0.96);
+  transition:opacity 0.35s ease,transform 0.35s ease;
+  pointer-events:none;
+}
+.partner-preview-item.is-active{
+  opacity:1;transform:scale(1);pointer-events:auto;
+}
+
+@media(max-width:768px){
+  .partner-panel.is-active{grid-template-columns:1fr}
+  .partner-panel__preview{aspect-ratio:auto;min-height:14rem}
+}
+
+/* ── Steps — Staggered timeline ── */
+.steps-section{
+  padding:6rem 2rem;
+  background:#fff;
+}
+.steps-section__inner{
+  max-width:48rem;margin:0 auto;
+}
+.steps-section__header{
+  text-align:center;max-width:38rem;margin:0 auto 4rem;
+}
+.steps-section__header h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+}
+
+.steps-timeline{
+  position:relative;
+  padding-left:3rem;
+}
+.steps-timeline::before{
+  display:none;
+}
+
+.step{
+  position:relative;
+  margin-bottom:3rem;
+  transition:transform 0.3s var(--ease);
+}
+.step:last-child{margin-bottom:0}
+.step:nth-child(1){margin-left:0}
+.step:nth-child(2){margin-left:3rem}
+.step:nth-child(3){margin-left:6rem}
+
+.step__circle{
+  position:absolute;
+  left:-3rem;top:0;
+  width:2.25rem;height:2.25rem;
+  border-radius:50%;
+  background:#D9FA87;
+  color:var(--black);
+  font-size:0.875rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 4px #fff, 0 0 0 6px rgba(217,250,135,0.25);
+  animation:circlePulse 2.5s ease-in-out infinite;
+}
+@keyframes circlePulse{
+  0%,100%{box-shadow:0 0 0 4px #fff, 0 0 0 6px rgba(217,250,135,0.25)}
+  50%{box-shadow:0 0 0 4px #fff, 0 0 0 12px rgba(217,250,135,0.1)}
+}
+/* Scroll-triggered animation */
+.step{opacity:0;transform:translateY(20px)}
+.step.is-visible{opacity:1;transform:translateY(0);transition:opacity 0.5s var(--ease),transform 0.5s var(--ease)}
+.step:nth-child(2).is-visible{transition-delay:0.15s}
+.step:nth-child(3).is-visible{transition-delay:0.3s}
+.step__card{
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.75rem;
+  padding:1.5rem 1.75rem;
+  box-shadow:0 2px 12px rgba(0,0,0,0.03);
+}
+.step__card h3{
+  font-size:1.0625rem;font-weight:600;
+  margin-bottom:0.375rem;
+  letter-spacing:-0.01em;
+}
+.step__card p{
+  font-size:0.9375rem;line-height:1.55;
+  color:var(--text-secondary);
+}
+
+/* ── Other ICPs — green bg ── */
+.other-icps{
+  padding:5rem 2rem;
+  background:#D9FA87;
+}
+.other-icps__inner{
+  max-width:72rem;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;
+  gap:0;
+}
+.other-icps__divider{
+  background:rgba(0,0,0,0.1);
+  width:1px;
+  align-self:stretch;
+}
+.other-icp{
+  display:flex;flex-direction:column;
+  align-items:center;text-align:center;
+  padding:1.5rem 2rem;
+  color:var(--black);
+  transition:opacity 0.2s;
+}
+.other-icp:hover{opacity:0.7}
+.other-icp__title{
+  font-family:"Nyght Serif",Georgia,serif;font-style:italic;font-weight:300;
+  font-size:1.5rem;margin-bottom:0.5rem;color:var(--black);
+}
+.other-icp__desc{font-size:0.9375rem;color:var(--text-secondary);line-height:1.55;max-width:20rem}
+.other-icp__link{
+  margin-top:0.75rem;
+  font-size:0.8125rem;font-weight:600;
+  color:var(--black);
+  display:inline-flex;align-items:center;gap:0.375rem;
+  border-bottom:1px solid transparent;
+  padding-bottom:0.125rem;
+  transition:border-color 0.25s;
+}
+.other-icp__link:hover{border-bottom-color:var(--black)}
+.other-icp__link svg{width:12px;height:12px;stroke:var(--black);fill:none;stroke-width:2;transition:transform 0.25s}
+.other-icp__link:hover svg{transform:translateX(3px)}
+
+/* ── Final CTA ── */
+.final-cta{
+  padding:2rem 2rem 6rem;background:#fff;
+}
+.final-cta__card{
+  max-width:72rem;margin:0 auto;text-align:center;
+  padding:5rem 3rem;background:#fff;
+  border:1px solid rgba(0,0,0,0.08);border-radius:1rem;
+  box-shadow:0 4px 32px rgba(0,0,0,0.04);
+}
+.final-cta h2{
+  font-size:clamp(1.75rem,4vw,2.75rem);
+  font-weight:300;letter-spacing:-0.02em;
+  margin-bottom:1.5rem;line-height:1.1;
+}
+.final-cta__buttons{
+  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
+  margin-bottom:1rem;
+}
+.final-cta__note{
+  font-size:0.8125rem;color:var(--text-secondary);
+}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .icp-hero{min-height:auto;padding:7rem 1.5rem 4rem}
+  .icp-hero h1{font-size:2.25rem}
+  .icp-hero__buttons{flex-direction:column;align-items:center}
+  .icp-hero__buttons .btn{width:100%;max-width:18rem;justify-content:center}
+
+  .pain-row{grid-template-columns:1fr;gap:2rem}
+  .pain-row--flipped .pain-row__text{order:1}
+  .pain-row--flipped .pain-row__panel{order:2}
+  .pain-row__panel{aspect-ratio:auto;padding:2rem;min-height:14rem}
+
+  .steps-timeline{padding-left:3rem}
+  .step:nth-child(2){margin-left:0}
+  .step:nth-child(3){margin-left:0}
+
+  .other-icps__inner{
+    grid-template-columns:1fr;
+    gap:0;
+  }
+  .other-icps__divider{
+    width:100%;height:1px;
+    align-self:auto;
+  }
+
+  .final-cta__card{padding:3rem 2rem}
+  .final-cta__buttons{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- Nav (dark hero, transitions to solid on scroll) -->
+<div id="team-nav" data-theme="dark"></div>
+
+<!-- Hero -->
+<section class="icp-hero" id="heroSection">
+  <div class="icp-hero__bg">
+    <img src="assets/hero-bg-new.png" alt="" loading="eager">
+  </div>
+  <div class="icp-hero__overlay"></div>
+  <div class="icp-hero__inner">
+    <div class="icp-nav">
+      <a href="for-artists.html" class="icp-nav__pill">For Artists</a>
+      <a href="for-managers.html" class="icp-nav__pill">For Managers</a>
+      <a href="for-labels.html" class="icp-nav__pill">For Labels</a>
+      <a href="for-partners.html" class="icp-nav__pill icp-nav__pill--active">For Partners</a>
+    </div>
+    <h1>Your clients are already on Team. <span class="nyght">Now you can be too.</span></h1>
+    <p>Whether you run PR campaigns, manage distribution, or handle marketing — Team gives you a seat at the table on every release you're part of.</p>
+    <div class="icp-hero__buttons">
+      <a href="onboarding.html?plan=pro&period=yearly" class="btn btn--green">Start your free trial</a>
+      <a href="demo.html" class="btn btn--outline">Book a demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- Pain → Solution — Alternating 2-col -->
+<section class="pain-section">
+  <div class="pain-section__inner">
+    <div class="pain-section__header">
+      <h2>Working across clients is messy. <span class="nyght">Team cleans it up.</span></h2>
+    </div>
+
+    <!-- Sub-section 1: Text left, Panel right -->
+    <div class="pain-row">
+      <div class="pain-row__text">
+        <span class="metadata-pill">One login, every client</span>
+        <h3>See every release you're involved in from one dashboard</h3>
+        <p>No more logging into separate tools for each client. Team gives you a single view of every release you're contributing to — with the context you need to do your job.</p>
+      </div>
+      <div class="pain-row__panel">
+        <div class="fp-command">
+          <div class="fp-command__row">
+            <div class="fp-command__card"><div class="fp-command__card-artist">Mara</div><div class="fp-command__card-release">Golden Hour</div><div class="fp-command__card-status mock-dashboard__pill--green">On Track</div></div>
+            <div class="fp-command__card"><div class="fp-command__card-artist">Ash Velo</div><div class="fp-command__card-release">First Light EP</div><div class="fp-command__card-status mock-dashboard__pill--amber">At Risk</div></div>
+          </div>
+          <div class="fp-command__row">
+            <div class="fp-command__card"><div class="fp-command__card-artist">Phoebe K</div><div class="fp-command__card-release">Neon Skyline</div><div class="fp-command__card-status mock-dashboard__pill--green">On Track</div></div>
+            <div class="fp-command__card"><div class="fp-command__card-artist">Kira</div><div class="fp-command__card-release">Late Bloom</div><div class="fp-command__card-status mock-dashboard__pill--green">On Track</div></div>
+          </div>
+          <div class="fp-command__row">
+            <div class="fp-command__card"><div class="fp-command__card-artist">Zara Lin</div><div class="fp-command__card-release">Quiet Rooms</div><div class="fp-command__card-status mock-dashboard__pill--green">On Track</div></div>
+            <div class="fp-command__card"><div class="fp-command__card-artist">Theo Park</div><div class="fp-command__card-release">After Dark</div><div class="fp-command__card-status mock-dashboard__pill--amber">At Risk</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sub-section 2: FLIPPED — Panel left, Text right -->
+    <div class="pain-row pain-row--flipped">
+      <div class="pain-row__text">
+        <span class="metadata-pill">Context, not chaos</span>
+        <h3>Get briefs, assets, and deadlines without the email chain</h3>
+        <p>When a client invites you into a release, you see the timeline, the assets, and exactly what's expected of you. No more digging through inboxes for that brief they sent last Tuesday.</p>
+      </div>
+      <div class="pain-row__panel">
+        <div class="fp-tasks">
+          <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">Review campaign brief</div><div class="fp-tasks__assignee" style="background:#8B5CF6">You</div></div>
+          <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">Upload press assets</div><div class="fp-tasks__assignee" style="background:#8B5CF6">You</div></div>
+          <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Draft playlist pitch</div><div class="fp-tasks__assignee" style="background:#8B5CF6">You</div></div>
+          <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Submit social content</div><div class="fp-tasks__assignee" style="background:#8B5CF6">You</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sub-section 3: Text left, Panel right -->
+    <div class="pain-row">
+      <div class="pain-row__text">
+        <span class="metadata-pill">Deliver on time</span>
+        <h3>Track your deliverables across every client</h3>
+        <p>See what's due, what's done, and what's at risk — across all your clients. Team keeps you accountable without the micromanagement.</p>
+      </div>
+      <div class="pain-row__panel">
+        <div class="mock-dashboard">
+          <div class="mock-dashboard__row">
+            <div class="mock-dashboard__card">
+              <div class="mock-dashboard__card-title">Active Clients</div>
+              <div class="mock-dashboard__card-value">8</div>
+              <div class="mock-dashboard__pill mock-dashboard__pill--green">On Track</div>
+            </div>
+            <div class="mock-dashboard__card">
+              <div class="mock-dashboard__card-title">Tasks Due</div>
+              <div class="mock-dashboard__card-value">5</div>
+              <div class="mock-dashboard__pill mock-dashboard__pill--amber">This Week</div>
+            </div>
+          </div>
+          <div class="mock-dashboard__row">
+            <div class="mock-dashboard__card">
+              <div class="mock-dashboard__card-title">Completed</div>
+              <div class="mock-dashboard__card-value">23</div>
+              <div class="mock-dashboard__pill mock-dashboard__pill--green">This Month</div>
+            </div>
+            <div class="mock-dashboard__card">
+              <div class="mock-dashboard__card-title">At Risk</div>
+              <div class="mock-dashboard__card-value">2</div>
+              <div class="mock-dashboard__pill mock-dashboard__pill--amber">Needs Attention</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Features — Tabbed Section -->
+<section class="features-section" id="featuresSection">
+  <div class="features-section__inner">
+    <div class="features-section__header">
+      <h2>Built for every kind of partner</h2>
+    </div>
+    <p class="features-section__sub">Whatever your role in the release, Team has you covered</p>
+
+    <div class="partner-tabs" role="tablist">
+      <button class="partner-tab is-active" data-tab="marketing" role="tab">Marketing &amp; PR</button>
+      <button class="partner-tab" data-tab="distribution" role="tab">Distribution</button>
+      <button class="partner-tab" data-tab="ar" role="tab">A&amp;R</button>
+      <button class="partner-tab" data-tab="creative" role="tab">Creative Services</button>
+    </div>
+
+    <!-- Marketing & PR -->
+    <div class="partner-panel is-active" data-tab="marketing">
+      <div class="partner-panel__features">
+        <div class="partner-panel__feature is-active" data-preview="mkt-1"><h4>Campaign Scheduling</h4><p>Sync your campaigns to release milestones</p></div>
+        <div class="partner-panel__feature" data-preview="mkt-2"><h4>Press Outreach</h4><p>Track pitches, coverage, and media relationships</p></div>
+        <div class="partner-panel__feature" data-preview="mkt-3"><h4>Social Planning</h4><p>Plan content across platforms, aligned to the rollout</p></div>
+        <div class="partner-panel__feature" data-preview="mkt-4"><h4>Budget Visibility</h4><p>See what's allocated and what's been spent</p></div>
+      </div>
+      <div class="partner-panel__preview">
+        <div class="partner-preview-item is-active" data-preview="mkt-1">
+          <div class="fp-timeline">
+            <div class="fp-timeline__row"><div class="fp-timeline__label">Teaser</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:0%;width:25%;background:linear-gradient(90deg,#F56002,#ff8533)"></div></div></div>
+            <div class="fp-timeline__row"><div class="fp-timeline__label">Press</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:15%;width:35%;background:linear-gradient(90deg,#3B82F6,#60a5fa)"></div></div></div>
+            <div class="fp-timeline__row"><div class="fp-timeline__label">Social</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:30%;width:40%;background:linear-gradient(90deg,#8B5CF6,#a78bfa)"></div></div></div>
+            <div class="fp-timeline__row"><div class="fp-timeline__label">Ads</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:50%;width:30%;background:linear-gradient(90deg,#EC4899,#f472b6)"></div></div></div>
+            <div class="fp-timeline__row"><div class="fp-timeline__label">Launch</div><div class="fp-timeline__track"><div class="fp-timeline__bar" style="left:75%;width:20%;background:linear-gradient(90deg,#FAD604,#fbe046)"></div></div></div>
+          </div>
+        </div>
+        <div class="partner-preview-item" data-preview="mkt-2">
+          <div class="fp-tasks">
+            <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">Pitch to NME</div><div class="fp-tasks__assignee" style="background:#3B82F6">PR</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">Pitch to Complex</div><div class="fp-tasks__assignee" style="background:#3B82F6">PR</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Follow up — Pitchfork</div><div class="fp-tasks__assignee" style="background:#EC4899">MK</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Submit playlist pitch</div><div class="fp-tasks__assignee" style="background:#EC4899">MK</div></div>
+          </div>
+        </div>
+        <div class="partner-preview-item" data-preview="mkt-3">
+          <div class="mock-gantt">
+            <div class="mock-gantt__row"><div class="mock-gantt__label">TikTok</div><div class="mock-gantt__track"><div class="mock-gantt__bar" style="left:0%;width:60%;background:linear-gradient(90deg,#191919,#333)"></div></div></div>
+            <div class="mock-gantt__row"><div class="mock-gantt__label">Instagram</div><div class="mock-gantt__track"><div class="mock-gantt__bar" style="left:10%;width:55%;background:linear-gradient(90deg,#EC4899,#f472b6)"></div></div></div>
+            <div class="mock-gantt__row"><div class="mock-gantt__label">X</div><div class="mock-gantt__track"><div class="mock-gantt__bar" style="left:20%;width:50%;background:linear-gradient(90deg,#3B82F6,#60a5fa)"></div></div></div>
+            <div class="mock-gantt__row"><div class="mock-gantt__label">YouTube</div><div class="mock-gantt__track"><div class="mock-gantt__bar" style="left:30%;width:65%;background:linear-gradient(90deg,#dc2626,#ef4444)"></div></div></div>
+          </div>
+        </div>
+        <div class="partner-preview-item" data-preview="mkt-4">
+          <div class="fp-budget">
+            <div class="fp-budget__bar-group">
+              <div class="fp-budget__bar-row"><div class="fp-budget__bar-label">Ads</div><div class="fp-budget__bar-track"><div class="fp-budget__bar-fill" style="width:65%;background:linear-gradient(90deg,#3B82F6,#60a5fa)"></div></div><div class="fp-budget__bar-value">$8.2k</div></div>
+              <div class="fp-budget__bar-row"><div class="fp-budget__bar-label">PR</div><div class="fp-budget__bar-track"><div class="fp-budget__bar-fill" style="width:40%;background:linear-gradient(90deg,#8B5CF6,#a78bfa)"></div></div><div class="fp-budget__bar-value">$5.0k</div></div>
+              <div class="fp-budget__bar-row"><div class="fp-budget__bar-label">Content</div><div class="fp-budget__bar-track"><div class="fp-budget__bar-fill" style="width:30%;background:linear-gradient(90deg,#EC4899,#f472b6)"></div></div><div class="fp-budget__bar-value">$3.8k</div></div>
+            </div>
+            <div class="fp-budget__total"><span>Campaign Total</span><span>$17.0k</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Distribution -->
+    <div class="partner-panel" data-tab="distribution">
+      <div class="partner-panel__features">
+        <div class="partner-panel__feature is-active" data-preview="dist-1"><h4>DSP Submissions</h4><p>Track delivery status across every platform</p></div>
+        <div class="partner-panel__feature" data-preview="dist-2"><h4>Metadata Check</h4><p>Validate metadata before submission</p></div>
+        <div class="partner-panel__feature" data-preview="dist-3"><h4>Status Updates</h4><p>Real-time delivery status for every release</p></div>
+        <div class="partner-panel__feature" data-preview="dist-4"><h4>Asset Ingestion</h4><p>Bulk upload and organise release assets</p></div>
+      </div>
+      <div class="partner-panel__preview">
+        <div class="partner-preview-item is-active" data-preview="dist-1">
+          <div class="mock-dashboard">
+            <div class="mock-dashboard__row">
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Spotify</div><div class="mock-dashboard__card-value">Delivered</div><div class="mock-dashboard__pill mock-dashboard__pill--green">Live</div></div>
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Apple Music</div><div class="mock-dashboard__card-value">Delivered</div><div class="mock-dashboard__pill mock-dashboard__pill--green">Live</div></div>
+            </div>
+            <div class="mock-dashboard__row">
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Amazon</div><div class="mock-dashboard__card-value">Processing</div><div class="mock-dashboard__pill mock-dashboard__pill--amber">In Progress</div></div>
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">YouTube Music</div><div class="mock-dashboard__card-value">Pending</div><div class="mock-dashboard__pill mock-dashboard__pill--amber">Queued</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="partner-preview-item" data-preview="dist-2">
+          <div class="fp-tasks">
+            <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">ISRC codes assigned</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">UPC barcode generated</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">Track titles validated</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Explicit content flag — review</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Genre classification — confirm</div></div>
+          </div>
+        </div>
+        <div class="partner-preview-item" data-preview="dist-3">
+          <div class="mock-collab">
+            <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#D9FA87;color:var(--black)">!</div><div class="mock-collab__task">Mara — Golden Hour delivered to all DSPs</div><div class="mock-collab__check mock-collab__check--done"></div></div>
+            <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#D9FA87;color:var(--black)">!</div><div class="mock-collab__task">Ash Velo — First Light EP processing on Spotify</div><div class="mock-collab__check"></div></div>
+            <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:rgba(239,68,68,0.1);color:#dc2626">!</div><div class="mock-collab__task">Kira — Late Bloom rejected: artwork too small</div><div class="mock-collab__check"></div></div>
+          </div>
+        </div>
+        <div class="partner-preview-item" data-preview="dist-4">
+          <div class="mock-dashboard">
+            <div class="mock-dashboard__row">
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Audio Files</div><div class="mock-dashboard__card-value">24</div><div class="mock-dashboard__pill mock-dashboard__pill--green">Uploaded</div></div>
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Artwork</div><div class="mock-dashboard__card-value">8</div><div class="mock-dashboard__pill mock-dashboard__pill--green">Verified</div></div>
+            </div>
+            <div class="mock-dashboard__row">
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Metadata</div><div class="mock-dashboard__card-value">6 releases</div><div class="mock-dashboard__pill mock-dashboard__pill--amber">2 pending</div></div>
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Storage</div><div class="mock-dashboard__card-value">4.2 GB</div><div class="mock-dashboard__pill mock-dashboard__pill--green">OK</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- A&R -->
+    <div class="partner-panel" data-tab="ar">
+      <div class="partner-panel__features">
+        <div class="partner-panel__feature is-active" data-preview="ar-1"><h4>Demo Pipeline</h4><p>Review and rate incoming demos in one place</p></div>
+        <div class="partner-panel__feature" data-preview="ar-2"><h4>Artist Development</h4><p>Track development milestones for each artist</p></div>
+        <div class="partner-panel__feature" data-preview="ar-3"><h4>Release Analytics</h4><p>Understand performance across your roster</p></div>
+        <div class="partner-panel__feature" data-preview="ar-4"><h4>Market Intelligence</h4><p>Discover trends and competitive positioning</p></div>
+      </div>
+      <div class="partner-panel__preview">
+        <div class="partner-preview-item is-active" data-preview="ar-1">
+          <div class="mock-dashboard">
+            <div class="mock-dashboard__row"><div class="mock-dashboard__card"><div class="mock-dashboard__card-title">New Demos</div><div class="mock-dashboard__card-value">12</div><div class="mock-dashboard__pill mock-dashboard__pill--amber">To Review</div></div></div>
+            <div class="mock-dashboard__row"><div class="mock-dashboard__card"><div class="mock-dashboard__card-title">In Review</div><div class="mock-dashboard__card-value">5</div><div class="mock-dashboard__pill mock-dashboard__pill--green">In Progress</div></div></div>
+            <div class="mock-dashboard__row"><div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Signed</div><div class="mock-dashboard__card-value">2</div><div class="mock-dashboard__pill mock-dashboard__pill--green">Confirmed</div></div></div>
+          </div>
+        </div>
+        <div class="partner-preview-item" data-preview="ar-2">
+          <div class="fp-tasks">
+            <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">Recording sessions booked</div><div class="fp-tasks__assignee" style="background:#8B5CF6">AR</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">Producer selected</div><div class="fp-tasks__assignee" style="background:#8B5CF6">AR</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Brand partnership outreach</div><div class="fp-tasks__assignee" style="background:#F56002">MG</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Visual identity development</div><div class="fp-tasks__assignee" style="background:#EC4899">CR</div></div>
+          </div>
+        </div>
+        <div class="partner-preview-item" data-preview="ar-3">
+          <div class="analytics-grid">
+            <!-- Streams — bar chart -->
+            <div class="analytics-tile">
+              <div class="analytics-tile__label">Streams</div>
+              <div class="analytics-tile__value">2.4M</div>
+              <div class="analytics-bars">
+                <div class="analytics-bars__bar" style="height:45%"></div>
+                <div class="analytics-bars__bar" style="height:62%"></div>
+                <div class="analytics-bars__bar" style="height:38%"></div>
+                <div class="analytics-bars__bar" style="height:78%"></div>
+                <div class="analytics-bars__bar" style="height:55%"></div>
+                <div class="analytics-bars__bar" style="height:90%"></div>
+                <div class="analytics-bars__bar" style="height:72%"></div>
+                <div class="analytics-bars__bar" style="height:85%"></div>
+                <div class="analytics-bars__bar" style="height:60%"></div>
+                <div class="analytics-bars__bar" style="height:95%"></div>
+                <div class="analytics-bars__bar" style="height:80%"></div>
+                <div class="analytics-bars__bar" style="height:100%"></div>
+                <div class="analytics-bars__bar" style="height:68%"></div>
+                <div class="analytics-bars__bar" style="height:52%"></div>
+              </div>
+            </div>
+            <!-- Saves — hearts -->
+            <div class="analytics-tile">
+              <div class="analytics-tile__label">Saves</div>
+              <div class="analytics-tile__value">18.2k</div>
+              <div class="analytics-hearts" id="heartsContainer"></div>
+            </div>
+            <!-- Playlists — tags -->
+            <div class="analytics-tile">
+              <div class="analytics-tile__label">Playlists</div>
+              <div class="analytics-tile__value">342</div>
+              <div class="analytics-tags">
+                <span class="analytics-tags__tag">New Music Friday</span>
+                <span class="analytics-tags__tag">Indie Pop</span>
+                <span class="analytics-tags__tag">Chill Vibes</span>
+                <span class="analytics-tags__tag">Release Radar</span>
+                <span class="analytics-tags__tag">Alt Rising</span>
+                <span class="analytics-tags__tag">Fresh Finds</span>
+                <span class="analytics-tags__tag">+336</span>
+              </div>
+            </div>
+            <!-- Reach — count up -->
+            <div class="analytics-tile">
+              <div class="analytics-tile__label">Reach</div>
+              <div class="analytics-reach" data-countup="890000">0</div>
+              <div class="mock-dashboard__pill mock-dashboard__pill--green" style="margin-top:auto">+12% this week</div>
+            </div>
+          </div>
+        </div>
+        <div class="partner-preview-item" data-preview="ar-4">
+          <div class="mock-dashboard">
+            <div class="mock-dashboard__row">
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Genre Trend</div><div class="mock-dashboard__card-value">+14%</div><div class="mock-dashboard__pill mock-dashboard__pill--green">Rising</div></div>
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Similar Artists</div><div class="mock-dashboard__card-value">28</div><div class="mock-dashboard__pill mock-dashboard__pill--green">Mapped</div></div>
+            </div>
+            <div class="mock-dashboard__row">
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Market Gap</div><div class="mock-dashboard__card-value">Found</div><div class="mock-dashboard__pill mock-dashboard__pill--amber">Opportunity</div></div>
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Audience</div><div class="mock-dashboard__card-value">18-24</div><div class="mock-dashboard__pill mock-dashboard__pill--green">Primary</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Creative Services -->
+    <div class="partner-panel" data-tab="creative">
+      <div class="partner-panel__features">
+        <div class="partner-panel__feature is-active" data-preview="cr-1"><h4>Asset Briefs</h4><p>Get clear specs and creative direction for every deliverable</p></div>
+        <div class="partner-panel__feature" data-preview="cr-2"><h4>Version Tracking</h4><p>Upload revisions and track approval history</p></div>
+        <div class="partner-panel__feature" data-preview="cr-3"><h4>Approval Workflows</h4><p>Submit work and get sign-off without the email thread</p></div>
+        <div class="partner-panel__feature" data-preview="cr-4"><h4>Deadline Reminders</h4><p>Never miss a delivery date</p></div>
+      </div>
+      <div class="partner-panel__preview">
+        <div class="partner-preview-item is-active" data-preview="cr-1">
+          <div class="mock-dashboard">
+            <div class="mock-dashboard__row">
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Deliverable</div><div class="mock-dashboard__card-value">Album Artwork</div><div class="mock-dashboard__pill mock-dashboard__pill--amber">In Progress</div></div>
+            </div>
+            <div class="mock-dashboard__row">
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Format</div><div class="mock-dashboard__card-value">3000x3000</div><div class="mock-dashboard__pill mock-dashboard__pill--green">RGB, 300dpi</div></div>
+              <div class="mock-dashboard__card"><div class="mock-dashboard__card-title">Due</div><div class="mock-dashboard__card-value">Apr 28</div><div class="mock-dashboard__pill mock-dashboard__pill--amber">5 days</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="partner-preview-item" data-preview="cr-2">
+          <div class="fp-tasks">
+            <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">Album artwork v1 — rejected</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check fp-tasks__check--done"></div><div class="fp-tasks__label fp-tasks__label--done">Album artwork v2 — revisions requested</div></div>
+            <div class="fp-tasks__row"><div class="fp-tasks__check"></div><div class="fp-tasks__label">Album artwork v3 — awaiting review</div></div>
+          </div>
+        </div>
+        <div class="partner-preview-item" data-preview="cr-3">
+          <div class="mock-collab">
+            <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#8B5CF6">CR</div><div class="mock-collab__task">Submitted artwork v3 for review</div><div class="mock-collab__check"></div></div>
+            <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#F56002">MG</div><div class="mock-collab__task">Approved lyric video</div><div class="mock-collab__check mock-collab__check--done"></div></div>
+            <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#3B82F6">AR</div><div class="mock-collab__task">Requested changes to press photos</div><div class="mock-collab__check"></div></div>
+          </div>
+        </div>
+        <div class="partner-preview-item" data-preview="cr-4">
+          <div class="mock-collab">
+            <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#D9FA87;color:var(--black)">!</div><div class="mock-collab__task">Album artwork v3 — due in 2 days</div><div class="mock-collab__check"></div></div>
+            <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:#D9FA87;color:var(--black)">!</div><div class="mock-collab__task">Social content kit — due in 5 days</div><div class="mock-collab__check"></div></div>
+            <div class="mock-collab__row"><div class="mock-collab__avatar" style="background:rgba(0,0,0,0.08);color:var(--text-secondary)">&#10003;</div><div class="mock-collab__task" style="text-decoration:line-through;opacity:0.5">Press photos — delivered</div><div class="mock-collab__check mock-collab__check--done"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- How It Works — Staggered Timeline -->
+<section class="steps-section">
+  <div class="steps-section__inner">
+    <div class="steps-section__header">
+      <h2>Up and running<br><span class="nyght">in minutes</span></h2>
+    </div>
+    <div class="steps-timeline">
+      <div class="step">
+        <div class="step__circle">1</div>
+        <div class="step__card">
+          <h3>Get invited</h3>
+          <p>A client adds you to their release on Team. You get an email with instant access.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__circle">2</div>
+        <div class="step__card">
+          <h3>See what's needed</h3>
+          <p>Your dashboard shows every release you're involved in, with your tasks and deadlines.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__circle">3</div>
+        <div class="step__card">
+          <h3>Deliver and track</h3>
+          <p>Complete your work, upload assets, and track progress — all in one place.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta">
+  <div class="final-cta__card">
+    <h2>Ready to work smarter<br><span class="nyght">with your clients?</span></h2>
+    <div class="final-cta__buttons">
+      <a href="onboarding.html?plan=pro&period=yearly" class="btn btn--primary-light">Start your free trial</a>
+      <a href="demo.html" class="btn btn--ghost">Book a demo</a>
+    </div>
+    <p class="final-cta__note">60-day free trial. No credit card required.</p>
+  </div>
+</section>
+
+<!-- Other ICPs — Green background -->
+<section class="other-icps">
+  <div class="other-icps__inner">
+    <a href="for-artists.html" class="other-icp">
+      <div class="other-icp__title">For Artists</div>
+      <div class="other-icp__desc">Tools for independent artists to plan and execute releases on their own terms.</div>
+      <div class="other-icp__link">Learn more <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+    </a>
+    <div class="other-icps__divider"></div>
+    <a href="for-managers.html" class="other-icp">
+      <div class="other-icp__title">For Managers</div>
+      <div class="other-icp__desc">A single command center for every rollout across your entire roster.</div>
+      <div class="other-icp__link">Learn more <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+    </a>
+    <div class="other-icps__divider"></div>
+    <a href="for-labels.html" class="other-icp">
+      <div class="other-icp__title">For Labels</div>
+      <div class="other-icp__desc">Manage every release across your entire catalog from one central hub.</div>
+      <div class="other-icp__link">Learn more <svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<div id="team-footer"></div>
+
+<script src="components/nav.js"></script>
+<script src="components/footer.js"></script>
+<script src="components/cookie-consent.js"></script>
+
+<!-- Nav solid on scroll + Hero fade + Steps reveal -->
+<script>
+(function() {
+  const nav = document.getElementById('nav');
+  const hero = document.getElementById('heroSection');
+  const heroInner = hero ? hero.querySelector('.icp-hero__inner') : null;
+  if (!nav || !hero) return;
+
+  function check() {
+    const heroBottom = hero.getBoundingClientRect().bottom;
+    const heroH = hero.offsetHeight;
+    const scrolled = window.scrollY;
+
+    // Nav solid transition
+    if (heroBottom < 60) nav.classList.add('nav--solid');
+    else nav.classList.remove('nav--solid');
+
+    // Hero content fade on scroll
+    if (heroInner) {
+      const progress = Math.min(1, scrolled / (heroH * 0.5));
+      heroInner.style.opacity = 1 - progress;
+      heroInner.style.transform = 'translateY(' + (progress * 40) + 'px)';
+    }
+  }
+  window.addEventListener('scroll', check, { passive: true });
+  check();
+
+  // Steps scroll reveal
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) e.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.step').forEach(function(s) { observer.observe(s); });
+  }
+})();
+</script>
+
+<!-- Partner Tabs + Feature Preview switching -->
+<script>
+(function() {
+  var tabs = document.querySelectorAll('.partner-tab');
+  var panels = document.querySelectorAll('.partner-panel');
+
+  // Tab switching
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var target = tab.getAttribute('data-tab');
+      tabs.forEach(function(t) { t.classList.remove('is-active'); });
+      panels.forEach(function(p) { p.classList.remove('is-active'); });
+      tab.classList.add('is-active');
+      document.querySelector('.partner-panel[data-tab="' + target + '"]').classList.add('is-active');
+    });
+  });
+
+  // Feature-to-preview switching within each tab panel
+  document.querySelectorAll('.partner-panel__feature[data-preview]').forEach(function(feature) {
+    feature.addEventListener('mouseenter', function() {
+      var panel = feature.closest('.partner-panel');
+      var previewId = feature.getAttribute('data-preview');
+      // Deactivate all features in this panel
+      panel.querySelectorAll('.partner-panel__feature').forEach(function(f) { f.classList.remove('is-active'); });
+      feature.classList.add('is-active');
+      // Switch preview
+      panel.querySelectorAll('.partner-preview-item').forEach(function(p) { p.classList.remove('is-active'); });
+      var target = panel.querySelector('.partner-preview-item[data-preview="' + previewId + '"]');
+      if (target) {
+        target.classList.add('is-active');
+      }
+    });
+    feature.addEventListener('click', function() {
+      feature.dispatchEvent(new Event('mouseenter'));
+    });
+  });
+
+  // Generate hearts
+  var heartsEl = document.getElementById('heartsContainer');
+  if (heartsEl) {
+    var heartSVG = '<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+    for (var i = 0; i < 42; i++) {
+      var h = document.createElement('div');
+      h.className = 'analytics-hearts__heart anim-scale';
+      h.innerHTML = heartSVG;
+      if (i > 30) h.style.opacity = Math.max(0.08, 1 - (i - 30) * 0.08);
+      heartsEl.appendChild(h);
+    }
+  }
+
+  // Animate preview panel elements when they become active
+  function animatePreview(previewItem) {
+    if (!previewItem) return;
+
+    // Reset all animatable elements first
+    previewItem.querySelectorAll('.is-animated').forEach(function(el) { el.classList.remove('is-animated'); });
+
+    // Bars (vertical — analytics bar chart)
+    previewItem.querySelectorAll('.analytics-bars__bar').forEach(function(bar, i) {
+      var h = bar.style.height;
+      bar.style.setProperty('--h', h);
+      bar.classList.add('anim-bar');
+      bar.classList.remove('is-animated');
+      setTimeout(function() { bar.classList.add('is-animated'); }, 50 + i * 30);
+    });
+
+    // Hearts
+    previewItem.querySelectorAll('.analytics-hearts__heart').forEach(function(heart, i) {
+      heart.classList.remove('is-animated');
+      setTimeout(function() { heart.classList.add('is-animated'); }, 30 + i * 20);
+    });
+
+    // Tags
+    previewItem.querySelectorAll('.analytics-tags__tag').forEach(function(tag, i) {
+      tag.classList.add('anim-scale');
+      tag.classList.remove('is-animated');
+      setTimeout(function() { tag.classList.add('is-animated'); }, 80 + i * 60);
+    });
+
+    // Dashboard cards
+    previewItem.querySelectorAll('.mock-dashboard__card').forEach(function(card, i) {
+      card.classList.add('anim-fade');
+      card.classList.remove('is-animated');
+      setTimeout(function() { card.classList.add('is-animated'); }, 60 + i * 80);
+    });
+
+    // Timeline/gantt bars (horizontal)
+    previewItem.querySelectorAll('.fp-timeline__bar, .mock-gantt__bar').forEach(function(bar, i) {
+      bar.classList.add('anim-bar-h');
+      bar.classList.remove('is-animated');
+      setTimeout(function() { bar.classList.add('is-animated'); }, 100 + i * 80);
+    });
+
+    // Timeline rows
+    previewItem.querySelectorAll('.fp-timeline__row, .mock-gantt__row').forEach(function(row, i) {
+      row.classList.add('anim-slide');
+      row.classList.remove('is-animated');
+      setTimeout(function() { row.classList.add('is-animated'); }, 50 + i * 60);
+    });
+
+    // Task rows
+    previewItem.querySelectorAll('.fp-tasks__row').forEach(function(row, i) {
+      row.classList.add('anim-fade');
+      row.classList.remove('is-animated');
+      setTimeout(function() { row.classList.add('is-animated'); }, 60 + i * 80);
+    });
+
+    // Task checkmarks
+    previewItem.querySelectorAll('.fp-tasks__check--done').forEach(function(check, i) {
+      check.classList.add('anim-check');
+      check.classList.remove('is-animated');
+      setTimeout(function() { check.classList.add('is-animated'); }, 200 + i * 100);
+    });
+
+    // Collab rows
+    previewItem.querySelectorAll('.mock-collab__row').forEach(function(row, i) {
+      row.classList.add('anim-slide');
+      row.classList.remove('is-animated');
+      setTimeout(function() { row.classList.add('is-animated'); }, 60 + i * 100);
+    });
+
+    // Chat bubbles
+    previewItem.querySelectorAll('.fp-chat__row').forEach(function(row, i) {
+      row.classList.add('anim-fade');
+      row.classList.remove('is-animated');
+      setTimeout(function() { row.classList.add('is-animated'); }, 100 + i * 300);
+    });
+
+    // Chat input
+    var chatInput = previewItem.querySelector('.fp-chat__input');
+    if (chatInput) {
+      chatInput.classList.add('anim-fade');
+      chatInput.classList.remove('is-animated');
+      setTimeout(function() { chatInput.classList.add('is-animated'); }, 700);
+    }
+
+    // Budget bar fills
+    previewItem.querySelectorAll('.fp-budget__bar-fill').forEach(function(bar, i) {
+      bar.classList.add('anim-bar-h');
+      bar.classList.remove('is-animated');
+      setTimeout(function() { bar.classList.add('is-animated'); }, 100 + i * 120);
+    });
+
+    // Budget total
+    var budgetTotal = previewItem.querySelector('.fp-budget__total');
+    if (budgetTotal) {
+      budgetTotal.classList.add('anim-fade');
+      budgetTotal.classList.remove('is-animated');
+      setTimeout(function() { budgetTotal.classList.add('is-animated'); }, 500);
+    }
+
+    // Command center cards
+    previewItem.querySelectorAll('.fp-command__card').forEach(function(card, i) {
+      card.classList.add('anim-fade');
+      card.classList.remove('is-animated');
+      setTimeout(function() { card.classList.add('is-animated'); }, 40 + i * 60);
+    });
+
+    // Count-up
+    var countEl = previewItem.querySelector('[data-countup]');
+    if (countEl) animateCountUp(countEl);
+
+    // Reach pill
+    var reachPill = previewItem.querySelector('.analytics-tile .mock-dashboard__pill');
+    if (reachPill) {
+      reachPill.classList.add('anim-fade');
+      reachPill.classList.remove('is-animated');
+      setTimeout(function() { reachPill.classList.add('is-animated'); }, 1000);
+    }
+  }
+
+  // Hook animations into the feature switching
+  var origFeatureHandlers = document.querySelectorAll('.partner-panel__feature[data-preview]');
+  origFeatureHandlers.forEach(function(feature) {
+    feature.addEventListener('mouseenter', function() {
+      var panel = feature.closest('.partner-panel');
+      var previewId = feature.getAttribute('data-preview');
+      var target = panel.querySelector('.partner-preview-item[data-preview="' + previewId + '"]');
+      setTimeout(function() { animatePreview(target); }, 50);
+    });
+  });
+
+  // Animate the initially active preview in each tab
+  document.querySelectorAll('.partner-panel.is-active .partner-preview-item.is-active').forEach(function(item) {
+    setTimeout(function() { animatePreview(item); }, 300);
+  });
+
+  // Also animate when switching tabs
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      setTimeout(function() {
+        var activePanel = document.querySelector('.partner-panel.is-active');
+        if (activePanel) {
+          var activePreview = activePanel.querySelector('.partner-preview-item.is-active');
+          animatePreview(activePreview);
+        }
+      }, 100);
+    });
+  });
+
+  // Count-up animation
+  function animateCountUp(el) {
+    var end = parseInt(el.getAttribute('data-countup'));
+    var duration = 1200;
+    var start = 0;
+    var startTime = null;
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      var current = Math.floor(eased * end);
+      if (current >= 1000) {
+        el.textContent = (current / 1000).toFixed(current >= 100000 ? 0 : 1) + 'k';
+      } else {
+        el.textContent = current;
+      }
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = '890k';
+    }
+    requestAnimationFrame(step);
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security — Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "Nyght Serif"; font-weight: 500; font-style: italic; font-display: swap; src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-MediumItalic.woff2") format("woff2"); }
+@font-face { font-family: "Nyght Serif"; font-weight: 300; font-style: italic; font-display: swap; src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-LightItalic.woff2") format("woff2"); }
+.nyght { font-family: "Nyght Serif", Georgia, serif; font-style: italic; font-weight: 300; }
+</style>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+html{scroll-behavior:smooth;scrollbar-gutter:stable}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:#111110;background:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+:root{--black:#191919;--white:#fff;--grey:#E0E0E0;--bg:#FAFAFA;--accent:#F56002;--text-secondary:#454545;--ease:cubic-bezier(0.16,1,0.3,1)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;font-weight:600;padding:0.75rem 1.25rem;border-radius:1.5rem;transition:all 0.3s ease;cursor:pointer}
+.btn--primary{background:var(--black);color:#fff;border:1px solid transparent}
+.btn--primary:hover{color:#111 !important;background:rgba(255,255,255,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.btn--primary-light{background:var(--black);color:#fff;border:1px solid transparent}
+.btn--primary-light:hover{color:#111 !important;background:rgba(0,0,0,0.05);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(0,0,0,0.12);box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.btn--outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.4)}
+.btn--outline:hover{background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:rgba(255,255,255,0.5)}
+.btn--ghost{background:transparent;color:var(--black);border:1px solid var(--grey)}
+.btn--ghost:hover{background:rgba(0,0,0,0.05);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--black)}
+.btn--white{background:#fff;color:var(--black);border:1px solid transparent}
+.btn--white:hover{background:rgba(255,255,255,0.85);box-shadow:0 2px 12px rgba(0,0,0,0.15)}
+.btn--green{background:#D9FA87;color:var(--black);border:1px solid transparent}
+.btn--green:hover{background:rgba(255,255,255,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.1)}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0.875rem 2rem;display:flex;align-items:center;justify-content:space-between;max-width:80rem;margin:0 auto;transition:transform 0.35s cubic-bezier(0.4,0,0.2,1)}
+.nav.nav--hidden{transform:translateY(calc(-100% - 1rem))}
+.nav__pill{display:flex;align-items:center;gap:0.25rem;padding:0.375rem 0.5rem;border-radius:100px;background:rgba(255,255,255,0.12);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1);transition:background 0.35s,border-color 0.35s}
+.nav--solid .nav__pill{background:rgba(255,255,255,0.95);border-color:rgba(0,0,0,0.06)}
+.nav__logo{display:flex;align-items:center;padding:0 0.5rem}
+.nav__logo img{height:1.125rem;transition:filter 0.3s,opacity 0.3s}
+.nav__logo .logo-light{position:absolute}
+.nav__logo .logo-dark{opacity:0}
+.nav--solid .nav__logo .logo-light{opacity:0}
+.nav--solid .nav__logo .logo-dark{opacity:1;position:relative}
+.nav__link{font-size:0.8125rem;font-weight:500;padding:0.5rem 0.875rem;border-radius:100px;color:rgba(255,255,255,0.85);white-space:nowrap;display:flex;align-items:center;gap:0.25rem;transition:color 0.2s,background 0.2s}
+.nav__link:hover{color:#fff;background:rgba(255,255,255,0.1)}
+.nav--solid .nav__link{color:var(--text-secondary)}
+.nav--solid .nav__link:hover{color:var(--black);background:rgba(0,0,0,0.04)}
+.nav__link svg{width:10px;height:10px;opacity:0.6}
+.nav__login{font-size:0.8125rem;font-weight:500;padding:0.5rem 1rem;border-radius:100px;color:rgba(255,255,255,0.85);white-space:nowrap;border:1px solid rgba(255,255,255,0.3);transition:color 0.2s,border-color 0.2s,background 0.2s}
+.nav__login:hover{color:#fff;border-color:rgba(255,255,255,0.5)}
+.nav--solid .nav__login{color:var(--black);border-color:rgba(0,0,0,0.15)}
+.nav--solid .nav__login:hover{border-color:var(--black)}
+a.nav__cta{font-size:0.8125rem;font-weight:600;padding:0.5rem 1.125rem;border-radius:100px;white-space:nowrap;text-decoration:none;color:#fff;background:#111110;border:1px solid transparent;transition:all 0.3s ease}
+a.nav__cta:hover{color:#111 !important;background:rgba(255,255,255,0.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(255,255,255,0.5);box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.nav--solid a.nav__cta{color:var(--black);background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.1);box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.nav--solid a.nav__cta:hover{color:var(--black);background:rgba(0,0,0,0.08);border-color:rgba(0,0,0,0.18);box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.nav__divider{width:1px;height:1rem;background:rgba(255,255,255,0.15);margin:0 0.125rem}
+.nav--solid .nav__divider{background:rgba(0,0,0,0.08)}
+.nav__dropdown{position:relative}
+.nav__dropdown>.nav__link{cursor:pointer}
+.nav__dropdown>.nav__link svg{transition:transform 0.25s}
+.nav__dropdown.is-open>.nav__link svg{transform:rotate(180deg)}
+.nav__dropdown-panel{position:absolute;top:calc(100% + 0.75rem);left:0;display:flex;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:0.75rem;box-shadow:0 12px 48px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.06);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity 0.25s ease,visibility 0.25s ease,transform 0.25s ease;z-index:100;min-width:36rem;overflow:hidden}
+.nav__dropdown.is-open .nav__dropdown-panel{opacity:1;visibility:visible;transform:translateY(0)}
+.nav__dropdown-left{flex:1;padding:1.5rem;display:flex;flex-direction:column;gap:0.25rem}
+.nav__dropdown-item{display:block;padding:0.75rem 1rem;border-radius:0.5rem;transition:background 0.15s}
+.nav__dropdown-item:hover{background:rgba(0,0,0,0.03)}
+.nav__dropdown-item-title{font-size:0.875rem;font-weight:600;color:var(--black);margin-bottom:0.125rem}
+.nav__dropdown-item-desc{font-size:0.8125rem;color:var(--text-secondary);line-height:1.4}
+.nav__dropdown-right{width:16rem;background:var(--black);padding:1.5rem;display:flex;flex-direction:column;gap:0.125rem;border-radius:0 0.75rem 0.75rem 0}
+.nav__dropdown-featured-label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.4);padding:0.5rem 0.75rem;margin-bottom:0.25rem;display:flex;align-items:center;gap:0.5rem}
+.nav__dropdown-featured-label::before{content:'';width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.5)}
+.nav__dropdown-featured-link{display:block;font-size:0.9375rem;font-weight:500;color:rgba(255,255,255,0.75);padding:0.625rem 0.75rem;border-radius:0.375rem;transition:color 0.15s,background 0.15s}
+.nav__dropdown-featured-link:hover{color:#fff;background:rgba(255,255,255,0.08)}
+.nav-blur-overlay{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.1);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity 0.35s ease,visibility 0.35s ease}
+.nav-blur-overlay.is-active{opacity:1;visibility:visible}
+@media(max-width:768px){
+  .nav{padding:0.75rem 1rem}
+  .nav__pill--left .nav__link,.nav__pill--left .nav__dropdown{display:none}
+  .nav__pill--right .nav__link,.nav__pill--right .nav__divider{display:none}
+  .nav__login{display:none}
+}
+
+
+/* =============================================
+   SECURITY PAGE
+   ============================================= */
+
+/* Section label (reusable) */
+.section-label{
+  font-size:0.6875rem;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--accent);
+  display:inline-flex;align-items:center;gap:0.5rem;
+  margin-bottom:1rem;
+}
+.section-label::before{
+  content:'';width:0.375rem;height:0.375rem;border-radius:50%;
+  background:var(--accent);
+}
+.section-label--light{color:rgba(255,255,255,0.5)}
+.section-label--light::before{background:rgba(255,255,255,0.4)}
+
+/* Hero pill (same as ICP pages) */
+.hero-pill{
+  display:inline-block;
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.06em;
+  padding:0.375rem 0.875rem;border-radius:0.375rem;
+  color:#fff;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.25);
+  margin-bottom:1.5rem;
+}
+
+/* Metadata pills */
+.metadata-pill{
+  display:inline-block;
+  width:auto;
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.06em;
+  padding:0.375rem 0.875rem;border-radius:0.375rem;
+  background:#D9FA87;color:var(--black);
+  margin-bottom:0.75rem;
+}
+.metadata-pill--neutral{
+  background:rgba(0,0,0,0.06);color:var(--text-secondary);
+}
+
+/* ── Hero ── */
+.icp-hero{
+  position:relative;
+  color:#fff;
+  min-height:80vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:8rem 2rem 6rem;
+  overflow:hidden;
+}
+.icp-hero__bg{
+  position:absolute;inset:0;z-index:0;
+}
+.icp-hero__bg img{
+  width:100%;height:100%;object-fit:cover;
+}
+.icp-hero__overlay{
+  position:absolute;inset:0;z-index:1;
+  background:rgba(0,0,0,0.7);
+}
+.icp-hero__inner{
+  max-width:48rem;position:relative;z-index:2;
+  transition:opacity 0.1s linear,transform 0.1s linear;
+  will-change:opacity,transform;
+}
+.icp-hero h1{
+  font-size:clamp(2.5rem,5.5vw,4rem);
+  font-weight:300;line-height:1.08;
+  letter-spacing:-0.03em;
+  margin-bottom:1.25rem;
+}
+.icp-hero p{
+  font-size:1.0625rem;line-height:1.65;
+  color:rgba(255,255,255,0.85);
+  max-width:36rem;margin:0 auto 2rem;
+}
+.icp-hero__buttons{
+  display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;
+}
+
+/* ── Security Pillars — 2x2 Grid ── */
+.pillars-section{
+  padding:6rem 2rem;
+  background:#fff;
+}
+.pillars-section__inner{
+  max-width:72rem;margin:0 auto;
+}
+.pillars-section__header{
+  text-align:center;max-width:38rem;margin:0 auto 3.5rem;
+}
+.pillars-section__header h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+}
+.pillars-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.5rem;
+  max-width:72rem;
+  margin:0 auto;
+}
+.pillar-card{
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:1rem;
+  padding:2.5rem 2.5rem 2rem;
+  position:relative;
+  overflow:hidden;
+  transition:box-shadow 0.3s var(--ease),border-color 0.3s;
+  /* scroll animation */
+  opacity:0;transform:translateY(24px);
+  transition:opacity 0.5s var(--ease),transform 0.5s var(--ease),box-shadow 0.3s,border-color 0.3s;
+}
+.pillar-card.is-visible{opacity:1;transform:translateY(0)}
+.pillar-card:nth-child(2).is-visible{transition-delay:0.08s}
+.pillar-card:nth-child(3).is-visible{transition-delay:0.16s}
+.pillar-card:nth-child(4).is-visible{transition-delay:0.24s}
+.pillar-card:hover{
+  box-shadow:0 8px 40px rgba(0,0,0,0.06);
+  border-color:rgba(0,0,0,0.1);
+}
+/* Large faded number in top-right */
+.pillar-card__num{
+  position:absolute;
+  top:-0.25rem;right:1rem;
+  font-size:5rem;font-weight:800;
+  line-height:1;letter-spacing:-0.04em;
+  color:rgba(0,0,0,0.03);
+  pointer-events:none;
+  user-select:none;
+}
+/* Green accent line at top */
+.pillar-card__accent{
+  width:2rem;height:3px;
+  border-radius:2px;
+  background:#D9FA87;
+  margin-bottom:1.5rem;
+}
+.pillar-card h3{
+  font-family:"Nyght Serif",Georgia,serif;
+  font-style:italic;font-weight:300;
+  font-size:1.375rem;
+  line-height:1.2;letter-spacing:-0.01em;
+  margin-bottom:0.625rem;
+  color:var(--black);
+}
+.pillar-card p{
+  font-size:0.9375rem;line-height:1.65;
+  color:var(--text-secondary);
+}
+/* Small metadata tag at bottom */
+.pillar-card__tag{
+  display:inline-block;
+  margin-top:1.25rem;
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.06em;
+  padding:0.3rem 0.75rem;border-radius:0.375rem;
+  background:rgba(0,0,0,0.04);
+  color:var(--text-secondary);
+}
+
+/* ── AI & Data Privacy ── */
+.ai-privacy-section{
+  padding:6rem 2rem;
+  background:#fafafa;
+}
+.ai-privacy-section__inner{
+  max-width:72rem;margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  align-items:center;
+}
+.ai-privacy__text .section-label{margin-bottom:1.25rem}
+.ai-privacy__text h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+  margin-bottom:2rem;
+}
+.ai-privacy__text h2 .nyght{font-weight:300}
+.ai-privacy__text p{
+  font-size:1rem;line-height:1.65;
+  color:var(--text-secondary);
+  margin-bottom:1rem;
+  max-width:30rem;
+}
+.ai-privacy__text p:last-of-type{margin-bottom:1.75rem}
+.ai-privacy__pills{
+  display:flex;flex-wrap:wrap;gap:0.5rem;
+}
+.ai-privacy__pills .metadata-pill{
+  margin-bottom:0;
+}
+
+/* Mock isolation diagram */
+.ai-privacy__panel{
+  background:linear-gradient(135deg,#fafafa,#f0f0ea);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:1rem;
+  padding:2rem;
+  position:relative;
+  min-height:24rem;
+  overflow:hidden;
+}
+/* Central "Your Account" card */
+.iso-center{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  z-index:5;
+  background:#fff;
+  border:1.5px solid rgba(0,0,0,0.1);
+  box-shadow:0 6px 28px rgba(0,0,0,0.08);
+  border-radius:0.75rem;
+  padding:1.25rem 1.5rem;
+  text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:0.5rem;
+  opacity:0;transform:translate(-50%,-50%) scale(0.9);
+  transition:opacity 0.5s var(--ease),transform 0.5s var(--ease);
+}
+.ai-privacy__panel.is-visible .iso-center{
+  opacity:1;transform:translate(-50%,-50%) scale(1);
+}
+.iso-center__icon{
+  width:2.5rem;height:2.5rem;border-radius:50%;
+  background:#D9FA87;
+  display:flex;align-items:center;justify-content:center;
+}
+.iso-center__icon svg{width:1.25rem;height:1.25rem;stroke:var(--black);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.iso-center__label{font-size:0.8125rem;font-weight:600;color:var(--black)}
+.iso-center__sub{font-size:0.625rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
+
+/* Connected accounts (your team) — green bg, connected with lines */
+.iso-connected{
+  position:absolute;
+  background:#D9FA87;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.5rem;
+  padding:0.5rem 0.75rem;
+  font-size:0.625rem;font-weight:600;color:var(--black);
+  z-index:3;
+  opacity:0;
+  transition:opacity 0.4s ease;
+  white-space:nowrap;
+}
+.ai-privacy__panel.is-visible .iso-connected{opacity:1}
+/* Positions — Your Artists above, Your Marketing left, Your Sub-Label right */
+.iso-conn-1{top:15%;left:50%;transform:translateX(-50%);transition-delay:0.35s}
+.iso-conn-2{top:58%;left:8%;transition-delay:0.45s}
+.iso-conn-3{bottom:20%;right:10%;transition-delay:0.55s}
+
+/* SVG connection lines — black solid, BEHIND green tiles */
+/* Fade in AFTER tiles (tiles at 0.35-0.55s, lines at 0.8s) */
+.iso-lines{
+  position:absolute;inset:0;z-index:1;
+  pointer-events:none;
+  opacity:0;transition:opacity 0.6s ease 0.8s;
+}
+.ai-privacy__panel.is-visible .iso-lines{opacity:1}
+.iso-lines line{
+  stroke:var(--black);
+  stroke-width:1;
+  vector-effect:non-scaling-stroke;
+}
+/* Pulsing dots — BEHIND green tiles (z-index:2), green glow */
+.iso-pulse{
+  position:absolute;
+  width:8px;height:8px;border-radius:50%;
+  background:#fff;
+  border:1px solid var(--black);
+  z-index:2;
+  opacity:0;
+  pointer-events:none;
+  box-shadow:0 0 6px rgba(217,250,135,0.5);
+  animation:pulseGlow 2s ease-in-out infinite;
+}
+@keyframes pulseGlow{
+  0%,100%{box-shadow:0 0 4px rgba(217,250,135,0.3)}
+  50%{box-shadow:0 0 10px rgba(217,250,135,0.7)}
+}
+
+/* Floating external accounts (other orgs — not connected) */
+.iso-external{
+  position:absolute;
+  background:rgba(255,255,255,0.7);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.5rem;
+  padding:0.5rem 0.75rem;
+  font-size:0.625rem;font-weight:600;color:rgba(0,0,0,0.25);
+  z-index:2;
+  opacity:0;
+  transition:opacity 0.4s ease;
+  white-space:nowrap;
+}
+.ai-privacy__panel.is-visible .iso-external{opacity:1}
+/* No connection lines for external */
+/* Positions + blur + delays */
+.iso-ext-1{top:8%;left:5%;filter:blur(0.5px);transition-delay:0.5s}
+.iso-ext-2{top:5%;right:12%;transition-delay:0.55s}
+.iso-ext-3{top:28%;right:3%;filter:blur(0.3px);transition-delay:0.6s}
+.iso-ext-4{bottom:10%;right:8%;filter:blur(0.7px);transition-delay:0.65s}
+.iso-ext-5{bottom:5%;left:25%;filter:blur(0.4px);transition-delay:0.7s}
+.iso-ext-6{top:70%;left:2%;filter:blur(0.6px);transition-delay:0.75s}
+
+/* Float animation */
+@keyframes isoFloat1{0%,100%{transform:translate(0,0)}50%{transform:translate(3px,-5px)}}
+@keyframes isoFloat2{0%,100%{transform:translate(0,0)}50%{transform:translate(-4px,3px)}}
+@keyframes isoFloat3{0%,100%{transform:translate(0,0)}50%{transform:translate(2px,4px)}}
+.iso-ext-1,.iso-ext-4{animation:isoFloat1 6s ease-in-out infinite}
+.iso-ext-2,.iso-ext-5{animation:isoFloat2 7s ease-in-out infinite}
+.iso-ext-3,.iso-ext-6{animation:isoFloat3 5s ease-in-out infinite}
+/* Connected accounts also float gently */
+.iso-conn-1{animation:isoFloat3 8s ease-in-out infinite}
+.iso-conn-2{animation:isoFloat1 9s ease-in-out infinite}
+.iso-conn-3{animation:isoFloat2 7s ease-in-out infinite}
+
+.isolation-label{
+  position:absolute;bottom:1.25rem;left:50%;transform:translateX(-50%);
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.08em;
+  z-index:6;
+  color:rgba(0,0,0,0.35);
+}
+
+/* ── Enterprise Section ── */
+.enterprise-section{
+  padding:6rem 2rem;
+  background:#fff;
+}
+.enterprise-section__inner{
+  max-width:72rem;margin:0 auto;
+}
+.enterprise-section__header{
+  text-align:center;max-width:38rem;margin:0 auto 3.5rem;
+}
+.enterprise-section__header h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+  margin-bottom:0.75rem;
+}
+.enterprise-section__header p{
+  font-size:1.0625rem;line-height:1.55;
+  color:var(--text-secondary);
+}
+.enterprise-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+  margin-bottom:3rem;
+}
+.enterprise-block{
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:1rem;
+  padding:2.5rem 2rem 2rem;
+  position:relative;
+  overflow:hidden;
+  transition:box-shadow 0.3s var(--ease),border-color 0.3s;
+}
+.enterprise-block:hover{
+  box-shadow:0 8px 40px rgba(0,0,0,0.06);
+  border-color:rgba(0,0,0,0.1);
+}
+.enterprise-block__accent{
+  width:2rem;height:3px;border-radius:2px;
+  background:#D9FA87;margin-bottom:1.25rem;
+}
+.enterprise-block__tag{
+  display:inline-block;
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.06em;
+  padding:0.3rem 0.75rem;border-radius:0.375rem;
+  background:rgba(0,0,0,0.04);color:var(--text-secondary);
+  margin-bottom:1rem;
+}
+.enterprise-block h3{
+  font-family:"Nyght Serif",Georgia,serif;
+  font-style:italic;font-weight:300;
+  font-size:1.375rem;line-height:1.2;
+  letter-spacing:-0.01em;
+  margin-bottom:0.625rem;
+  color:var(--black);
+}
+.enterprise-block p{
+  font-size:0.9375rem;line-height:1.65;
+  color:var(--text-secondary);
+}
+.enterprise-cta{
+  text-align:center;
+  padding:4rem 2.5rem;
+  background:var(--black);
+  border-radius:1rem;
+  color:#fff;
+}
+.enterprise-cta h3{
+  font-size:clamp(1.5rem,3vw,2rem);
+  font-weight:400;letter-spacing:-0.02em;
+  color:#fff;margin-bottom:0.75rem;
+}
+.enterprise-cta p{
+  font-size:1rem;
+  color:rgba(255,255,255,0.6);
+  margin-bottom:1.5rem;
+}
+.enterprise-cta a{
+  display:inline-flex;align-items:center;gap:0.375rem;
+  font-size:0.875rem;font-weight:600;color:#D9FA87;
+  text-decoration:none;
+  transition:color 0.2s,gap 0.2s;
+}
+.enterprise-cta a:hover{color:#fff;gap:0.625rem}
+.enterprise-cta a span{transition:transform 0.2s;display:inline-block}
+.enterprise-cta a:hover span{transform:translateX(3px)}
+
+/* ── Compliance — Full-screen scroll-driven card stack ── */
+.compliance-section{
+  position:relative;
+  background:var(--bg);
+}
+.compliance-section__header h2{
+  font-size:clamp(2rem,4vw,2.75rem);
+  font-weight:400;line-height:1.1;
+  letter-spacing:-0.02em;
+}
+/* Scroll container */
+.compliance-scroll{
+  height:250vh;
+  position:relative;
+}
+/* Sticky viewport */
+.compliance-viewport{
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:6rem 2rem 3rem;
+  overflow:hidden;
+}
+.compliance-section__header{
+  position:relative;z-index:10;
+  flex-shrink:0;
+  margin-bottom:2rem;
+  text-align:center;
+}
+/* Card area wrapper */
+.compliance-card-area{
+  position:relative;
+  width:100%;max-width:48rem;
+  flex:1;
+  display:flex;align-items:center;justify-content:center;
+}
+/* Individual compliance cards */
+.compliance-card{
+  position:absolute;
+  width:100%;max-width:48rem;
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:1.25rem;
+  padding:4rem 3.5rem;
+  box-shadow:0 8px 40px rgba(0,0,0,0.04);
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;
+  will-change:transform,opacity;
+  transition:none; /* JS controls this */
+}
+.compliance-card__num{
+  font-size:4rem;font-weight:800;
+  color:rgba(0,0,0,0.04);
+  letter-spacing:-0.04em;line-height:1;
+  margin-bottom:1rem;
+}
+.compliance-card__accent{
+  width:2.5rem;height:3px;border-radius:2px;
+  background:#D9FA87;margin:0 auto 1.5rem;
+}
+.compliance-card h3{
+  font-family:"Nyght Serif",Georgia,serif;
+  font-style:italic;font-weight:300;
+  font-size:clamp(1.5rem,3vw,2rem);
+  line-height:1.2;letter-spacing:-0.01em;
+  color:var(--black);margin-bottom:0.75rem;
+}
+.compliance-card__status{
+  display:inline-block;
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.06em;
+  padding:0.375rem 0.875rem;border-radius:0.375rem;
+  margin-bottom:1.5rem;
+  white-space:nowrap;
+  background:rgba(0,0,0,0.04);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(0,0,0,0.06);
+  color:var(--text-secondary);
+}
+.compliance-card p{
+  font-size:1.0625rem;line-height:1.65;
+  color:var(--text-secondary);
+  max-width:32rem;
+}
+/* Progress indicator — numbered bar */
+.compliance-dots{
+  position:absolute;
+  bottom:2.5rem;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:0.25rem;
+  background:rgba(0,0,0,0.04);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:0.375rem;
+  padding:0.25rem;
+}
+.compliance-dots__dot{
+  width:2rem;height:1.75rem;
+  border-radius:0.25rem;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.625rem;font-weight:700;
+  color:rgba(0,0,0,0.25);
+  transition:all 0.3s var(--ease);
+  letter-spacing:0.02em;
+}
+.compliance-dots__dot.is-active{
+  background:var(--black);
+  color:#fff;
+}
+
+/* =============================================
+   FAQ — Exact homepage design
+   ============================================= */
+.faq-section{
+  padding:6rem 2rem 8rem;
+  background:#fff;
+  position:relative;
+}
+.faq-section__inner{
+  max-width:72rem;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1.4fr;gap:5rem;
+  align-items:flex-start;
+}
+@media(max-width:900px){
+  .faq-section__inner{grid-template-columns:1fr;gap:2.5rem}
+}
+.faq-section__intro{
+  position:sticky;top:6rem;
+}
+.faq-section__label{
+  font-size:0.6875rem;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--accent);
+  display:inline-flex;align-items:center;gap:0.5rem;
+  margin-bottom:1rem;
+}
+.faq-section__label::before{
+  content:'';width:0.375rem;height:0.375rem;border-radius:50%;
+  background:var(--accent);
+}
+.faq-section__headline{
+  font-size:clamp(2rem,3.2vw,2.75rem);font-weight:400;
+  line-height:1.08;letter-spacing:-0.02em;
+  color:var(--black);margin-bottom:1.25rem;
+}
+.faq-section__headline .nyght{font-weight:300}
+.faq-section__sub{
+  font-size:0.9375rem;color:var(--text-secondary);
+  line-height:1.55;margin-bottom:1.75rem;max-width:24rem;
+}
+.faq-section__cta{
+  display:inline-flex;align-items:center;gap:0.375rem;
+  font-size:0.875rem;font-weight:600;color:var(--black);
+  border-bottom:1px solid currentColor;padding-bottom:0.125rem;
+  transition:color 0.2s,gap 0.2s;
+}
+.faq-section__cta:hover{color:#D9FA87;gap:0.625rem}
+
+/* Accordion list */
+.faq-list{display:flex;flex-direction:column}
+.faq-item{
+  border-top:1px solid rgba(0,0,0,0.08);
+  position:relative;
+  transition:background 0.3s,border-radius 0.3s,border-color 0.3s;
+}
+.faq-item:last-child{border-bottom:1px solid rgba(0,0,0,0.08)}
+.faq-item__trigger{
+  width:100%;
+  display:flex;align-items:center;gap:1.25rem;
+  padding:1.625rem 1.25rem;
+  background:none;border:none;cursor:pointer;
+  text-align:left;font-family:inherit;
+  color:var(--black);
+  transition:padding 0.3s;
+}
+.faq-item__num{
+  font-family:'SF Mono','JetBrains Mono',ui-monospace,Menlo,monospace;
+  font-size:0.75rem;font-weight:500;
+  color:rgba(0,0,0,0.35);
+  letter-spacing:0.04em;min-width:1.75rem;
+  transition:color 0.3s;
+}
+.faq-item__q{
+  flex:1;
+  font-size:1.0625rem;font-weight:600;
+  letter-spacing:-0.01em;line-height:1.35;
+  transition:transform 0.3s var(--ease);
+}
+.faq-item__toggle{
+  width:2.25rem;height:2.25rem;border-radius:50%;
+  background:rgba(0,0,0,0.04);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  transition:background 0.3s,transform 0.3s var(--ease);
+}
+.faq-item__toggle svg{
+  width:0.875rem;height:0.875rem;
+  stroke:var(--black);stroke-width:2.5;
+  fill:none;stroke-linecap:round;
+  transition:transform 0.3s var(--ease);
+}
+.faq-item__toggle svg line.v{
+  transform-origin:center;transition:transform 0.3s var(--ease),opacity 0.3s;
+}
+
+.faq-item__answer{
+  display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows 0.45s var(--ease);
+}
+.faq-item__answer-inner{
+  overflow:hidden;
+  min-height:0;
+}
+.faq-item__answer-content{
+  padding:0.5rem 1.25rem 2rem 4.25rem;
+  max-width:42rem;
+}
+.faq-item__answer-content p{
+  font-size:0.9375rem;line-height:1.65;color:var(--text-secondary);
+  margin-bottom:0.75rem;
+}
+.faq-item__answer-content p:last-child{margin-bottom:0}
+.faq-item__answer-content a{
+  color:var(--black);font-weight:500;
+  border-bottom:1px solid currentColor;
+  transition:border-color 0.2s;
+}
+.faq-item__answer-content a:hover{border-bottom-color:transparent}
+
+/* Open state */
+.faq-item.is-open{
+  background:#fafaf7;
+  border-radius:0.875rem;
+  border-top-color:transparent;
+}
+.faq-item.is-open + .faq-item{border-top-color:transparent}
+.faq-item.is-open .faq-item__num{color:var(--accent)}
+.faq-item.is-open .faq-item__q{transform:translateX(0.25rem)}
+.faq-item.is-open .faq-item__toggle{background:var(--black)}
+.faq-item.is-open .faq-item__toggle svg{stroke:#fff;transform:rotate(180deg)}
+.faq-item.is-open .faq-item__toggle svg line.v{opacity:0;transform:rotate(90deg) scale(0)}
+.faq-item.is-open .faq-item__answer{grid-template-rows:1fr}
+
+/* Hover state (non-open) */
+.faq-item:not(.is-open):hover .faq-item__num{color:var(--black)}
+.faq-item:not(.is-open):hover .faq-item__toggle{background:rgba(0,0,0,0.08)}
+
+@media(max-width:900px){
+  .faq-section__intro{position:static}
+  .faq-item__answer-content{padding-left:0}
+  .faq-item__num{min-width:1.5rem;font-size:0.6875rem}
+  .faq-item__q{font-size:0.9375rem}
+}
+
+/* ── Final CTA ── */
+.final-cta{
+  padding:2rem 2rem 6rem;background:#fff;
+}
+.final-cta__card{
+  max-width:72rem;margin:0 auto;text-align:center;
+  padding:5rem 3rem;background:#fff;
+  border:1px solid rgba(0,0,0,0.08);border-radius:1rem;
+  box-shadow:0 4px 32px rgba(0,0,0,0.04);
+}
+.final-cta h2{
+  font-size:clamp(1.75rem,4vw,2.75rem);
+  font-weight:300;letter-spacing:-0.02em;
+  margin-bottom:1.5rem;line-height:1.1;
+}
+.final-cta__buttons{
+  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
+  margin-bottom:1rem;
+}
+.final-cta__note{
+  font-size:0.8125rem;color:var(--text-secondary);
+}
+
+/* ── Responsive — Tablet ── */
+@media(max-width:1024px){
+  .ai-privacy-section__inner{gap:2.5rem}
+  .ai-privacy__panel{min-height:20rem}
+  .iso-external{font-size:0.5625rem;padding:0.375rem 0.625rem}
+  .iso-connected{font-size:0.5625rem;padding:0.375rem 0.625rem}
+}
+
+/* ── Responsive — Mobile ── */
+@media(max-width:768px){
+  /* Hero */
+  .icp-hero{min-height:auto;padding:7rem 1.5rem 4rem}
+  .icp-hero h1{font-size:2rem}
+  .icp-hero p{font-size:0.9375rem}
+  .icp-hero__buttons{flex-direction:column;align-items:center}
+  .icp-hero__buttons .btn{width:100%;max-width:18rem;justify-content:center}
+  .hero-pill{font-size:0.625rem;padding:0.3rem 0.75rem}
+
+  /* Security Pillars */
+  .pillars-section{padding:4rem 1.5rem}
+  .pillars-section__header{margin-bottom:2.5rem}
+  .pillars-grid{grid-template-columns:1fr;gap:1rem}
+  .pillar-card{padding:2rem 1.5rem}
+  .pillar-card h3{font-size:1.125rem}
+
+  /* AI & Data Privacy */
+  .ai-privacy-section{padding:4rem 1.5rem}
+  .ai-privacy-section__inner{grid-template-columns:1fr;gap:2rem}
+  .ai-privacy__text h2{font-size:1.75rem;margin-bottom:1.5rem}
+  .ai-privacy__panel{min-height:18rem;padding:1.5rem}
+  .ai-privacy__pills{gap:0.375rem}
+  .ai-privacy__pills .metadata-pill{font-size:0.5625rem;padding:0.3rem 0.625rem}
+  /* Hide some external tiles on small screens for clarity */
+  .iso-ext-5,.iso-ext-6{display:none}
+  .iso-center{padding:1rem 1.25rem}
+  .iso-center__icon{width:2rem;height:2rem}
+  .iso-center__icon svg{width:1rem;height:1rem}
+  .iso-center__label{font-size:0.6875rem}
+  .iso-center__sub{font-size:0.5rem}
+  .iso-connected{font-size:0.5rem;padding:0.3rem 0.5rem}
+  .iso-external{font-size:0.5rem;padding:0.3rem 0.5rem}
+
+  /* Enterprise */
+  .enterprise-section{padding:4rem 1.5rem}
+  .enterprise-section__header{margin-bottom:2.5rem}
+  .enterprise-grid{grid-template-columns:1fr;gap:1rem}
+  .enterprise-block{padding:2rem 1.5rem}
+  .enterprise-block h3{font-size:1.125rem}
+  .enterprise-cta{padding:3rem 1.5rem}
+  .enterprise-cta h3{font-size:1.375rem}
+
+  /* Compliance carousel */
+  .compliance-viewport{padding:4rem 1.5rem 3rem}
+  .compliance-section__header h2{font-size:1.75rem}
+  .compliance-card{padding:2.5rem 1.5rem}
+  .compliance-card h3{font-size:1.25rem}
+  .compliance-card p{font-size:0.9375rem}
+  .compliance-scroll{height:220vh}
+  .compliance-dots{bottom:1.5rem}
+
+  /* FAQ */
+  .faq-section{padding:4rem 1.5rem 6rem}
+  .faq-section__intro{position:static}
+  .faq-item__answer-content{padding-left:0}
+  .faq-item__num{min-width:1.5rem;font-size:0.6875rem}
+  .faq-item__q{font-size:0.9375rem}
+
+  /* Final CTA */
+  .final-cta{padding:2rem 1.5rem 4rem}
+  .final-cta__card{padding:3rem 1.5rem}
+  .final-cta h2{font-size:1.5rem}
+  .final-cta__buttons{flex-direction:column;align-items:center}
+}
+
+/* ── Responsive — Small mobile ── */
+@media(max-width:480px){
+  .icp-hero h1{font-size:1.75rem}
+  .pillars-grid{gap:0.75rem}
+  .pillar-card{padding:1.5rem 1.25rem}
+  .pillar-card h3{font-size:1rem}
+  .pillar-card__tag{font-size:0.5625rem}
+  .ai-privacy__panel{min-height:16rem;padding:1.25rem}
+  /* Simplify diagram on very small screens */
+  .iso-ext-3,.iso-ext-4{display:none}
+  .iso-conn-2,.iso-conn-3{font-size:0.45rem}
+  .compliance-card{padding:2rem 1.25rem}
+  .compliance-scroll{height:200vh}
+  .enterprise-cta{padding:2.5rem 1.25rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Nav (dark hero, transitions to solid on scroll) -->
+<div id="team-nav" data-theme="dark"></div>
+
+<!-- Hero -->
+<section class="icp-hero" id="heroSection">
+  <div class="icp-hero__bg">
+    <img src="assets/hero-bg-new.png" alt="" loading="eager">
+  </div>
+  <div class="icp-hero__overlay"></div>
+  <div class="icp-hero__inner">
+    <span class="hero-pill">Security</span>
+    <h1>Your releases. Your data. <span class="nyght">Your rules.</span></h1>
+    <p>Team is built with security at its core. Your release, content, data, strategy, and execution are protected by design, not as an afterthought.</p>
+    <div class="icp-hero__buttons">
+      <a href="onboarding.html?plan=pro&period=yearly" class="btn btn--green">Start your free trial</a>
+      <a href="demo.html" class="btn btn--outline">Talk to us</a>
+    </div>
+  </div>
+</section>
+
+<!-- Security Pillars -->
+<section class="pillars-section">
+  <div class="pillars-section__inner">
+    <div class="pillars-section__header">
+      <h2>Security you can trust</h2>
+    </div>
+    <div class="pillars-grid">
+
+      <div class="pillar-card">
+
+        <div class="pillar-card__accent"></div>
+        <h3>Encrypted at rest and in transit</h3>
+        <p>All data is encrypted using AES-256 at rest and TLS 1.3 in transit. Your unreleased masters, contracts, and business data are protected at every stage.</p>
+        <span class="pillar-card__tag">AES-256 + TLS 1.3</span>
+      </div>
+
+      <div class="pillar-card">
+
+        <div class="pillar-card__accent"></div>
+        <h3>Role-based access and 2FA</h3>
+        <p>Control exactly who sees what with granular permissions per release, per artist, per team. Two-factor authentication adds an extra layer of protection.</p>
+        <span class="pillar-card__tag">Granular permissions</span>
+      </div>
+
+      <div class="pillar-card">
+
+        <div class="pillar-card__accent"></div>
+        <h3>Enterprise-grade infrastructure</h3>
+        <p>Hosted on industry-leading cloud infrastructure with 99.9% uptime SLA, automated backups, and geo-redundant data storage.</p>
+        <span class="pillar-card__tag">99.9% uptime SLA</span>
+      </div>
+
+      <div class="pillar-card">
+
+        <div class="pillar-card__accent"></div>
+        <h3>Your data is yours. Always.</h3>
+        <p>Export your data at any time in standard formats. No lock-in, no hostage-taking. If you leave, your data leaves with you.</p>
+        <span class="pillar-card__tag">Full data export</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- AI & Data Privacy -->
+<section class="ai-privacy-section">
+  <div class="ai-privacy-section__inner">
+
+    <div class="ai-privacy__text">
+      <span class="metadata-pill metadata-pill--neutral">AI &amp; Data Privacy</span>
+      <h2>TeamMate AI works for you. <span class="nyght">Only you.</span></h2>
+      <p>TeamMate AI learns about your artists, releases, and workflows to give you smarter, more context-aware recommendations. But that knowledge is strictly yours.</p>
+      <p>Your data is never used to train our models. It is never shared with other users or companies. It is never accessible to anyone outside your account.</p>
+      <p>Every Team account operates in its own isolated environment. TeamMate's intelligence about your roster, your release history, and your strategies stays within your account boundary — always.</p>
+      <div class="ai-privacy__pills">
+        <span class="metadata-pill">Your data never trains our AI</span>
+        <span class="metadata-pill">Zero cross-account data sharing</span>
+        <span class="metadata-pill">Per-account data isolation</span>
+        <span class="metadata-pill">Full data export anytime</span>
+        <span class="metadata-pill">No third-party data access</span>
+      </div>
+    </div>
+
+    <div class="ai-privacy__panel" id="isoPanel">
+      <!-- Central account -->
+      <div class="iso-center">
+        <div class="iso-center__icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="iso-center__label">Your Account</div>
+        <div class="iso-center__sub">Protected</div>
+      </div>
+
+      <!-- Connection lines + pulses (JS-positioned) -->
+      <svg class="iso-lines" id="isoLinesSvg"></svg>
+      <div class="iso-pulse" id="isoPulse1"></div>
+      <div class="iso-pulse" id="isoPulse1r"></div>
+      <div class="iso-pulse" id="isoPulse2"></div>
+      <div class="iso-pulse" id="isoPulse2r"></div>
+      <div class="iso-pulse" id="isoPulse3"></div>
+      <div class="iso-pulse" id="isoPulse3r"></div>
+
+      <!-- Connected accounts (your team — green, with lines) -->
+      <div class="iso-connected iso-conn-1">Your Artists</div>
+      <div class="iso-connected iso-conn-2">Your Marketing</div>
+      <div class="iso-connected iso-conn-3">Your Sub-Label</div>
+
+      <!-- Floating external accounts (other orgs — faded, no connection) -->
+      <div class="iso-external iso-ext-1">Label</div>
+      <div class="iso-external iso-ext-2">Studio</div>
+      <div class="iso-external iso-ext-3">Agency</div>
+      <div class="iso-external iso-ext-4">Mgmt</div>
+      <div class="iso-external iso-ext-5">Dist</div>
+      <div class="iso-external iso-ext-6">PR</div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- Enterprise Security -->
+<section class="enterprise-section">
+  <div class="enterprise-section__inner">
+    <div class="enterprise-section__header">
+      <h2>Enterprise-grade controls</h2>
+      <p>For teams that need advanced security and compliance.</p>
+    </div>
+    <div class="enterprise-grid">
+
+      <div class="enterprise-block">
+        <div class="enterprise-block__accent"></div>
+        <span class="enterprise-block__tag">Authentication</span>
+        <h3>SSO &amp; SAML</h3>
+        <p>Single sign-on integration with your existing identity provider. SAML 2.0 supported.</p>
+      </div>
+
+      <div class="enterprise-block">
+        <div class="enterprise-block__accent"></div>
+        <span class="enterprise-block__tag">Visibility</span>
+        <h3>Audit Logs</h3>
+        <p>Full activity history across your account. See who did what, when, and on which release.</p>
+      </div>
+
+      <div class="enterprise-block">
+        <div class="enterprise-block__accent"></div>
+        <span class="enterprise-block__tag">Automation</span>
+        <h3>SCIM Provisioning</h3>
+        <p>Automate user management at scale. Add, remove, and update team members from your identity provider.</p>
+      </div>
+
+    </div>
+
+    <div class="enterprise-cta">
+      <h3>Need specific security measures?</h3>
+      <p>Talk to the team to see how we can meet your unique security needs.</p>
+      <a href="demo.html">Book a demo <span>&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Compliance — scroll-driven card stack -->
+<section class="compliance-section" id="complianceSection">
+  <div class="compliance-scroll">
+    <div class="compliance-viewport">
+      <div class="compliance-section__header">
+        <h2>Compliance<br><span class="nyght">&amp; certifications</span></h2>
+      </div>
+
+      <div class="compliance-card-area">
+        <div class="compliance-card" data-compliance="0">
+          <div class="compliance-card__accent"></div>
+          <div class="compliance-card__status">Active</div>
+          <h3>SOC 2 Type II</h3>
+          <p>SOC 2 Type II certified for security, availability, and confidentiality trust service criteria. Independently audited and verified.</p>
+        </div>
+
+        <div class="compliance-card" data-compliance="1">
+          <div class="compliance-card__accent"></div>
+          <div class="compliance-card__status">Available on request</div>
+          <h3>Data Processing Agreement</h3>
+          <p>Custom DPA available for enterprise customers covering data handling, sub-processors, and breach notification procedures.</p>
+        </div>
+
+        <div class="compliance-card" data-compliance="2">
+          <div class="compliance-card__accent"></div>
+          <div class="compliance-card__status">Coming soon</div>
+          <h3>GDPR Compliant</h3>
+          <p>Full compliance with the EU General Data Protection Regulation. Data subject rights, lawful processing, and privacy by design built into every layer of the platform.</p>
+        </div>
+      </div>
+
+      <div class="compliance-dots">
+        <div class="compliance-dots__dot is-active" data-dot="0">01</div>
+        <div class="compliance-dots__dot" data-dot="1">02</div>
+        <div class="compliance-dots__dot" data-dot="2">03</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faqSection">
+  <div class="faq-section__inner">
+    <div class="faq-section__intro">
+      <span class="metadata-pill--neutral" style="display:inline-block;font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:0.375rem 0.875rem;border-radius:0.375rem;background:rgba(0,0,0,0.06);color:var(--text-secondary);margin-bottom:1rem">Security</span>
+      <h2 class="faq-section__headline">Questions about security? <span class="nyght">We've got answers.</span></h2>
+      <p class="faq-section__sub">Your unreleased music and business data deserve the highest level of protection.</p>
+      <a href="demo.html" class="faq-section__cta" style="border-bottom:none">Talk to a founder <span style="display:inline-block;transition:transform 0.2s">&rarr;</span></a>
+    </div>
+
+    <div class="faq-list" id="faqList">
+
+      <div class="faq-item">
+        <button class="faq-item__trigger" aria-expanded="false">
+          <span class="faq-item__num">01</span>
+          <span class="faq-item__q">Is my unreleased music safe on Team?</span>
+          <span class="faq-item__toggle">
+            <svg viewBox="0 0 16 16"><line x1="3" y1="8" x2="13" y2="8"/><line class="v" x1="8" y1="3" x2="8" y2="13"/></svg>
+          </span>
+        </button>
+        <div class="faq-item__answer"><div class="faq-item__answer-inner"><div class="faq-item__answer-content">
+          <p>Yes. All files are encrypted at rest (AES-256) and in transit (TLS 1.3). Access is controlled by role-based permissions, and you can restrict who sees what at the release level.</p>
+        </div></div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-item__trigger" aria-expanded="false">
+          <span class="faq-item__num">02</span>
+          <span class="faq-item__q">Does TeamMate AI use my data to train its models?</span>
+          <span class="faq-item__toggle">
+            <svg viewBox="0 0 16 16"><line x1="3" y1="8" x2="13" y2="8"/><line class="v" x1="8" y1="3" x2="8" y2="13"/></svg>
+          </span>
+        </button>
+        <div class="faq-item__answer"><div class="faq-item__answer-inner"><div class="faq-item__answer-content">
+          <p>No. Your data is never used for model training. TeamMate learns your context to give better recommendations, but that knowledge stays strictly within your account and is never shared.</p>
+        </div></div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-item__trigger" aria-expanded="false">
+          <span class="faq-item__num">03</span>
+          <span class="faq-item__q">Can other companies see my data?</span>
+          <span class="faq-item__toggle">
+            <svg viewBox="0 0 16 16"><line x1="3" y1="8" x2="13" y2="8"/><line class="v" x1="8" y1="3" x2="8" y2="13"/></svg>
+          </span>
+        </button>
+        <div class="faq-item__answer"><div class="faq-item__answer-inner"><div class="faq-item__answer-content">
+          <p>Absolutely not. Every Team account operates in complete isolation. There is no cross-account data sharing, no shared intelligence, and no way for another user to access your information.</p>
+        </div></div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-item__trigger" aria-expanded="false">
+          <span class="faq-item__num">04</span>
+          <span class="faq-item__q">What happens to my data if I cancel?</span>
+          <span class="faq-item__toggle">
+            <svg viewBox="0 0 16 16"><line x1="3" y1="8" x2="13" y2="8"/><line class="v" x1="8" y1="3" x2="8" y2="13"/></svg>
+          </span>
+        </button>
+        <div class="faq-item__answer"><div class="faq-item__answer-inner"><div class="faq-item__answer-content">
+          <p>Your data remains accessible for 30 days after cancellation, during which you can export everything. After that, it's permanently deleted from our systems. We don't hold your data hostage.</p>
+        </div></div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-item__trigger" aria-expanded="false">
+          <span class="faq-item__num">05</span>
+          <span class="faq-item__q">Do you support SSO and enterprise security?</span>
+          <span class="faq-item__toggle">
+            <svg viewBox="0 0 16 16"><line x1="3" y1="8" x2="13" y2="8"/><line class="v" x1="8" y1="3" x2="8" y2="13"/></svg>
+          </span>
+        </button>
+        <div class="faq-item__answer"><div class="faq-item__answer-inner"><div class="faq-item__answer-content">
+          <p>Yes. We support SAML-based SSO, SCIM provisioning for automated user management, and comprehensive audit logs. Contact us for enterprise security requirements.</p>
+        </div></div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta">
+  <div class="final-cta__card">
+    <h2>Ready to protect your releases <span class="nyght">from day one?</span></h2>
+    <div class="final-cta__buttons">
+      <a href="onboarding.html?plan=pro&period=yearly" class="btn btn--green">Start your free trial</a>
+      <a href="demo.html" class="btn btn--ghost">Book a demo</a>
+    </div>
+    <p class="final-cta__note">60-day free trial. No credit card required.</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<div id="team-footer"></div>
+
+<script src="components/nav.js"></script>
+<script src="components/footer.js"></script>
+<script src="components/cookie-consent.js"></script>
+
+<!-- Nav solid on scroll + Hero fade -->
+<script>
+(function() {
+  const nav = document.getElementById('nav');
+  const hero = document.getElementById('heroSection');
+  const heroInner = hero ? hero.querySelector('.icp-hero__inner') : null;
+  if (!nav || !hero) return;
+
+  function check() {
+    const heroBottom = hero.getBoundingClientRect().bottom;
+    const heroH = hero.offsetHeight;
+    const scrolled = window.scrollY;
+
+    // Nav solid transition
+    if (heroBottom < 60) nav.classList.add('nav--solid');
+    else nav.classList.remove('nav--solid');
+
+    // Hero content fade on scroll
+    if (heroInner) {
+      const progress = Math.min(1, scrolled / (heroH * 0.5));
+      heroInner.style.opacity = 1 - progress;
+      heroInner.style.transform = 'translateY(' + (progress * 40) + 'px)';
+    }
+  }
+  window.addEventListener('scroll', check, { passive: true });
+  check();
+})();
+</script>
+
+<!-- Scroll reveal for pillar cards -->
+<script>
+(function() {
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) e.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.pillar-card').forEach(function(c) { observer.observe(c); });
+    // Also observe the AI privacy panel
+    var isoPanel = document.getElementById('isoPanel');
+    if (isoPanel) observer.observe(isoPanel);
+  }
+})();
+</script>
+
+<!-- Diagram lines + pulse dots -->
+<script>
+(function() {
+  var panel = document.getElementById('isoPanel');
+  if (!panel) return;
+  var svg = document.getElementById('isoLinesSvg');
+  var center = panel.querySelector('.iso-center');
+  var conns = panel.querySelectorAll('.iso-connected');
+  var pulses = [
+    [document.getElementById('isoPulse1'), document.getElementById('isoPulse1r')],
+    [document.getElementById('isoPulse2'), document.getElementById('isoPulse2r')],
+    [document.getElementById('isoPulse3'), document.getElementById('isoPulse3r')],
+  ];
+
+  // Get center of an element relative to the panel
+  function getCenter(el) {
+    var pr = panel.getBoundingClientRect();
+    var er = el.getBoundingClientRect();
+    return { x: er.left - pr.left + er.width / 2, y: er.top - pr.top + er.height / 2 };
+  }
+
+  // Draw SVG lines connecting green tiles to center tile
+  function drawLines() {
+    var pw = panel.offsetWidth;
+    var ph = panel.offsetHeight;
+    svg.setAttribute('width', pw);
+    svg.setAttribute('height', ph);
+    svg.setAttribute('viewBox', '0 0 ' + pw + ' ' + ph);
+    svg.innerHTML = '';
+    var c = getCenter(center);
+    conns.forEach(function(conn) {
+      var t = getCenter(conn);
+      var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', t.x);
+      line.setAttribute('y1', t.y);
+      line.setAttribute('x2', c.x);
+      line.setAttribute('y2', c.y);
+      line.setAttribute('stroke', '#191919');
+      line.setAttribute('stroke-width', '1');
+      svg.appendChild(line);
+    });
+  }
+
+  // Animate pulses along lines — only after lines have faded in (1.5s after panel visible)
+  var startTimes = [0, 1500, 500, 2000, 1000, 700];
+  var durations = [3000, 3500, 4000, 3000, 3500, 4000];
+  var visibleSince = 0;
+
+  // Track when panel becomes visible
+  var panelObserver = new MutationObserver(function() {
+    if (panel.classList.contains('is-visible') && !visibleSince) {
+      visibleSince = performance.now();
+    } else if (!panel.classList.contains('is-visible')) {
+      visibleSince = 0;
+    }
+  });
+  panelObserver.observe(panel, { attributes: true, attributeFilter: ['class'] });
+
+  function animatePulses(timestamp) {
+    var c = getCenter(center);
+    var isVisible = panel.classList.contains('is-visible');
+    // Pulses appear 1.5s after panel visible (after lines fade in at 0.8s + 0.6s transition)
+    var pulsesReady = isVisible && visibleSince && (timestamp - visibleSince > 1500);
+
+    conns.forEach(function(conn, i) {
+      var t = getCenter(conn);
+      var fwd = pulses[i][0];
+      var rev = pulses[i][1];
+      if (!fwd || !rev) return;
+
+      var elapsed = (timestamp + startTimes[i * 2]) % durations[i * 2];
+      var p = elapsed / durations[i * 2];
+      var ep = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      var fx = t.x + (c.x - t.x) * ep;
+      var fy = t.y + (c.y - t.y) * ep;
+      var fo = p < 0.1 ? p / 0.1 : p > 0.9 ? (1 - p) / 0.1 : 1;
+      fwd.style.left = (fx - 5) + 'px';
+      fwd.style.top = (fy - 5) + 'px';
+      fwd.style.opacity = pulsesReady ? fo : 0;
+
+      // Reverse
+      var elapsed2 = (timestamp + startTimes[i * 2 + 1]) % durations[i * 2 + 1];
+      var p2 = elapsed2 / durations[i * 2 + 1];
+      var ep2 = p2 < 0.5 ? 2 * p2 * p2 : 1 - Math.pow(-2 * p2 + 2, 2) / 2;
+      var rx = c.x + (t.x - c.x) * ep2;
+      var ry = c.y + (t.y - c.y) * ep2;
+      var ro = p2 < 0.1 ? p2 / 0.1 : p2 > 0.9 ? (1 - p2) / 0.1 : 1;
+      rev.style.left = (rx - 5) + 'px';
+      rev.style.top = (ry - 5) + 'px';
+      rev.style.opacity = pulsesReady ? ro : 0;
+    });
+    drawLines();
+    requestAnimationFrame(animatePulses);
+  }
+
+  drawLines();
+  requestAnimationFrame(animatePulses);
+})();
+</script>
+
+<!-- Compliance scroll-driven card stack -->
+<script>
+(function() {
+  var section = document.getElementById('complianceSection');
+  if (!section) return;
+  var scrollContainer = section.querySelector('.compliance-scroll');
+  var cards = section.querySelectorAll('.compliance-card');
+  var dots = section.querySelectorAll('.compliance-dots__dot');
+  var numCards = cards.length;
+
+  // First card starts visible and centered
+  cards[0].style.opacity = '1';
+  cards[0].style.transform = 'translateY(0)';
+
+  function update() {
+    var rect = scrollContainer.getBoundingClientRect();
+    var scrollH = scrollContainer.offsetHeight;
+    var viewH = window.innerHeight;
+
+    var scrolled = -rect.top;
+    var totalScroll = scrollH - viewH;
+    if (totalScroll <= 0) return;
+    var progress = Math.max(0, Math.min(1, scrolled / totalScroll));
+
+    // First 10% = hold first card, then carousel transitions
+    var holdEnd = 0.1;
+
+    cards.forEach(function(card, i) {
+      if (progress <= holdEnd) {
+        // Hold phase — first card stays, others hidden
+        if (i === 0) {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        } else {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(80px)';
+        }
+      } else {
+        // Carousel phase
+        var carouselP = (progress - holdEnd) / (1 - holdEnd); // 0 to 1
+        var slice = 1 / numCards;
+        var cardStart = i * slice;
+        var cardEnd = (i + 1) * slice;
+        var cardHoldIn = cardStart + slice * 0.3;
+        var cardHoldOut = cardStart + slice * 0.7;
+
+        if (carouselP < cardStart) {
+          card.style.transform = 'translateY(80px)';
+          card.style.opacity = '0';
+        } else if (carouselP < cardHoldIn) {
+          // Entering — skip for first card (already visible from hold phase)
+          if (i === 0) {
+            card.style.transform = 'translateY(0)';
+            card.style.opacity = '1';
+          } else {
+            var p = (carouselP - cardStart) / (cardHoldIn - cardStart);
+            card.style.transform = 'translateY(' + (80 * (1 - p)) + 'px)';
+            card.style.opacity = String(Math.min(1, p * 1.5));
+          }
+        } else if (carouselP < cardHoldOut) {
+          // Holding
+          card.style.transform = 'translateY(0)';
+          card.style.opacity = '1';
+        } else if (carouselP < cardEnd && i < numCards - 1) {
+          // Exiting (not last card)
+          var p = (carouselP - cardHoldOut) / (cardEnd - cardHoldOut);
+          card.style.transform = 'translateY(' + (-80 * p) + 'px)';
+          card.style.opacity = String(Math.max(0, 1 - p));
+        } else if (i === numCards - 1) {
+          // Last card stays
+          card.style.transform = 'translateY(0)';
+          card.style.opacity = '1';
+        } else {
+          card.style.transform = 'translateY(-80px)';
+          card.style.opacity = '0';
+        }
+      }
+    });
+
+    // Update dots
+    var activeIdx = Math.min(numCards - 1, Math.floor(progress * numCards));
+    dots.forEach(function(dot, i) {
+      dot.classList.toggle('is-active', i === activeIdx);
+    });
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+
+<!-- FAQ Accordion -->
+<script>
+(function initFaq() {
+  const list = document.getElementById('faqList');
+  if (!list) return;
+  const items = list.querySelectorAll('.faq-item');
+
+  items.forEach(item => {
+    const trigger = item.querySelector('.faq-item__trigger');
+    trigger.addEventListener('click', () => {
+      const isOpen = item.classList.contains('is-open');
+      // Close all
+      items.forEach(i => {
+        i.classList.remove('is-open');
+        i.querySelector('.faq-item__trigger').setAttribute('aria-expanded', 'false');
+      });
+      // Open this one if it wasn't already open
+      if (!isOpen) {
+        item.classList.add('is-open');
+        trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

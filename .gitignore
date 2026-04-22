@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+*.log
+.env
+.env.local
+
+# Internal exploration folders — not referenced by any production page
+example-moving-screen/
+rotato-test/

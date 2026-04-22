@@ -1,0 +1,281 @@
+/**
+ * Team Homepage — Custom CSS
+ * Styles that Webflow can't generate natively.
+ * Injected via Webflow's <head> custom code.
+ *
+ * Everything else (layout, typography, colours, spacing, responsive)
+ * is built directly in the Webflow designer.
+ *
+ * @version 1.0.0
+ */
+
+/* ── Nyght Serif font ── */
+@font-face {
+  font-family: "Nyght Serif";
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+  src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-MediumItalic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Nyght Serif";
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+  src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-LightItalic.woff2") format("woff2");
+}
+.nyght {
+  font-family: "Nyght Serif", Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* ── Hero clip-path frame pull-in (driven by --progress JS var) ── */
+.hero-img-w {
+  clip-path: inset(calc(var(--progress, 0) * 2%) round calc(var(--progress, 0) * 1rem));
+  will-change: clip-path;
+  pointer-events: none;
+}
+.hero-img-w::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgba(0,0,0,0.75) 0%,
+    rgba(0,0,0,0.6) 20%,
+    rgba(0,0,0,0.4) 40%,
+    rgba(0,0,0,0.15) 55%,
+    rgba(0,0,0,0) 70%);
+  opacity: calc(1 - var(--progress, 0));
+}
+.hero-img {
+  transform: scale(calc(1 + var(--progress, 0) * 0.2));
+  will-change: transform;
+}
+.cover-w {
+  pointer-events: none;
+}
+.cover-w::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: rgba(0,0,0,calc(0.1 + var(--progress, 0) * 0.5));
+  clip-path: inset(calc(var(--progress, 0) * 2%) round calc(var(--progress, 0) * 1rem));
+  pointer-events: none;
+}
+.cover__intro {
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+.cover__buttons .btn {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* ── Hero excerpt tiles (pointer-events off for click-through) ── */
+.hero-excerpts,
+.hero-excerpts * {
+  pointer-events: none !important;
+}
+.hero-excerpt {
+  opacity: 0;
+  visibility: hidden;
+}
+.hero-excerpt__flank {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* ── Typer cursor blink ── */
+.typer__caret {
+  display: inline-block;
+  width: 0.06em;
+  height: 0.95em;
+  background: currentColor;
+  margin-left: 0.05em;
+  vertical-align: -0.1em;
+  animation: typerBlink 0.85s steps(1) infinite;
+  border-radius: 1px;
+}
+@keyframes typerBlink {
+  0%, 49% { opacity: 1 }
+  50%, 100% { opacity: 0 }
+}
+
+/* ── Role marquee animation ── */
+.marquee-list[data-direction="left"] {
+  animation: marqueeL var(--marquee-dur, 55s) linear infinite;
+}
+.marquee-list[data-direction="right"] {
+  animation: marqueeR var(--marquee-dur, 60s) linear infinite;
+}
+.marquee-list:hover {
+  animation-play-state: paused;
+}
+@keyframes marqueeL { to { transform: translateX(-50%); } }
+@keyframes marqueeR { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+/* ── Search submit spinner ── */
+.search-submit__spinner svg {
+  animation: searchSpin 0.9s linear infinite;
+  animation-play-state: paused;
+}
+.search-submit.is-loading .search-submit__spinner svg {
+  animation-play-state: running;
+}
+@keyframes searchSpin {
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Pondering dots ── */
+.pondering__dot {
+  animation: ponderPulse 1.4s ease-in-out infinite;
+}
+.pondering__dot:nth-child(2) { animation-delay: 0.15s; }
+.pondering__dot:nth-child(3) { animation-delay: 0.3s; }
+@keyframes ponderPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* ── FAQ accordion smooth height ── */
+.faq-item__answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.faq-item__answer-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+.faq-item.is-open .faq-item__answer {
+  grid-template-rows: 1fr;
+}
+
+/* ── Video modal transitions ── */
+.video-modal {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+}
+.video-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+.video-modal__content {
+  transform: scale(0.95) translateY(12px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.video-modal.is-open .video-modal__content {
+  transform: scale(1) translateY(0);
+}
+
+/* ── Floating CTA frosted glass ── */
+.floating-cta__btn::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 8%;
+  right: 8%;
+  height: 40%;
+  border-radius: 100px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.55), transparent);
+  pointer-events: none;
+  opacity: 0.9;
+  transition: opacity 0.3s;
+}
+.floating-cta__btn:hover::before {
+  opacity: 0;
+}
+
+/* ── Side nav hover animation ── */
+.side-nav__dot:hover {
+  height: 1.5rem;
+  background: var(--black);
+  border-radius: 100px 0 0 100px;
+}
+.side-nav__dot.is-active:hover {
+  background: var(--accent);
+  border-radius: 100px 0 0 100px;
+}
+.side-nav__dot::after {
+  content: attr(data-label);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  white-space: nowrap;
+  background: var(--black);
+  padding: 0.3125rem 0.75rem;
+  border-radius: 0 100px 100px 0;
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s, padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  padding-left: 0;
+  padding-right: 0;
+}
+.side-nav__dot:hover::after {
+  max-width: 10rem;
+  opacity: 1;
+  padding: 0.3125rem 0.75rem;
+}
+.side-nav__dot.is-active:hover::after {
+  background: var(--accent);
+}
+
+/* ── Nav dropdown transitions ── */
+.nav__dropdown-panel {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav__dropdown.is-open .nav__dropdown-panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.nav-blur-overlay {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+.nav-blur-overlay.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ── Book demo calendar icon animation ── */
+.btn--demo__icon {
+  width: 0;
+  height: 1em;
+  opacity: 0;
+  margin-right: 0;
+  stroke: currentColor;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s, margin-right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+.btn--demo:hover .btn--demo__icon {
+  width: 1em;
+  opacity: 1;
+  margin-right: 0.375rem;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .marquee-list { animation: none !important; }
+}
