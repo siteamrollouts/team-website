@@ -671,7 +671,7 @@ const LEVEL_THEMES = [
   { name: 'STUDIO SESSION', subtitle: 'Time to record!', bg1: '#1a2a1a', bg2: '#2d4d2d', bg3: '#0d1a0d', groundColor: '#3d5d3d', platformColor: '#4a7a4a', collectName: 'Gold Records', obstacleName: 'Rejected Demos' },
   { name: 'PRESS RUN', subtitle: 'Hit the streets!', bg1: '#2a1a1a', bg2: '#4d2d2d', bg3: '#1a0d0d', groundColor: '#5d3d3d', platformColor: '#7a4a4a', collectName: 'Play Buttons', obstacleName: 'Bad Reviews' },
   { name: 'TOUR BUS', subtitle: 'On the road!', bg1: '#1a1a2a', bg2: '#2d2d4d', bg3: '#0d0d1a', groundColor: '#3d3d5d', platformColor: '#4a4a7a', collectName: 'Backstage Passes', obstacleName: 'Potholes' },
-  { name: 'RELEASE DAY', subtitle: 'The big moment!', bg1: '#2a1a2a', bg2: '#4d2d4d', bg3: '#1a0d1a', groundColor: '#5d3d5d', platformColor: '#7a4a7a', collectName: 'Diamond Records', obstacleName: 'Copyright Strikes' },
+  { name: 'RELEASE DAY', subtitle: 'The big moment!', bg1: '#2a1a2a', bg2: '#4d2d4d', bg3: '#1a0d1a', groundColor: '#5d3d5d', platformColor: '#7a4a7a', collectName: 'Grammy Awards', obstacleName: 'Copyright Strikes' },
 ];
 
 const COLLECT_SCORES = [100, 250, 150, 200, 500];
@@ -1289,29 +1289,58 @@ function drawBackstagePass(x, y, size) {
   ctx.beginPath(); ctx.arc(x + s/2, y + s - 4, 3, 0, Math.PI * 2); ctx.fill();
 }
 
-function drawDiamondRecord(x, y, size) {
+function drawGrammy(x, y, size) {
   const s = size;
-  // Diamond shape
-  ctx.fillStyle = '#A29BFE';
+  const gold = BRAND.gold;     // #FDCB6E — matches the rest of the game UI
+  const dark = '#8b6914';      // deeper gold for shadows + depth
+  const light = '#ffe680';     // highlight gold for shine
+
+  // ── HORN (flared gramophone bell at the top) ──
+  ctx.fillStyle = gold;
   ctx.beginPath();
-  ctx.moveTo(x + s/2, y);
-  ctx.lineTo(x + s, y + s/2);
-  ctx.lineTo(x + s/2, y + s);
-  ctx.lineTo(x, y + s/2);
+  ctx.moveTo(x + s * 0.12, y + s * 0.06);   // top-left rim
+  ctx.lineTo(x + s * 0.88, y + s * 0.06);   // top-right rim
+  ctx.lineTo(x + s * 0.66, y + s * 0.50);   // neck right
+  ctx.lineTo(x + s * 0.34, y + s * 0.50);   // neck left
   ctx.closePath();
   ctx.fill();
-  // Shine
-  ctx.fillStyle = '#DFE6E9';
+
+  // Inner rim shadow (suggests the horn's cavity)
+  ctx.fillStyle = dark;
+  ctx.fillRect(x + s * 0.18, y + s * 0.10, s * 0.64, 2);
+
+  // Left-edge shine
+  ctx.fillStyle = light;
   ctx.beginPath();
-  ctx.moveTo(x + s/2, y + 4);
-  ctx.lineTo(x + s * 0.65, y + s * 0.4);
-  ctx.lineTo(x + s/2, y + s/2);
-  ctx.lineTo(x + s * 0.35, y + s * 0.4);
+  ctx.moveTo(x + s * 0.14, y + s * 0.08);
+  ctx.lineTo(x + s * 0.20, y + s * 0.08);
+  ctx.lineTo(x + s * 0.38, y + s * 0.48);
+  ctx.lineTo(x + s * 0.34, y + s * 0.48);
   ctx.closePath();
   ctx.fill();
+
+  // ── STEM (neck connecting horn to base) ──
+  ctx.fillStyle = gold;
+  ctx.fillRect(x + s * 0.44, y + s * 0.50, s * 0.12, s * 0.26);
+  ctx.fillStyle = light;
+  ctx.fillRect(x + s * 0.44, y + s * 0.50, 2, s * 0.26);
+
+  // ── BASE (two-tier pedestal) ──
+  ctx.fillStyle = gold;
+  ctx.fillRect(x + s * 0.22, y + s * 0.76, s * 0.56, s * 0.06);
+  ctx.fillStyle = light;
+  ctx.fillRect(x + s * 0.22, y + s * 0.76, s * 0.56, 1);
+  ctx.fillStyle = dark;
+  ctx.fillRect(x + s * 0.14, y + s * 0.82, s * 0.72, s * 0.10);
+  ctx.fillStyle = gold;
+  ctx.fillRect(x + s * 0.14, y + s * 0.82, s * 0.72, 1);
+
+  // Sparkle (that award-winning shine)
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(x + s * 0.72, y + s * 0.16, 2, 2);
 }
 
-const collectDrawFuncs = [drawVinylLP, drawGoldRecord, drawPlayButton, drawBackstagePass, drawDiamondRecord];
+const collectDrawFuncs = [drawVinylLP, drawGoldRecord, drawPlayButton, drawBackstagePass, drawGrammy];
 
 function drawObstacle(x, y, size, levelIdx) {
   const s = size;
