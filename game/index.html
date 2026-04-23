@@ -1291,86 +1291,82 @@ function drawBackstagePass(x, y, size) {
 
 function drawGrammy(x, y, size) {
   const s = size;
-  const gold      = BRAND.gold;  // #FDCB6E — established game gold
-  const goldDark  = '#8b6914';   // shadow gold
-  const goldLight = '#ffe680';   // highlight gold
-  const hornDark  = '#4a3608';   // inside-the-horn darkness (the cavity)
-  const baseBlack = '#1a1a1a';   // the trademark black plinth
-  const baseEdge  = '#000';      // base lower-edge shadow
 
-  // ═══ 1. HORN (flared gramophone bell, top 45%) ═══
-  // Outer bell — flared mouth, narrows to a small neck
-  ctx.fillStyle = gold;
-  ctx.beginPath();
-  ctx.moveTo(x + s * 0.14, y + s * 0.03);
-  ctx.lineTo(x + s * 0.86, y + s * 0.03);
-  ctx.lineTo(x + s * 0.74, y + s * 0.34);
-  ctx.lineTo(x + s * 0.58, y + s * 0.44);
-  ctx.lineTo(x + s * 0.42, y + s * 0.44);
-  ctx.lineTo(x + s * 0.26, y + s * 0.34);
-  ctx.closePath();
-  ctx.fill();
+  const sprite = [
+    "...........OOOO..................",
+    "..........OGGGGO.................",
+    ".........OGGDDGGOO...............",
+    ".........OGDHHHDGGO..............",
+    "........OGDHHHHHDGGO.............",
+    "........OGDHHHHHHDGGO............",
+    "........OGDHHHHHHHDGGO...........",
+    ".......OGGDHHHHHHHHDGGO..........",
+    ".....OOGGGDHHHHHHHHHDGGO.........",
+    "....OGGGGGGDHHHHHHHHHDGGO........",
+    "...OGGLLGGGGDHHHHHHHHHDGGO.......",
+    "..OGGLLLGGGGDHHHHHHHHHDGGO.......",
+    "..OGGLLLLGGGDHHHHHHHHHDGGO.......",
+    "..OGGLLLLLGGGDHHHHHHHDGGGO.......",
+    "..OGGLLLLLLGGGDHHHHHDGGGO........",
+    "..OGGDDDDDDDDGDHHHHDGGGO.........",
+    "..OGGDD....DDGDHHHDGGGO..........",
+    "..OGGD......DGGDHDGGGO...........",
+    "..OGGD......DGGGDGGGO............",
+    "...OGGD....DGGGGGGGO.............",
+    "...OGGGDDDDGGGGGGGO..............",
+    "....OGGGGGGGGGOGGO...............",
+    ".....OOGGGGGGO.OO................",
+    ".......OGGGGO....................",
+    "......OGGGGGGO...................",
+    "....OOGGOOOGGGOO.................",
+    "...OGGGO....OGGGO................",
+    "...OGGO......OGGGO...............",
+    "..OGGG........OGGGO..............",
+    "..OGGGGGGGGGGGGGGGGGGGGGO........",
+    "..OGLLLLLLLLLLLLLLLLLLLGGO.......",
+    ".OGGLLLDDDDDDDDDDDDDLLLLGGO......",
+    ".OGGLLDDHHHHHHHHHHHHDDLLLGGO.....",
+    ".OGGLLDDHHHHHHHHHHHHDDLLLGGO.....",
+    ".OGGLLDDHHHHHHHHHHHHDDLLLGGO.....",
+    ".OGGLLLDDDDDDDDDDDDDDLLLGGO......",
+    ".OGGLLLLLLLLLLLLLLLLLLLLGGO......"
+  ];
 
-  // Dark interior of the horn — this is the giveaway it's a gramophone
-  ctx.fillStyle = hornDark;
-  ctx.beginPath();
-  ctx.moveTo(x + s * 0.22, y + s * 0.07);
-  ctx.lineTo(x + s * 0.78, y + s * 0.07);
-  ctx.lineTo(x + s * 0.66, y + s * 0.30);
-  ctx.lineTo(x + s * 0.34, y + s * 0.30);
-  ctx.closePath();
-  ctx.fill();
+  const gold = '#FDCB6E';
 
-  // Bright rim around the horn mouth
-  ctx.fillStyle = goldLight;
-  ctx.fillRect(x + s * 0.14, y + s * 0.03, s * 0.72, 2);
-  // Left-edge highlight running down the outer shell
-  ctx.beginPath();
-  ctx.moveTo(x + s * 0.14, y + s * 0.03);
-  ctx.lineTo(x + s * 0.20, y + s * 0.03);
-  ctx.lineTo(x + s * 0.30, y + s * 0.34);
-  ctx.lineTo(x + s * 0.26, y + s * 0.34);
-  ctx.closePath();
-  ctx.fill();
+  const palette = {
+    O: '#000000',
+    G: gold,
+    L: '#ffe680',
+    D: '#d89a17',
+    H: '#8b6914'
+  };
 
-  // ═══ 2. NECK — short arm connecting horn to the disc ═══
-  ctx.fillStyle = gold;
-  ctx.fillRect(x + s * 0.44, y + s * 0.42, s * 0.12, s * 0.08);
+  const rows = sprite.length;
+  const cols = sprite[0].length;
 
-  // ═══ 3. GOLD BODY — the phonograph disc + mounting plate ═══
-  // Wider plate (the disc, viewed from above)
-  ctx.fillStyle = gold;
-  ctx.fillRect(x + s * 0.16, y + s * 0.50, s * 0.68, s * 0.10);
-  // Plate top highlight
-  ctx.fillStyle = goldLight;
-  ctx.fillRect(x + s * 0.16, y + s * 0.50, s * 0.68, 1);
-  // Plate lower shadow edge
-  ctx.fillStyle = goldDark;
-  ctx.fillRect(x + s * 0.16, y + s * 0.59, s * 0.68, 1);
+  const px = Math.max(1, Math.floor(Math.min(s / cols, s / rows)));
+  const drawW = cols * px;
+  const drawH = rows * px;
 
-  // Stepped plinth on top of the black base (narrower than the disc)
-  ctx.fillStyle = gold;
-  ctx.fillRect(x + s * 0.24, y + s * 0.60, s * 0.52, s * 0.07);
-  ctx.fillStyle = goldDark;
-  ctx.fillRect(x + s * 0.24, y + s * 0.66, s * 0.52, 1);
+  const ox = Math.round(x + (s - drawW) / 2);
+  const oy = Math.round(y + (s - drawH) / 2);
 
-  // ═══ 4. BLACK TRAPEZOIDAL BASE — the Grammy signature ═══
-  ctx.fillStyle = baseBlack;
-  ctx.beginPath();
-  ctx.moveTo(x + s * 0.20, y + s * 0.68);
-  ctx.lineTo(x + s * 0.80, y + s * 0.68);
-  ctx.lineTo(x + s * 0.92, y + s * 0.96);
-  ctx.lineTo(x + s * 0.08, y + s * 0.96);
-  ctx.closePath();
-  ctx.fill();
+  const prevSmoothing = ctx.imageSmoothingEnabled;
+  ctx.imageSmoothingEnabled = false;
 
-  // Thin gold line along the top of the black base (seam detail)
-  ctx.fillStyle = goldLight;
-  ctx.fillRect(x + s * 0.20, y + s * 0.68, s * 0.60, 1);
+  for (let row = 0; row < rows; row++) {
+    const line = sprite[row];
+    for (let col = 0; col < cols; col++) {
+      const ch = line[col];
+      if (ch === '.') continue;
 
-  // Bottom shadow of the base for contact
-  ctx.fillStyle = baseEdge;
-  ctx.fillRect(x + s * 0.08, y + s * 0.95, s * 0.84, 1);
+      ctx.fillStyle = palette[ch];
+      ctx.fillRect(ox + col * px, oy + row * px, px, px);
+    }
+  }
+
+  ctx.imageSmoothingEnabled = prevSmoothing;
 }
 
 const collectDrawFuncs = [drawVinylLP, drawGoldRecord, drawPlayButton, drawBackstagePass, drawGrammy];
