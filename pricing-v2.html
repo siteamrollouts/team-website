@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing — Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* Nyght Serif */
+@font-face { font-family: "Nyght Serif"; font-weight: 500; font-style: italic; font-display: swap; src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-MediumItalic.woff2") format("woff2"); }
+@font-face { font-family: "Nyght Serif"; font-weight: 300; font-style: italic; font-display: swap; src: url("https://raw.githubusercontent.com/siteamrollouts/team-nomorechaos/main/NyghtSerif-LightItalic.woff2") format("woff2"); }
+.nyght { font-family: "Nyght Serif", Georgia, serif; font-style: italic; font-weight: 300; }
+</style>
+<style>
+/* =============================================
+   RESET & TOKENS
+   ============================================= */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+html{scroll-behavior:auto;scrollbar-gutter:stable}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  color:#111110;background:#fff;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+:root{
+  --black:#191919;--white:#fff;--grey:#E0E0E0;--bg:#FAFAFA;
+  --accent:#F56002;--text-secondary:#454545;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+
+/* =============================================
+   TYPOGRAPHY
+   ============================================= */
+.headline-xl{font-size:clamp(2.5rem,5.5vw,4.5rem);font-weight:300;line-height:1.05;letter-spacing:-0.03em}
+.headline-lg{font-size:clamp(2rem,4vw,3.2rem);font-weight:400;line-height:1.1;letter-spacing:-0.02em}
+.body-lg{font-size:1.125rem;font-weight:400;line-height:1.6;color:var(--text-secondary)}
+.body-sm{font-size:0.875rem;line-height:1.5}
+.label-sm{font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em}
+
+/* =============================================
+   BUTTONS
+   ============================================= */
+.btn{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-size:0.875rem;font-weight:600;padding:0.75rem 1.25rem;
+  border-radius:1.5rem;transition:background 0.3s,border-color 0.3s,color 0.3s,backdrop-filter 0.3s;
+  cursor:pointer;
+}
+.btn--primary{
+  background:var(--black);color:#fff;border:1px solid transparent;
+  transition:all 0.3s ease;
+}
+.btn--primary:hover{
+  color:#111 !important;
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-color:rgba(255,255,255,0.5);
+  box-shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+/* On light backgrounds, primary hover needs dark text on light bg */
+.btn--primary-light{
+  background:var(--black);color:#fff;border:1px solid transparent;
+  transition:all 0.3s ease;
+}
+.btn--primary-light:hover{
+  color:#111 !important;
+  background:rgba(0,0,0,0.05);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-color:rgba(0,0,0,0.12);
+  box-shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+.btn--outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.4)}
+.btn--outline:hover{background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:rgba(255,255,255,0.5)}
+.btn--ghost{background:transparent;color:var(--black);border:1px solid var(--grey)}
+.btn--ghost:hover{background:rgba(0,0,0,0.05);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--black)}
+
+/* =============================================
+   NAV
+   ============================================= */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:0.875rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:80rem;margin:0 auto;
+  transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.nav.nav--hidden{transform:translateY(calc(-100% - 1rem))}
+.nav__pill{
+  display:flex;align-items:center;gap:0.25rem;
+  padding:0.375rem 0.5rem;
+  border-radius:100px;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,0.1);
+  transition:background 0.35s,border-color 0.35s,backdrop-filter 0.35s;
+}
+.nav--solid .nav__pill{
+  background:rgba(255,255,255,0.95);
+  border-color:rgba(0,0,0,0.06);
+}
+.nav__logo{display:flex;align-items:center;padding:0 0.5rem}
+.nav__logo img{height:1.125rem;transition:filter 0.3s,opacity 0.3s}
+.nav__logo .logo-light{position:absolute}
+.nav__logo .logo-dark{opacity:0}
+.nav--solid .nav__logo .logo-light{opacity:0}
+.nav--solid .nav__logo .logo-dark{opacity:1;position:relative}
+.nav__link{
+  font-size:0.8125rem;font-weight:500;
+  padding:0.5rem 0.875rem;border-radius:100px;
+  color:rgba(255,255,255,0.85);white-space:nowrap;
+  display:flex;align-items:center;gap:0.25rem;
+  transition:color 0.2s,background 0.2s;
+}
+.nav__link:hover{color:#fff;background:rgba(255,255,255,0.1)}
+.nav--solid .nav__link{color:var(--text-secondary)}
+.nav--solid .nav__link:hover{color:var(--black);background:rgba(0,0,0,0.04)}
+.nav__link svg{width:10px;height:10px;opacity:0.6}
+.nav__login{
+  font-size:0.8125rem;font-weight:500;
+  padding:0.5rem 1rem;border-radius:100px;
+  color:rgba(255,255,255,0.85);white-space:nowrap;
+  border:1px solid rgba(255,255,255,0.3);
+  transition:color 0.2s,border-color 0.2s,background 0.2s;
+}
+.nav__login:hover{color:#fff;border-color:rgba(255,255,255,0.5)}
+.nav--solid .nav__login{color:var(--black);border-color:rgba(0,0,0,0.15)}
+.nav--solid .nav__login:hover{border-color:var(--black)}
+a.nav__cta{
+  font-size:0.8125rem;font-weight:600;
+  padding:0.5rem 1.125rem;border-radius:100px;
+  white-space:nowrap;text-decoration:none;
+  color:#fff;background:#111110;
+  border:1px solid transparent;
+  transition:all 0.3s ease;
+}
+a.nav__cta:hover{
+  color:#111 !important;
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-color:rgba(255,255,255,0.5);
+  box-shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+.nav--solid a.nav__cta{
+  color:var(--black);
+  background:rgba(0,0,0,0.04);
+  border:1px solid rgba(0,0,0,0.1);
+  box-shadow:0 1px 4px rgba(0,0,0,0.04);
+}
+.nav--solid a.nav__cta:hover{
+  color:var(--black);
+  background:rgba(0,0,0,0.08);
+  border-color:rgba(0,0,0,0.18);
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+.nav__divider{
+  width:1px;height:1rem;
+  background:rgba(255,255,255,0.15);margin:0 0.125rem;
+}
+.nav--solid .nav__divider{background:rgba(0,0,0,0.08)}
+.nav__dropdown{position:relative}
+.nav__dropdown>.nav__link{cursor:pointer}
+.nav__dropdown>.nav__link svg{transition:transform 0.25s}
+.nav__dropdown.is-open>.nav__link svg{transform:rotate(180deg)}
+.nav__dropdown-panel{
+  position:absolute;top:calc(100% + 0.75rem);left:0;
+  display:flex;
+  background:rgba(255,255,255,0.97);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-radius:0.75rem;
+  box-shadow:0 12px 48px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06);
+  border:1px solid rgba(0,0,0,0.06);
+  opacity:0;visibility:hidden;
+  transform:translateY(-6px);
+  transition:opacity 0.25s ease,visibility 0.25s ease,transform 0.25s ease;
+  z-index:100;min-width:36rem;overflow:hidden;
+}
+.nav__dropdown.is-open .nav__dropdown-panel{
+  opacity:1;visibility:visible;transform:translateY(0);
+}
+.nav__dropdown-left{
+  flex:1;padding:1.5rem;
+  display:flex;flex-direction:column;gap:0.25rem;
+}
+.nav__dropdown-item{
+  display:block;padding:0.75rem 1rem;border-radius:0.5rem;
+  transition:background 0.15s;
+}
+.nav__dropdown-item:hover{background:rgba(0,0,0,0.03)}
+.nav__dropdown-item-title{
+  font-size:0.875rem;font-weight:600;color:var(--black);
+  margin-bottom:0.125rem;
+}
+.nav__dropdown-item-desc{
+  font-size:0.8125rem;color:var(--text-secondary);line-height:1.4;
+}
+.nav__dropdown-right{
+  width:16rem;background:var(--black);
+  padding:1.5rem;
+  display:flex;flex-direction:column;gap:0.125rem;
+  border-radius:0 0.75rem 0.75rem 0;
+}
+.nav__dropdown-featured-label{
+  font-size:0.6875rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:0.06em;color:rgba(255,255,255,0.4);
+  padding:0.5rem 0.75rem;margin-bottom:0.25rem;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.nav__dropdown-featured-label::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,0.5);
+}
+.nav__dropdown-featured-link{
+  display:block;font-size:0.9375rem;font-weight:500;
+  color:rgba(255,255,255,0.75);padding:0.625rem 0.75rem;
+  border-radius:0.375rem;transition:color 0.15s,background 0.15s;
+}
+.nav__dropdown-featured-link:hover{
+  color:#fff;background:rgba(255,255,255,0.08);
+}
+.nav-blur-overlay{
+  position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,0.1);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity 0.35s ease,visibility 0.35s ease;
+}
+.nav-blur-overlay.is-active{opacity:1;visibility:visible}
+
+@media(max-width:768px){
+  .nav{padding:0.75rem 1rem}
+  .nav__pill--left .nav__link{display:none}
+  .nav__pill--left .nav__dropdown{display:none}
+  .nav__pill--right .nav__link{display:none}
+  .nav__pill--right .nav__divider{display:none}
+  .nav__login{display:none}
+}
+
+
+/* =============================================
+   PRICING PAGE
+   ============================================= */
+
+/* Hero */
+.pricing-hero{
+  padding:10rem 2rem 4rem;
+  text-align:center;
+  max-width:48rem;
+  margin:0 auto;
+}
+.pricing-hero h1{
+  font-size:clamp(2.25rem,5vw,3.5rem);
+  font-weight:300;
+  line-height:1.1;
+  letter-spacing:-0.03em;
+  margin-bottom:1.25rem;
+}
+.pricing-hero p{
+  font-size:1.0625rem;
+  line-height:1.65;
+  color:var(--text-secondary);
+  max-width:36rem;
+  margin:0 auto 2rem;
+}
+.pricing-hero__cta-short{display:none}
+@media(max-width:768px){
+  .pricing-hero__cta-full{display:none}
+  .pricing-hero__cta-short{display:inline}
+}
+
+/* Pricing Cards */
+.pricing-cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+  max-width:72rem;
+  margin:0 auto;
+  padding:0 2rem 6rem;
+}
+
+.pricing-card{
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:1rem;
+  padding:2.5rem 2rem;
+  display:flex;
+  flex-direction:column;
+  transition:box-shadow 0.35s var(--ease);
+}
+.pricing-card:hover{
+  box-shadow:0 8px 40px rgba(0,0,0,0.06);
+}
+
+/* Team card — dark background */
+.pricing-card--team{
+  background:var(--black);
+  border-color:transparent;
+  color:#fff;
+  box-shadow:0 8px 32px rgba(0,0,0,0.15);
+}
+.pricing-card--team:hover{
+  box-shadow:0 16px 56px rgba(0,0,0,0.2);
+}
+.pricing-card--team .pricing-card__tier{color:#fff}
+.pricing-card--team .pricing-card__who{color:rgba(255,255,255,0.5)}
+.pricing-card--team .pricing-card__amount{color:#fff}
+.pricing-card--team .pricing-card__period{color:rgba(255,255,255,0.4)}
+.pricing-card--team .pricing-card__trial-note{color:rgba(255,255,255,0.4)}
+.pricing-card--team .pricing-card__then{color:rgba(255,255,255,0.8)}
+.pricing-card--team .pricing-card__billing{color:rgba(255,255,255,0.4)}
+.pricing-card--team .pricing-card__cta{
+  background:#fff;color:var(--black);
+}
+.pricing-card--team .pricing-card__cta:hover{
+  background:#D9FA87;
+  color:#111;
+  border-color:#D9FA87;
+  box-shadow:0 4px 16px rgba(217,250,135,0.35);
+}
+.pricing-card--team .pricing-card__no-card{color:rgba(255,255,255,0.4)}
+.pricing-card--team .pricing-card__divider{background:rgba(255,255,255,0.1)}
+.pricing-card--team .pricing-card__includes-label{color:rgba(255,255,255,0.5)}
+
+.pricing-card__tier{
+  font-size:1.125rem;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.04em;
+  color:var(--black);
+  margin-bottom:0.25rem;
+}
+.pricing-card__who{
+  font-size:0.875rem;
+  color:var(--text-secondary);
+  margin-bottom:2rem;
+}
+
+.pricing-card__price-row{
+  display:flex;
+  align-items:baseline;
+  gap:0.25rem;
+  margin-bottom:0.25rem;
+}
+.pricing-card__amount{
+  font-size:3rem;
+  font-weight:700;
+  line-height:1;
+  letter-spacing:-0.03em;
+  color:var(--black);
+}
+.pricing-card__period{
+  font-size:1rem;
+  font-weight:400;
+  color:var(--text-secondary);
+}
+.pricing-card__trial-note{
+  font-size:0.8125rem;
+  color:var(--text-secondary);
+  margin-bottom:0.75rem;
+}
+.pricing-card__then{
+  font-size:0.9375rem;
+  font-weight:500;
+  color:var(--black);
+  margin-bottom:0.125rem;
+}
+.pricing-card__billing{
+  font-size:0.8125rem;
+  color:var(--text-secondary);
+  margin-bottom:2rem;
+}
+
+.pricing-card__cta{
+  display:block;
+  text-align:center;
+  width:100%;
+  font-size:0.875rem;
+  font-weight:600;
+  padding:0.75rem 1.25rem;
+  border-radius:1.5rem;
+  background:var(--black);
+  color:#fff;
+  border:1px solid transparent;
+  transition:all 0.3s ease;
+  margin-bottom:0.5rem;
+}
+.pricing-card__cta:hover{
+  color:#111 !important;
+  background:#D9FA87;
+  border-color:#D9FA87;
+  box-shadow:0 4px 16px rgba(217,250,135,0.35);
+}
+.pricing-card__no-card{
+  font-size:0.75rem;
+  color:var(--text-secondary);
+  text-align:center;
+  margin-bottom:2rem;
+}
+
+.pricing-card__divider{
+  height:1px;
+  background:rgba(0,0,0,0.06);
+  margin-bottom:1.5rem;
+}
+
+.pricing-card__includes-label{
+  font-size:0.8125rem;
+  font-weight:600;
+  color:var(--text-secondary);
+  margin-bottom:1rem;
+}
+
+.pricing-card__features{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:0.375rem;
+  flex:1;
+}
+.pricing-card__features li{
+  font-size:0.8125rem;
+  font-weight:500;
+  line-height:1;
+  padding:0.5rem 0.875rem;
+  border-radius:0.5rem;
+  background:rgba(0,0,0,0.04);
+  color:var(--black);
+}
+/* Team card feature pills */
+.pricing-card--team .pricing-card__features li{
+  background:rgba(255,255,255,0.08);
+  color:rgba(255,255,255,0.8);
+}
+
+/* What's included link */
+.pricing-card__compare{
+  margin-top:auto;
+  padding-top:1.25rem;
+  text-align:center;
+}
+.pricing-card__compare a{
+  font-size:0.8125rem;
+  font-weight:500;
+  color:var(--text-secondary);
+  border-bottom:1px solid rgba(0,0,0,0.15);
+  padding-bottom:0.125rem;
+  transition:color 0.2s,border-color 0.2s;
+}
+.pricing-card__compare a:hover{
+  color:var(--black);
+  border-color:var(--black);
+}
+.pricing-card--team .pricing-card__compare a{
+  color:rgba(255,255,255,0.5);
+  border-color:rgba(255,255,255,0.2);
+}
+.pricing-card--team .pricing-card__compare a:hover{
+  color:#fff;
+  border-color:#fff;
+}
+
+/* Billing Toggle */
+.billing-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.75rem;
+  margin-bottom:3rem;
+}
+.billing-toggle__label{
+  font-size:0.875rem;
+  font-weight:500;
+  color:var(--text-secondary);
+  cursor:pointer;
+  transition:color 0.2s;
+}
+.billing-toggle__label.is-active{
+  color:var(--black);
+  font-weight:600;
+}
+.billing-toggle__switch{
+  width:3rem;
+  height:1.625rem;
+  border-radius:100px;
+  background:var(--black);
+  position:relative;
+  cursor:pointer;
+  transition:background 0.3s;
+  flex-shrink:0;
+}
+.billing-toggle__switch::after{
+  content:'';
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:1.125rem;
+  height:1.125rem;
+  border-radius:50%;
+  background:#fff;
+  transition:transform 0.25s var(--ease);
+}
+.billing-toggle__switch.is-monthly::after{
+  transform:translateX(1.375rem);
+}
+.billing-toggle__save{
+  font-size:0.6875rem;
+  font-weight:600;
+  color:var(--accent);
+  background:rgba(245,96,2,0.08);
+  padding:0.25rem 0.625rem;
+  border-radius:100px;
+  letter-spacing:0.02em;
+}
+
+/* Enterprise Section */
+.enterprise-section{
+  padding:0 2rem 6rem;
+}
+.enterprise-card{
+  max-width:72rem;
+  margin:0 auto;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:1rem;
+  overflow:hidden;
+}
+.enterprise-card__inner{
+  background:var(--black);
+  color:#fff;
+  padding:4rem 3.5rem;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:3rem;
+  align-items:center;
+}
+.enterprise-card__headline{
+  font-size:clamp(1.75rem,3vw,2.5rem);
+  font-weight:400;
+  letter-spacing:-0.02em;
+  margin-bottom:0.75rem;
+  line-height:1.1;
+}
+.enterprise-card__desc{
+  font-size:1rem;
+  color:rgba(255,255,255,0.6);
+  line-height:1.6;
+  max-width:32rem;
+  margin-bottom:1.5rem;
+}
+.enterprise-card__pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.5rem;
+}
+.enterprise-pill{
+  font-size:0.75rem;
+  font-weight:500;
+  padding:0.375rem 0.875rem;
+  border-radius:100px;
+  background:rgba(255,255,255,0.08);
+  color:rgba(255,255,255,0.7);
+  border:1px solid rgba(255,255,255,0.1);
+}
+.enterprise-card__cta-wrap{
+  flex-shrink:0;
+}
+.enterprise-card__cta{
+  display:inline-flex;
+  align-items:center;
+  gap:0.375rem;
+  font-size:0.875rem;
+  font-weight:600;
+  color:#fff;
+  padding:0.75rem 1.25rem;
+  border-radius:1.5rem;
+  border:1px solid rgba(255,255,255,0.4);
+  background:transparent;
+  transition:all 0.3s ease;
+  white-space:nowrap;
+}
+.enterprise-card__cta:hover{
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-color:rgba(255,255,255,0.5);
+}
+
+/* Comparison Table */
+.comparison-section{
+  padding:6rem 2rem;
+  max-width:72rem;
+  margin:0 auto;
+}
+.comparison-section h2{
+  font-size:clamp(1.75rem,3vw,2.5rem);
+  font-weight:400;
+  letter-spacing:-0.02em;
+  text-align:center;
+  margin-bottom:3rem;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+.comparison-scroll{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.comparison-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.9375rem;
+}
+.comparison-table thead th{
+  text-align:center;
+  padding:1.25rem 1.25rem 1.25rem;
+  font-size:1.125rem;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  border-bottom:2px solid var(--black);
+  vertical-align:bottom;
+  color:var(--black);
+  background:#fff;
+}
+/* "Get started" button under each tier column header (main table + sticky).
+   Dark base with lime-green hover, mirroring the pricing card CTA pattern. */
+.compare-cta{
+  display:block;
+  width:fit-content;
+  margin:0.625rem auto 0;
+  font-size:0.75rem;
+  font-weight:600;
+  letter-spacing:-0.005em;
+  padding:0.425rem 0.9rem;
+  border-radius:100px;
+  background:#191919;
+  color:#fff !important;
+  border:1px solid transparent;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:background 0.2s ease, color 0.2s ease, box-shadow 0.25s ease, transform 0.15s ease;
+}
+.compare-cta:hover{
+  background:#D9FA87;
+  color:#111 !important;
+  box-shadow:0 4px 14px rgba(217,250,135,0.5);
+  transform:translateY(-1px);
+}
+/* On the main table's dark Team column, invert the button so it stays visible */
+.comparison-table .th-team .compare-cta{
+  background:#fff;
+  color:#111 !important;
+}
+.comparison-table .th-team .compare-cta:hover{
+  background:#D9FA87;
+  color:#111 !important;
+}
+/* Compact version inside the sticky bar */
+.comparison-sticky .compare-cta{
+  margin-top:0.5rem;
+  font-size:0.6875rem;
+  padding:0.32rem 0.8rem;
+}
+
+/* Floating sticky header clone — refined styling.
+   Anchored to top:0 always; when the nav is visible we grow an internal
+   top-padding so the bar's white background keeps covering the area above
+   the thead (instead of revealing the table scrolling past behind). */
+.comparison-sticky{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  background:rgba(255,255,255,0.88);
+  backdrop-filter:blur(20px) saturate(1.4);
+  -webkit-backdrop-filter:blur(20px) saturate(1.4);
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  box-shadow:0 1px 0 rgba(255,255,255,0.3) inset, 0 8px 28px -10px rgba(0,0,0,0.08);
+  padding-top:0;
+  opacity:0;visibility:hidden;
+  transform:translateY(-100%);
+  transition:padding-top 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s, visibility 0.25s, transform 0.3s cubic-bezier(0.16,1,0.3,1);
+  pointer-events:none;
+}
+.comparison-sticky.is-visible{
+  opacity:1;visibility:visible;pointer-events:auto;
+  transform:translateY(0);
+}
+/* When the nav is also visible, grow top padding so the thead sits below
+   the nav while the sticky's white bg still covers the full area above. */
+.comparison-sticky.is-below-nav{padding-top:4.25rem}
+.comparison-sticky table{
+  width:100%;border-collapse:collapse;
+}
+.comparison-sticky th{
+  text-align:center;
+  padding:0.75rem 1.25rem 0.875rem;
+  font-size:0.9375rem;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  color:var(--black);
+  vertical-align:top;
+  position:relative;
+}
+/* "Compare plans" label injected via pseudo-element in the empty first cell */
+.comparison-sticky th:first-child{
+  text-align:left;
+  vertical-align:middle;
+  padding-left:1.5rem;
+}
+.comparison-sticky th:first-child::before{
+  content:'Compare plans';
+  font-size:0.6875rem;
+  font-weight:700;
+  color:var(--text-secondary);
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+  line-height:1.2;
+  display:inline-block;
+}
+/* Drop the orange Team accent; Team stays the same dark weight as Pro/Free. */
+.comparison-sticky .th-team{
+  color:var(--black);
+  font-weight:600;
+}
+.comparison-table thead th:first-child{
+  text-align:left;
+  font-size:0.875rem;
+  font-weight:500;
+  color:var(--text-secondary);
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+}
+.comparison-table .th-team{
+  background:var(--black);
+  color:#fff;
+  border-radius:0.5rem 0.5rem 0 0;
+}
+.comparison-table tbody tr{
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  transition:background 0.2s;
+}
+.comparison-table tbody tr:hover{
+  background:#D9FA87;
+}
+.comparison-table tbody tr:hover td:first-child span{
+  background:rgba(255,255,255,0.6);
+}
+.comparison-table tbody tr:hover .td-team{
+  background:rgba(217,250,135,0.3);
+}
+.comparison-table tbody td{
+  padding:0.875rem 1.25rem;
+  text-align:center;
+  color:var(--text-secondary);
+}
+.comparison-table tbody td:first-child{
+  text-align:left;
+  font-weight:500;
+  color:var(--black);
+}
+.comparison-table tbody td:first-child span{
+  display:inline-block;
+  font-size:0.8125rem;
+  font-weight:500;
+  padding:0.375rem 0.75rem;
+  border-radius:100px;
+  background:rgba(0,0,0,0.04);
+  color:var(--black);
+}
+/* Team column background tint */
+.comparison-table .td-team{
+  background:rgba(25,25,25,0.03);
+}
+.comparison-table .check{
+  color:var(--black);
+  font-weight:600;
+}
+/* SVG checkmark */
+.comparison-table .check-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.comparison-table .check-icon svg{
+  width:16px;
+  height:16px;
+  stroke:var(--black);
+  stroke-width:2.5;
+  fill:none;
+}
+/* Dash line */
+.comparison-table .dash-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.comparison-table .dash-icon svg{
+  width:12px;
+  height:2px;
+}
+
+@media(max-width:900px){
+  .comparison-table{font-size:0.8125rem}
+  .comparison-table thead th,
+  .comparison-table tbody td{padding:0.625rem 0.5rem}
+  .comparison-table thead th{font-size:0.875rem}
+  .comparison-table tbody td:first-child span{
+    font-size:0.6875rem;
+    padding:0.25rem 0.5rem;
+  }
+  .comparison-table .th-team{
+    border-radius:0.375rem 0.375rem 0 0;
+  }
+}
+@media(max-width:600px){
+  /* On very small screens, make the table horizontally scrollable with a minimum width */
+  .comparison-scroll{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    margin:0 -1rem;
+    padding:0 1rem;
+  }
+  .comparison-table{min-width:32rem}
+  .comparison-section{padding:4rem 1rem}
+}
+
+/* =============================================
+   FAQ — Exact homepage design
+   ============================================= */
+.faq-section{
+  padding:6rem 2rem 8rem;
+  background:#fff;
+  position:relative;
+}
+.faq-section__inner{
+  max-width:72rem;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1.4fr;gap:5rem;
+  align-items:flex-start;
+}
+@media(max-width:900px){
+  .faq-section__inner{grid-template-columns:1fr;gap:2.5rem}
+}
+.faq-section__intro{
+  position:sticky;top:6rem;
+}
+.faq-section__label{
+  font-size:0.6875rem;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--accent);
+  display:inline-flex;align-items:center;gap:0.5rem;
+  margin-bottom:1rem;
+}
+.faq-section__label::before{
+  content:'';width:0.375rem;height:0.375rem;border-radius:50%;
+  background:var(--accent);
+}
+.faq-section__headline{
+  font-size:clamp(2rem,3.2vw,2.75rem);font-weight:400;
+  line-height:1.08;letter-spacing:-0.02em;
+  color:var(--black);margin-bottom:1.25rem;
+}
+.faq-section__headline .nyght{font-weight:300}
+.faq-section__sub{
+  font-size:0.9375rem;color:var(--text-secondary);
+  line-height:1.55;margin-bottom:1.75rem;max-width:24rem;
+}
+.faq-section__cta{
+  display:inline-flex;align-items:center;gap:0.375rem;
+  font-size:0.875rem;font-weight:600;color:var(--black);
+  border-bottom:1px solid currentColor;padding-bottom:0.125rem;
+  transition:color 0.2s,gap 0.2s;
+}
+.faq-section__cta:hover{color:var(--accent);gap:0.625rem}
+
+/* Accordion list */
+.faq-list{display:flex;flex-direction:column}
+.faq-item{
+  border-top:1px solid rgba(0,0,0,0.08);
+  position:relative;
+  transition:background 0.3s,border-radius 0.3s,border-color 0.3s;
+}
+.faq-item:last-child{border-bottom:1px solid rgba(0,0,0,0.08)}
+.faq-item__trigger{
+  width:100%;
+  display:flex;align-items:center;gap:1.25rem;
+  padding:1.625rem 1.25rem;
+  background:none;border:none;cursor:pointer;
+  text-align:left;font-family:inherit;
+  color:var(--black);
+  transition:padding 0.3s;
+}
+.faq-item__num{
+  font-family:'SF Mono','JetBrains Mono',ui-monospace,Menlo,monospace;
+  font-size:0.75rem;font-weight:500;
+  color:rgba(0,0,0,0.35);
+  letter-spacing:0.04em;min-width:1.75rem;
+  transition:color 0.3s;
+}
+.faq-item__q{
+  flex:1;
+  font-size:1.0625rem;font-weight:600;
+  letter-spacing:-0.01em;line-height:1.35;
+  transition:transform 0.3s var(--ease);
+}
+.faq-item__toggle{
+  width:2.25rem;height:2.25rem;border-radius:50%;
+  background:rgba(0,0,0,0.04);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  transition:background 0.3s,transform 0.3s var(--ease);
+}
+.faq-item__toggle svg{
+  width:0.875rem;height:0.875rem;
+  stroke:var(--black);stroke-width:2.5;
+  fill:none;stroke-linecap:round;
+  transition:transform 0.3s var(--ease);
+}
+.faq-item__toggle svg line.v{
+  transform-origin:center;transition:transform 0.3s var(--ease),opacity 0.3s;
+}
+
+.faq-item__answer{
+  display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows 0.45s var(--ease);
+}
+.faq-item__answer-inner{
+  overflow:hidden;
+  min-height:0;
+}
+.faq-item__answer-content{
+  padding:0.5rem 1.25rem 2rem 4.25rem;
+  max-width:42rem;
+}
+.faq-item__answer-content p{
+  font-size:0.9375rem;line-height:1.65;color:var(--text-secondary);
+  margin-bottom:0.75rem;
+}
+.faq-item__answer-content p:last-child{margin-bottom:0}
+.faq-item__answer-content a{
+  color:var(--black);font-weight:500;
+  border-bottom:1px solid currentColor;
+  transition:border-color 0.2s;
+}
+.faq-item__answer-content a:hover{border-bottom-color:transparent}
+
+/* Open state */
+.faq-item.is-open{
+  background:#fafaf7;
+  border-radius:0.875rem;
+  border-top-color:transparent;
+}
+.faq-item.is-open + .faq-item{border-top-color:transparent}
+.faq-item.is-open .faq-item__num{color:var(--accent)}
+.faq-item.is-open .faq-item__q{transform:translateX(0.25rem)}
+.faq-item.is-open .faq-item__toggle{background:var(--black)}
+.faq-item.is-open .faq-item__toggle svg{stroke:#fff;transform:rotate(180deg)}
+.faq-item.is-open .faq-item__toggle svg line.v{opacity:0;transform:rotate(90deg) scale(0)}
+.faq-item.is-open .faq-item__answer{grid-template-rows:1fr}
+
+/* Hover state (non-open) */
+.faq-item:not(.is-open):hover .faq-item__num{color:var(--black)}
+.faq-item:not(.is-open):hover .faq-item__toggle{background:rgba(0,0,0,0.08)}
+
+@media(max-width:900px){
+  .faq-section__intro{position:static}
+  .faq-item__answer-content{padding-left:0}
+  .faq-item__num{min-width:1.5rem;font-size:0.6875rem}
+  .faq-item__q{font-size:0.9375rem}
+}
+
+/* Final CTA */
+.final-cta{
+  padding:2rem 2rem 6rem;
+  background:#fff;
+}
+.final-cta__card{
+  max-width:72rem;
+  margin:0 auto;
+  text-align:center;
+  padding:5rem 3rem;
+  background:#D9FA87;
+  border:1px solid rgba(0,0,0,0.08);
+  border-radius:1rem;
+  box-shadow:0 4px 32px rgba(0,0,0,0.04);
+}
+.final-cta__card h2{color:#111}
+.final-cta__card .final-cta__note{color:rgba(0,0,0,0.65)}
+/* Buttons need to hold up against the lime background */
+.final-cta__card .btn--ghost{
+  border-color:#111;
+}
+.final-cta__card .btn--ghost:hover{
+  background:rgba(0,0,0,0.08);
+  border-color:#111;
+}
+.final-cta__card .btn--primary-light:hover{
+  background:#000 !important;
+  color:#fff !important;
+  border-color:#000;
+  transform:translateY(-2px);
+  box-shadow:0 10px 28px rgba(0,0,0,0.28),0 2px 6px rgba(0,0,0,0.18);
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+.final-cta h2{
+  font-size:clamp(1.75rem,4vw,2.75rem);
+  font-weight:300;
+  letter-spacing:-0.02em;
+  margin-bottom:1.5rem;
+  line-height:1.1;
+}
+.final-cta__buttons{
+  display:flex;
+  gap:1rem;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-bottom:1rem;
+}
+.final-cta__note{
+  font-size:0.8125rem;
+  color:var(--text-secondary);
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media(max-width:768px){
+  .pricing-hero{
+    padding:8rem 1.5rem 3rem;
+  }
+  .pricing-hero h1{
+    font-size:2rem;
+  }
+  .pricing-cards{
+    grid-template-columns:1fr;
+    max-width:28rem;
+    margin:0 auto;
+    padding:0 1.5rem 4rem;
+  }
+  .pricing-card__cta .cta-full{display:none}
+  .pricing-card__cta .cta-short{display:inline}
+  .enterprise-section{
+    padding:0 1rem 4rem;
+  }
+  .enterprise-card__inner{
+    grid-template-columns:1fr;
+    padding:2.5rem 2rem;
+    text-align:center;
+  }
+  .enterprise-card__pills{
+    justify-content:center;
+  }
+  .enterprise-card__cta-wrap{
+    margin:0 auto;
+  }
+  .final-cta__card{
+    padding:3rem 2rem;
+  }
+  .final-cta__buttons{
+    flex-direction:column;
+    align-items:center;
+  }
+}
+@media(min-width:769px){
+  .pricing-card__cta .cta-short{display:none}
+}
+
+/* =============================================
+   PRICING V2 — Questionnaire flow + reveal
+   ============================================= */
+.quiz-wrap{
+  /* Pricing hero above handles nav clearance */
+  position:relative;
+  /* Very soft ambient backdrop — warm off-white with a whisper of lime
+     glow at the top. Pulls the whole quiz area together and gives it a
+     sense of depth that plain white can't. */
+  background:
+    radial-gradient(1200px 520px at 50% -80px, rgba(217,250,135,0.08), transparent 65%),
+    linear-gradient(180deg, #ffffff 0%, #fafaf6 100%);
+  /* Small cushion when we scroll-into-view so the stage doesn't kiss the top */
+  scroll-margin-top:1rem;
+}
+.quiz-section{
+  padding:1rem 1.5rem 3rem;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.quiz-inner{
+  width:100%;max-width:56rem;margin:0 auto;
+  position:relative;
+}
+
+.quiz-progress{
+  display:flex;align-items:center;gap:1rem;
+  width:fit-content;margin:0 auto 3rem;
+  padding:0.45rem 0.875rem 0.45rem 1.125rem;
+  background:rgba(255,255,255,0.7);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(0,0,0,0.05);
+  border-radius:100px;
+  font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.14em;
+  color:var(--text-secondary);
+  box-shadow:0 1px 0 rgba(255,255,255,0.8) inset, 0 4px 14px rgba(0,0,0,0.03);
+}
+.quiz-progress strong{color:var(--black);font-weight:700}
+.quiz-progress__bar{
+  width:7rem;height:5px;border-radius:5px;
+  background:rgba(0,0,0,0.08);
+  box-shadow:0 1px 1px rgba(0,0,0,0.04) inset;
+  overflow:hidden;position:relative;
+}
+.quiz-progress__fill{
+  height:100%;
+  background:linear-gradient(90deg, #C9ED74 0%, #D9FA87 55%, #E7FFA1 100%);
+  box-shadow:
+    0 0 6px rgba(217,250,135,0.7),
+    0 0 18px rgba(217,250,135,0.35);
+  width:33.33%;border-radius:5px;
+  transition:width 0.55s cubic-bezier(0.16,1,0.3,1);
+}
+
+/* Character stage — animated group photo above the tiles.
+   Hero (Q1 answer) stays pinned to slot 0 (centre front). Supporting cast
+   fans in behind as the team grows (Q2). Each .quiz-char carries inline
+   left/z-index/--scale styles so we can animate between arrangements. */
+.quiz-stage{
+  position:relative;
+  width:100%;max-width:46rem;
+  height:16rem;
+  margin:0 auto 1.25rem;
+  pointer-events:none;
+  overflow:hidden; /* clip characters while the stage grows in */
+  transition:height 0.5s cubic-bezier(0.16,1,0.3,1), margin-bottom 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease;
+}
+.quiz-stage.is-hidden{height:0;margin-bottom:0;opacity:0}
+/* Characters use a FIXED height (not 100% of stage) so their width stays
+   stable while the stage is animating its height open. If width changed
+   every frame, translateX(-50%) re-resolves each frame and the image
+   appears to slide sideways. Fixed dimensions = zero jump. */
+.quiz-char{
+  position:absolute;bottom:0;
+  left:50%;
+  height:14rem;width:auto;
+  opacity:0;
+  transform-origin:center bottom;
+  transform:translateX(-50%) translateY(12px) scale(var(--scale, 1));
+  transition:
+    opacity 0.55s cubic-bezier(0.16,1,0.3,1),
+    transform 0.55s cubic-bezier(0.16,1,0.3,1),
+    left 0.55s cubic-bezier(0.16,1,0.3,1);
+  pointer-events:none;user-select:none;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,0.04));
+}
+.quiz-char.is-visible{
+  opacity:1;
+  transform:translateX(-50%) translateY(0) scale(var(--scale, 1));
+}
+@media(max-width:860px){
+  .quiz-stage{height:12rem;max-width:38rem}
+  .quiz-char{height:10.5rem}
+}
+@media(max-width:540px){
+  .quiz-stage{height:9rem;margin-bottom:0.75rem}
+  .quiz-char{height:8rem}
+}
+
+.quiz-steps{position:relative;min-height:19rem}
+.quiz-step{
+  opacity:0;transform:translateY(14px);
+  pointer-events:none;
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:stretch;
+  transition:opacity 0.45s cubic-bezier(0.16,1,0.3,1),transform 0.45s cubic-bezier(0.16,1,0.3,1);
+}
+.quiz-step.is-active{
+  opacity:1;transform:translateY(0);
+  pointer-events:auto;
+  position:relative;inset:auto;
+}
+.quiz-question{
+  /* Inter only — one notch smaller than the pricing-hero h1 so the hero
+     leads the page and the question reads as the next layer down. */
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:clamp(1.5rem,3.4vw,2rem);
+  font-weight:400;letter-spacing:-0.02em;line-height:1.15;
+  color:var(--black);
+  text-align:center;
+  margin-bottom:2.25rem;
+  max-width:36rem;margin-left:auto;margin-right:auto;
+}
+
+/* Flex-based centred grid. Column count tuned per question via [data-count]
+   so we never leave an orphan tile on the last row. */
+.quiz-options{
+  display:flex;flex-wrap:wrap;
+  justify-content:center;
+  gap:0.75rem;
+  width:100%;
+}
+/* Tiles — refined, tactile, premium.
+   Subtle warm gradient ground with an inset top highlight so each tile
+   feels like a lit surface. Hover layers in a lime halo + lift.
+   Selected switches to a deep charcoal gradient with a lime ring + inner
+   highlight so it reads as a clearly-locked-in choice. */
+.quiz-option{
+  /* Default: 4 per row — used for Q1/Q3 (4 items) */
+  flex:0 0 calc(25% - 0.5625rem);
+  display:flex;flex-direction:column;justify-content:center;
+  gap:0.4rem;
+  padding:1.5rem 1rem;
+  min-height:7.5rem;
+  background:linear-gradient(180deg, #ffffff 0%, #fafaf4 100%);
+  border:1px solid rgba(0,0,0,0.07);
+  border-radius:1.125rem;
+  cursor:pointer;text-align:center;
+  font-family:inherit;color:var(--black);
+  position:relative;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 1px 2px rgba(0,0,0,0.03),
+    0 1px 3px rgba(0,0,0,0.015);
+  transition:
+    border-color 0.3s ease,
+    background 0.35s ease,
+    transform 0.3s cubic-bezier(0.16,1,0.3,1),
+    box-shadow 0.4s ease,
+    color 0.25s ease;
+}
+.quiz-option:hover{
+  border-color:rgba(0,0,0,0.16);
+  transform:translateY(-4px);
+  background:linear-gradient(180deg, #ffffff 0%, #faf9ef 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 14px 36px rgba(0,0,0,0.08),
+    0 3px 8px rgba(0,0,0,0.04),
+    0 0 0 5px rgba(217,250,135,0.12);
+}
+.quiz-option.is-selected{
+  background:linear-gradient(180deg, #242424 0%, #0b0b0b 100%);
+  color:#fff;
+  border-color:#000;
+  transform:translateY(-2px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.09) inset,
+    0 -1px 0 rgba(0,0,0,0.4) inset,
+    0 18px 42px rgba(0,0,0,0.3),
+    0 4px 12px rgba(0,0,0,0.15),
+    0 0 0 4px rgba(217,250,135,0.28),
+    0 0 0 5px rgba(217,250,135,0.08);
+}
+.quiz-option__label{display:flex;flex-direction:column;gap:0.28rem;align-items:center;width:100%}
+.quiz-option__main{
+  font-size:0.9375rem;font-weight:650;letter-spacing:-0.01em;line-height:1.2;
+  font-weight:600;
+}
+.quiz-option__desc{
+  font-size:0.75rem;color:rgba(0,0,0,0.48);line-height:1.4;
+  transition:color 0.25s ease;
+}
+.quiz-option.is-selected .quiz-option__desc{color:rgba(255,255,255,0.62)}
+.quiz-option__arrow{display:none}
+
+/* 5 items → 3 per row (produces 3+2) / 3 items → 3 per row */
+.quiz-options[data-count="5"] .quiz-option,
+.quiz-options[data-count="3"] .quiz-option{
+  flex-basis:calc(33.3333% - 0.5rem);
+}
+/* 2 items → centred pair, capped width so they don't go full-bleed */
+.quiz-options[data-count="2"] .quiz-option{
+  flex-basis:calc(50% - 0.375rem);max-width:18rem;
+}
+
+/* Below-options action bar: skip + back, refined chip buttons */
+.quiz-actions{
+  margin-top:2.25rem;
+  display:flex;align-items:center;justify-content:center;gap:0.875rem;
+  flex-wrap:wrap;
+}
+.quiz-skip,
+.quiz-back{
+  font-family:inherit;
+  font-size:0.8125rem;font-weight:600;letter-spacing:-0.005em;
+  color:var(--text-secondary);
+  background:rgba(255,255,255,0.6);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(0,0,0,0.06);
+  cursor:pointer;
+  padding:0.6rem 1.125rem;border-radius:100px;
+  display:inline-flex;align-items:center;gap:0.4rem;
+  box-shadow:0 1px 0 rgba(255,255,255,0.8) inset, 0 2px 6px rgba(0,0,0,0.02);
+  transition:color 0.2s ease, background 0.25s ease, border-color 0.25s ease,
+             transform 0.2s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease;
+}
+.quiz-skip:hover,
+.quiz-back:hover{
+  color:var(--black);
+  background:#fff;
+  border-color:rgba(0,0,0,0.14);
+  transform:translateY(-1px);
+  box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 6px 16px rgba(0,0,0,0.06);
+}
+.quiz-skip::after{content:'→';transition:transform 0.2s;opacity:0.55}
+.quiz-skip:hover::after{transform:translateX(3px);opacity:1}
+.quiz-back::before{content:'←';transition:transform 0.2s;opacity:0.55}
+.quiz-back:hover::before{transform:translateX(-3px);opacity:1}
+.quiz-back[hidden]{display:none}
+
+@media(max-width:860px){
+  /* Tablet: 4-count drops to 2-col (2+2); 5-count stays 3-col (3+2) */
+  .quiz-option{flex-basis:calc(50% - 0.375rem)}
+  .quiz-options[data-count="5"] .quiz-option{flex-basis:calc(33.3333% - 0.5rem)}
+}
+@media(max-width:540px){
+  /* Mobile: single column across the board */
+  .quiz-option,
+  .quiz-options[data-count] .quiz-option{flex-basis:100%;max-width:none;min-height:auto;padding:1.125rem 1rem}
+  .quiz-actions{margin-top:1.75rem;gap:1rem}
+}
+
+/* ── Reveal screen ── */
+.quiz-reveal{
+  padding:1rem 1.5rem 5rem;
+}
+.quiz-reveal[hidden]{display:none}
+.quiz-reveal__inner{
+  max-width:72rem;margin:0 auto;
+  text-align:center;
+}
+.quiz-reveal__kicker{
+  display:inline-block;
+  font-size:0.6875rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.14em;
+  color:var(--text-secondary);
+  margin-bottom:1rem;
+}
+.quiz-reveal__kicker[hidden]{display:none}
+.quiz-reveal__title{
+  font-size:clamp(2rem,4.5vw,2.75rem);
+  font-weight:300;letter-spacing:-0.02em;line-height:1.1;
+  color:var(--black);
+  margin-bottom:0.875rem;
+}
+.quiz-reveal__title .nyght{font-weight:300}
+.quiz-reveal__reason{
+  font-size:1rem;line-height:1.6;
+  color:var(--text-secondary);
+  max-width:38rem;margin:0 auto 1.5rem;
+}
+.quiz-reveal__rerun{
+  display:inline-flex;align-items:center;gap:0.375rem;
+  font-family:inherit;font-size:0.8125rem;font-weight:500;
+  color:var(--text-secondary);
+  background:none;border:none;cursor:pointer;
+  padding:0.375rem 0.75rem;border-radius:100px;
+  margin-bottom:3rem;
+  transition:color 0.2s, background 0.2s;
+}
+.quiz-reveal__rerun::before{content:'↻';font-size:0.9375rem;line-height:1}
+.quiz-reveal__rerun:hover{color:var(--black);background:rgba(0,0,0,0.04)}
+
+.quiz-reveal__tiers{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;
+  max-width:64rem;margin:0 auto;
+  text-align:left;
+}
+@media(max-width:800px){.quiz-reveal__tiers{grid-template-columns:1fr;max-width:28rem}}
+
+.quiz-tier{
+  position:relative;
+  background:linear-gradient(180deg, #ffffff 0%, #fafaf4 100%);
+  border:1px solid rgba(0,0,0,0.07);
+  border-radius:1.25rem;
+  padding:2.5rem 2rem;
+  display:flex;flex-direction:column;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 1px 3px rgba(0,0,0,0.03),
+    0 2px 8px rgba(0,0,0,0.02);
+  transition:border-color 0.35s ease, background 0.4s ease,
+             box-shadow 0.4s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.quiz-tier:hover{
+  border-color:rgba(0,0,0,0.16);
+  background:linear-gradient(180deg, #ffffff 0%, #faf9ef 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 18px 44px rgba(0,0,0,0.08),
+    0 4px 10px rgba(0,0,0,0.04);
+  transform:translateY(-3px);
+}
+.quiz-tier.is-recommended{
+  /* Lime-tinted background + glowing ring + warmer shadow */
+  background:linear-gradient(180deg, #ffffff 0%, #FCFEEF 100%);
+  border-color:#D9FA87;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 0 0 4px rgba(217,250,135,0.22),
+    0 0 28px rgba(217,250,135,0.18),
+    0 20px 52px rgba(0,0,0,0.09),
+    0 4px 12px rgba(0,0,0,0.04);
+}
+.quiz-tier.is-recommended:hover{
+  border-color:#C9ED74;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 0 0 4px rgba(217,250,135,0.32),
+    0 0 34px rgba(217,250,135,0.28),
+    0 24px 64px rgba(0,0,0,0.11),
+    0 4px 12px rgba(0,0,0,0.05);
+}
+.quiz-tier__badge{
+  position:absolute;top:-0.625rem;left:1.5rem;
+  background:#D9FA87;color:#111;
+  font-size:0.5625rem;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;
+  padding:0.3rem 0.75rem;border-radius:100px;
+  opacity:0;transform:translateY(4px);
+  transition:opacity 0.25s,transform 0.25s;
+}
+.quiz-tier.is-recommended .quiz-tier__badge{opacity:1;transform:translateY(0)}
+.quiz-tier__name{
+  font-size:1.875rem;font-weight:700;
+  letter-spacing:-0.02em;color:var(--black);
+  line-height:1.1;
+  margin-bottom:0.25rem;
+}
+.quiz-tier__who{
+  font-size:0.8125rem;color:var(--text-secondary);
+  margin-bottom:1.5rem;line-height:1.4;
+}
+.quiz-tier__price{
+  display:flex;align-items:baseline;gap:0.375rem;
+  margin-bottom:0.375rem;
+}
+.quiz-tier__amount{
+  font-size:1.375rem;font-weight:700;
+  letter-spacing:-0.02em;color:var(--black);
+  line-height:1.1;
+}
+.quiz-tier__period{
+  font-size:0.8125rem;color:var(--text-secondary);font-weight:500;
+}
+.quiz-tier__note{
+  font-size:0.75rem;color:var(--text-secondary);
+  line-height:1.45;margin-bottom:1.5rem;
+  min-height:2.1rem;
+}
+.quiz-tier__cta{
+  display:block;text-align:center;width:100%;
+  font-size:0.875rem;font-weight:600;letter-spacing:-0.005em;
+  padding:0.875rem 1.25rem;
+  border-radius:100px;
+  background:linear-gradient(180deg, #242424 0%, #0b0b0b 100%);
+  color:#fff;
+  border:1px solid #000;
+  text-decoration:none;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.1) inset,
+    0 4px 12px rgba(0,0,0,0.15),
+    0 2px 4px rgba(0,0,0,0.08);
+  transition:all 0.3s cubic-bezier(0.16,1,0.3,1);
+  margin-bottom:0.625rem;
+}
+.quiz-tier__cta:hover{
+  color:#111 !important;
+  background:linear-gradient(180deg, #E7FFA1 0%, #D9FA87 100%);
+  border-color:#D9FA87;
+  transform:translateY(-2px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.6) inset,
+    0 10px 28px rgba(217,250,135,0.5),
+    0 4px 8px rgba(217,250,135,0.25);
+}
+.quiz-tier__sub{
+  font-size:0.75rem;color:var(--text-secondary);
+  text-align:center;
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<div id="team-nav" data-theme="light"></div>
+
+<!-- Hero headline + subcopy — introduces the questionnaire -->
+<section class="pricing-hero">
+  <h1>Start free.<br><span class="nyght">Upgrade when you're ready.</span></h1>
+  <p>Answer three questions below to find out what plan is best for you. All come with a 60-day free trial, so you can experience all the power of Team with zero risk. No credit card required.</p>
+</section>
+
+<!-- ========================================================
+     QUIZ v2 — Typeform-style flow that recommends a tier.
+     Stage sits OUTSIDE the swappable sections so characters persist
+     through Q1 → Q2 → Q3 → reveal. Only hidden on back/reset/refresh.
+     ======================================================== -->
+<section class="quiz-wrap">
+  <div class="quiz-stage is-hidden" id="quizStage" aria-hidden="true"></div>
+
+  <section class="quiz-section" id="quizSection">
+  <div class="quiz-inner">
+    <div class="quiz-progress">
+      <span>Question <strong id="quizStepNum">1</strong> of 3</span>
+      <div class="quiz-progress__bar"><div class="quiz-progress__fill" id="quizProgressFill"></div></div>
+    </div>
+
+    <div class="quiz-steps">
+      <!-- Step 1: org type (q1) -->
+      <div class="quiz-step is-active" data-step="1">
+        <h2 class="quiz-question">What are you running?</h2>
+        <div class="quiz-options" data-count="5">
+          <button type="button" class="quiz-option" data-q="q1" data-val="artist">
+            <span class="quiz-option__label">
+              <span class="quiz-option__main">An artist project</span>
+              <span class="quiz-option__desc">Your own career, solo or with a manager</span>
+            </span>
+            <span class="quiz-option__arrow" aria-hidden="true">→</span>
+          </button>
+          <button type="button" class="quiz-option" data-q="q1" data-val="management">
+            <span class="quiz-option__label">
+              <span class="quiz-option__main">Artist management</span>
+              <span class="quiz-option__desc">Managing one or more artists</span>
+            </span>
+            <span class="quiz-option__arrow" aria-hidden="true">→</span>
+          </button>
+          <button type="button" class="quiz-option" data-q="q1" data-val="indie">
+            <span class="quiz-option__label">
+              <span class="quiz-option__main">An independent label</span>
+              <span class="quiz-option__desc">Running your own roster</span>
+            </span>
+            <span class="quiz-option__arrow" aria-hidden="true">→</span>
+          </button>
+          <button type="button" class="quiz-option" data-q="q1" data-val="major">
+            <span class="quiz-option__label">
+              <span class="quiz-option__main">A major label, distributor or group</span>
+              <span class="quiz-option__desc">Large-scale operations</span>
+            </span>
+            <span class="quiz-option__arrow" aria-hidden="true">→</span>
+          </button>
+          <button type="button" class="quiz-option" data-q="q1" data-val="other">
+            <span class="quiz-option__label">
+              <span class="quiz-option__main">Something else</span>
+              <span class="quiz-option__desc">Agency, publisher, service provider</span>
+            </span>
+            <span class="quiz-option__arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: team size (q2) -->
+      <div class="quiz-step" data-step="2">
+        <h2 class="quiz-question">Who'll be using Team with you?</h2>
+        <div class="quiz-options" data-count="4">
+          <button type="button" class="quiz-option" data-q="q2" data-val="solo">
+            <span class="quiz-option__label">
+              <span class="quiz-option__main">Just me</span>
+              <span class="quiz-option__desc">Running my own releases</span>
+            </span>
+            <span class="quiz-option__arrow" aria-hidden="true">→</span>
+          </button>
+          <button type="button" class="quiz-option" data-q="q2" data-val="small">
+            <span class="quiz-option__label">
+              <span class="quiz-option__main">A small team</span>
+              <span class="quiz-option__desc">2&ndash;5 people collaborating</span>
+            </span>
+            <span class="quiz-option__arrow" aria-hidden="true">→</span>
+          </button>
+          <button type="button" class="quiz-option" data-q="q2" data-val="mid">
+            <span class="quiz-option__label">
+              <span class="quiz-option__main">A bigger team</span>
+              <span class="quiz-option__desc">6&ndash;15 people</span>
+            </span>
+            <span class="quiz-option__arrow" aria-hidden="true">→</span>
+          </button>
+          <button type="button" class="quiz-option" data-q="q2" data-val="large">
+            <span class="quiz-option__label">
+              <span class="quiz-option__main">A larger organization</span>
+              <span class="quiz-option__desc">16+ people</span>
+            </span>
+            <span class="quiz-option__arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: release volume -->
+      <div class="quiz-step" data-step="3">
+        <h2 class="quiz-question">How many releases a year?</h2>
+        <div class="quiz-options" data-count="4">
+          <button type="button" class="quiz-option" data-q="q3" data-val="few">
+            <span class="quiz-option__label">
+              <span class="quiz-option__main">Just a few</span>
+              <span class="quiz-option__desc">1&ndash;5 per year</span>
+            </span>
+            <span class="quiz-option__arrow" aria-hidden="true">→</span>
+          </button>
+          <button type="button" class="quiz-option" data-q="q3" data-val="regular">
+            <span class="quiz-option__label">
+              <span class="quiz-option__main">A regular cadence</span>
+              <span class="quiz-option__desc">6&ndash;20 per year</span>
+            </span>
+            <span class="quiz-option__arrow" aria-hidden="true">→</span>
+          </button>
+          <button type="button" class="quiz-option" data-q="q3" data-val="high">
+            <span class="quiz-option__label">
+              <span class="quiz-option__main">High volume</span>
+              <span class="quiz-option__desc">21&ndash;100 per year</span>
+            </span>
+            <span class="quiz-option__arrow" aria-hidden="true">→</span>
+          </button>
+          <button type="button" class="quiz-option" data-q="q3" data-val="massive">
+            <span class="quiz-option__label">
+              <span class="quiz-option__main">Very high volume</span>
+              <span class="quiz-option__desc">100+ per year</span>
+            </span>
+            <span class="quiz-option__arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-actions">
+      <button type="button" class="quiz-back" id="quizBack" hidden>Back</button>
+      <button type="button" class="quiz-skip" id="quizSkip">Skip &mdash; show me the plans</button>
+    </div>
+  </div>
+  </section>
+
+<!-- Reveal screen — hidden until quiz completes -->
+<section class="quiz-reveal" id="quizReveal" hidden>
+  <div class="quiz-reveal__inner">
+    <div class="quiz-reveal__kicker" id="quizRevealKicker" hidden>Our recommendation</div>
+    <h2 class="quiz-reveal__title" id="quizRevealTitle"></h2>
+    <p class="quiz-reveal__reason" id="quizRevealReason"></p>
+    <button type="button" class="quiz-reveal__rerun" id="quizRerun">Change my answers</button>
+
+    <div class="quiz-reveal__tiers">
+      <div class="quiz-tier" data-tier="solo">
+        <div class="quiz-tier__badge">Recommended for you</div>
+        <div class="quiz-tier__name">Solo</div>
+        <div class="quiz-tier__who">For getting started on your own</div>
+        <div class="quiz-tier__price">
+          <span class="quiz-tier__amount">$0</span>
+          <span class="quiz-tier__period">forever</span>
+        </div>
+        <div class="quiz-tier__note">No catch. That's a promise.</div>
+        <a href="onboarding.html?plan=free&amp;period=yearly" class="quiz-tier__cta">Get started</a>
+        <div class="quiz-tier__sub">No card required</div>
+      </div>
+
+      <div class="quiz-tier" data-tier="team">
+        <div class="quiz-tier__badge">Recommended for you</div>
+        <div class="quiz-tier__name">Team</div>
+        <div class="quiz-tier__who">For labels, managers, and teams</div>
+        <div class="quiz-tier__price">
+          <span class="quiz-tier__amount">$0</span>
+          <span class="quiz-tier__period">for 60 days</span>
+        </div>
+        <div class="quiz-tier__note">Then $51.99/mo per seat, billed yearly</div>
+        <a href="onboarding.html?plan=team&amp;period=yearly" class="quiz-tier__cta">Start free for 60 days</a>
+        <div class="quiz-tier__sub">No card required</div>
+      </div>
+
+      <div class="quiz-tier" data-tier="enterprise">
+        <div class="quiz-tier__badge">Recommended for you</div>
+        <div class="quiz-tier__name">Enterprise</div>
+        <div class="quiz-tier__who">For major labels and custom deployments</div>
+        <div class="quiz-tier__price">
+          <span class="quiz-tier__amount">Custom</span>
+        </div>
+        <div class="quiz-tier__note">Tailored to your roster and workflow</div>
+        <a href="contact.html?interest=enterprise" class="quiz-tier__cta">Talk to us</a>
+        <div class="quiz-tier__sub">We'll reach out within 1 business day</div>
+      </div>
+    </div>
+  </div>
+</section>
+</section><!-- /.quiz-wrap -->
+
+<!-- Footer -->
+<div id="team-footer"></div>
+
+<!-- Shared Components -->
+<script src="components/nav.js"></script>
+<script src="components/footer.js"></script>
+<script src="components/cookie-consent.js"></script>
+
+<!-- Pricing v2 questionnaire: 3 questions → tier recommendation -->
+<script>
+(function initQuiz() {
+  const section = document.getElementById('quizSection');
+  const reveal  = document.getElementById('quizReveal');
+  if (!section || !reveal) return;
+
+  const steps   = section.querySelectorAll('.quiz-step');
+  const options = section.querySelectorAll('.quiz-option');
+  const skipBtn = document.getElementById('quizSkip');
+  const backBtn = document.getElementById('quizBack');
+  const rerunBtn = document.getElementById('quizRerun');
+  const progFill = document.getElementById('quizProgressFill');
+  const stepNumEl = document.getElementById('quizStepNum');
+
+  const TOTAL_STEPS = 3;
+  const answers = { q1: null, q2: null, q3: null };
+  let current = 1;
+
+  /* ──────────────── Character stage ──────────────── */
+  const stageEl = document.getElementById('quizStage');
+  const CHAR_BASE = 'assets/characters/';
+
+  // Hero per Q1 answer (one character represents the answer)
+  const HEROES = {
+    artist:     'Character Artist 1.png',
+    management: 'Character Artist 17.png',
+    indie:      'Character Independent Label 1.png',
+    major:      'Character Major Label 1.png',
+    other:      'Character Something Else.png'
+  };
+  // Full pool — any char not used as the current hero is available as a supporter.
+  const ALL_CHARS = [
+    'Character Artist 1.png','Character Artist 2.png','Character Artist 3.png',
+    'Character Artist 4.png','Character Artist 5.png','Character Artist 6.png',
+    'Character Artist 11.png','Character Artist 12.png','Character Artist 13.png',
+    'Character Artist 14.png','Character Artist 15.png','Character Artist 16.png',
+    'Character Artist 17.png','Character Artist 18.png','Character Artist 19.png',
+    'Character Artist 20.png','Character Independent Label 1.png',
+    'Character Major Label 1.png','Character Something Else.png'
+  ];
+  const COUNTS = { solo: 1, small: 4, mid: 8, large: 16 };
+
+  // Slot positions — 16 slots max. x = horizontal centre (% of stage width).
+  // scale = visual size (back rows smaller). z = layering (front highest).
+  const SLOTS = [
+    { x: 50, scale: 1.00, z: 30 },  // 0 hero centre
+    { x: 60, scale: 0.96, z: 28 },  // 1 right of hero
+    { x: 40, scale: 0.96, z: 27 },  // 2 left
+    { x: 68, scale: 0.92, z: 25 },  // 3 further right
+    { x: 32, scale: 0.92, z: 24 },  // 4 further left
+    { x: 55, scale: 0.90, z: 22 },  // 5 behind, right of centre
+    { x: 45, scale: 0.90, z: 21 },  // 6 behind, left of centre
+    { x: 75, scale: 0.88, z: 19 },  // 7
+    { x: 25, scale: 0.88, z: 18 },  // 8
+    { x: 63, scale: 0.86, z: 16 },  // 9
+    { x: 37, scale: 0.86, z: 15 },  // 10
+    { x: 50, scale: 0.84, z: 13 },  // 11 back centre
+    { x: 82, scale: 0.82, z: 11 },  // 12
+    { x: 18, scale: 0.82, z: 10 },  // 13
+    { x: 70, scale: 0.80, z:  8 },  // 14
+    { x: 30, scale: 0.80, z:  7 }   // 15
+  ];
+
+  function preload(src) {
+    if (!src) return;
+    const img = new Image();
+    img.src = CHAR_BASE + encodeURIComponent(src);
+  }
+  // Heroes load immediately; supporters load lazily when user reaches Q2.
+  Object.values(HEROES).forEach(preload);
+  let _suppLoaded = false;
+  function preloadSupporters() {
+    if (_suppLoaded) return;
+    _suppLoaded = true;
+    ALL_CHARS.forEach(preload);
+  }
+
+  function ensureSlotElements() {
+    while (stageEl.children.length < SLOTS.length) {
+      const img = document.createElement('img');
+      img.className = 'quiz-char';
+      img.alt = '';
+      img.loading = 'eager';
+      img.setAttribute('aria-hidden', 'true');
+      stageEl.appendChild(img);
+    }
+  }
+
+  function updateStage() {
+    if (!stageEl) return;
+    const heroSrc = HEROES[answers.q1];
+    // Stage persists across Q1 → Q2 → Q3 → reveal. Only hides when q1 is null
+    // (first load, back-out from Q1, or reset via "Change my answers").
+    const show = !!heroSrc;
+    stageEl.classList.toggle('is-hidden', !show);
+    if (!show) {
+      stageEl.querySelectorAll('.quiz-char').forEach(c => c.classList.remove('is-visible'));
+      return;
+    }
+    ensureSlotElements();
+    const count = answers.q2 ? COUNTS[answers.q2] : 1;
+    if (count > 1) preloadSupporters();
+    const pool = ALL_CHARS.filter(c => c !== heroSrc);
+    const sources = [heroSrc, ...pool.slice(0, count - 1)];
+
+    const slots = stageEl.children;
+    for (let i = 0; i < SLOTS.length; i++) {
+      const slot = slots[i];
+      const src = sources[i];
+      const pos = SLOTS[i];
+      if (src) {
+        const fullSrc = CHAR_BASE + encodeURIComponent(src);
+        if (!slot.src.endsWith(encodeURIComponent(src))) slot.src = fullSrc;
+        slot.style.left = pos.x + '%';
+        slot.style.zIndex = pos.z;
+        slot.style.setProperty('--scale', pos.scale);
+        // Wait until the image has actual dimensions before triggering the
+        // fade-in, otherwise translateX(-50%) of a 0-width img centres to
+        // the wrong spot and snaps into place once it loads.
+        revealWhenReady(slot);
+      } else {
+        slot.classList.remove('is-visible');
+      }
+    }
+  }
+
+  function revealWhenReady(slot) {
+    const go = () => requestAnimationFrame(() => slot.classList.add('is-visible'));
+    if (slot.complete && slot.naturalWidth > 0) {
+      go();
+    } else {
+      slot.addEventListener('load', go, { once: true });
+      slot.addEventListener('error', go, { once: true });
+    }
+  }
+
+  function goTo(n) {
+    current = n;
+    steps.forEach(s => s.classList.toggle('is-active', parseInt(s.dataset.step, 10) === n));
+    stepNumEl.textContent = n;
+    progFill.style.width = (n / TOTAL_STEPS * 100) + '%';
+    backBtn.hidden = n === 1;
+    updateStage();
+  }
+
+  // Recommendation logic — Enterprise is only triggered by real institutional
+  // signals (major label or 16+ headcount). Volume alone doesn't upsell —
+  // a prolific solo artist or small label belongs on Solo/Team. If they
+  // genuinely need SSO / custom deployments, they'll self-select Enterprise
+  // later when they hit a ceiling.
+  //   q1 = org type     (artist | management | indie | major | other)
+  //   q2 = team size    (solo | small | mid | large)
+  //   q3 = release volume (few | regular | high | massive) — currently not used for tier
+  //
+  //   Major label/distributor/group → Enterprise
+  //   Larger org (16+)              → Enterprise
+  //   Just me                       → Solo (free forever)
+  //   Else                          → Team
+  function recommend() {
+    if (answers.q1 === 'major')    return 'enterprise';
+    if (answers.q2 === 'large')    return 'enterprise';
+    if (answers.q2 === 'solo')     return 'solo';
+    return 'team';
+  }
+
+  function reasonFor(tier) {
+    if (tier === 'enterprise') {
+      if (answers.q1 === 'major') return "Major labels and distributors need custom deployments, SSO, and dedicated support — that's Enterprise territory.";
+      return "A 16+ person organization will get the most out of Enterprise's custom workflows and dedicated support.";
+    }
+    if (tier === 'solo') {
+      return "You're working on your own — our free forever plan has everything you need to ship your first release. Upgrade the day you add a teammate.";
+    }
+    // team
+    const sizeBit = { small: 'a small team', mid: 'a 6–15 person team' }[answers.q2] || 'a growing team';
+    const orgBit  = {
+      artist: 'working around an artist',
+      management: 'running a management company',
+      indie: 'running an indie label',
+      other: 'operating in music services'
+    }[answers.q1] || 'collaborating';
+    return `You're ${orgBit} with ${sizeBit}. Team is built for this — collaboration, permissions, and shared workflows out of the box. Free for 60 days so your whole team can try it.`;
+  }
+
+  const TITLES = {
+    solo: 'We recommend <span class="nyght">Solo</span> for you',
+    team: 'We recommend <span class="nyght">Team</span> for you',
+    enterprise: 'We recommend <span class="nyght">Enterprise</span> for you',
+  };
+
+  const kicker = document.getElementById('quizRevealKicker');
+
+  function showReveal(tier) {
+    const t = tier || recommend();
+    if (kicker) kicker.hidden = false;
+    document.getElementById('quizRevealTitle').innerHTML = TITLES[t];
+    document.getElementById('quizRevealReason').textContent = reasonFor(t);
+    document.querySelectorAll('.quiz-tier').forEach(card => {
+      card.classList.toggle('is-recommended', card.dataset.tier === t);
+    });
+    section.hidden = true;
+    reveal.hidden = false;
+    // Small delay so the reveal renders before we scroll to it
+    requestAnimationFrame(() => reveal.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
+
+  function showAll() {
+    // Skip path: no kicker, no recommendation highlighted, neutral copy
+    if (kicker) kicker.hidden = true;
+    document.getElementById('quizRevealTitle').innerHTML = 'Choose the plan <span class="nyght">that fits.</span>';
+    document.getElementById('quizRevealReason').textContent = 'All plans start free. No credit card required.';
+    document.querySelectorAll('.quiz-tier').forEach(card => card.classList.remove('is-recommended'));
+    section.hidden = true;
+    reveal.hidden = false;
+    requestAnimationFrame(() => reveal.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
+
+  function restart() {
+    answers.q1 = answers.q2 = answers.q3 = null;
+    options.forEach(o => o.classList.remove('is-selected'));
+    reveal.hidden = true;
+    section.hidden = false;
+    _stageScrolled = false; // allow the first-answer scroll to fire again next time
+    goTo(1);
+    requestAnimationFrame(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
+
+  // Once-per-session flag — on the first Q1 answer we scroll the quiz into
+  // view (pushing the hero copy off-screen) so the character + question
+  // take over the frame. Resets on "Change my answers" (restart()).
+  let _stageScrolled = false;
+
+  options.forEach(opt => {
+    opt.addEventListener('click', () => {
+      const q = opt.dataset.q;
+      answers[q] = opt.dataset.val;
+      // Only mark the clicked option on the current step as selected
+      section.querySelectorAll('[data-q="' + q + '"]').forEach(o => o.classList.remove('is-selected'));
+      opt.classList.add('is-selected');
+      // Reflect the answer on the character stage immediately (hero appears /
+      // team fans in behind) while the tile's selected state is still visible.
+      updateStage();
+      // First-Q1 scroll: pull the quiz-wrap to the top of the viewport so the
+      // hero headline slides up off-screen and the character leads the frame.
+      if (q === 'q1' && !_stageScrolled) {
+        _stageScrolled = true;
+        setTimeout(() => {
+          const wrap = document.querySelector('.quiz-wrap');
+          if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 120);
+      }
+      // Short pause so the user sees the selection, then advance
+      setTimeout(() => {
+        if (current < TOTAL_STEPS) goTo(current + 1);
+        else showReveal();
+      }, 240);
+    });
+  });
+
+  backBtn.addEventListener('click', () => {
+    if (current <= 1) return;
+    // Reset the previous question's selection so the UI returns to a clean slate
+    const prev = current - 1;
+    const qKey = 'q' + prev;
+    answers[qKey] = null;
+    section.querySelectorAll('[data-q="' + qKey + '"]').forEach(o => o.classList.remove('is-selected'));
+    goTo(prev);
+  });
+
+  skipBtn.addEventListener('click', showAll);
+  rerunBtn.addEventListener('click', restart);
+
+  // Initial paint
+  goTo(1);
+})();
+</script>
+
+
+</body>
+</html>
