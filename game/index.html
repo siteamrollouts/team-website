@@ -1291,53 +1291,86 @@ function drawBackstagePass(x, y, size) {
 
 function drawGrammy(x, y, size) {
   const s = size;
-  const gold = BRAND.gold;     // #FDCB6E — matches the rest of the game UI
-  const dark = '#8b6914';      // deeper gold for shadows + depth
-  const light = '#ffe680';     // highlight gold for shine
+  const gold      = BRAND.gold;  // #FDCB6E — established game gold
+  const goldDark  = '#8b6914';   // shadow gold
+  const goldLight = '#ffe680';   // highlight gold
+  const hornDark  = '#4a3608';   // inside-the-horn darkness (the cavity)
+  const baseBlack = '#1a1a1a';   // the trademark black plinth
+  const baseEdge  = '#000';      // base lower-edge shadow
 
-  // ── HORN (flared gramophone bell at the top) ──
+  // ═══ 1. HORN (flared gramophone bell, top 45%) ═══
+  // Outer bell — flared mouth, narrows to a small neck
   ctx.fillStyle = gold;
   ctx.beginPath();
-  ctx.moveTo(x + s * 0.12, y + s * 0.06);   // top-left rim
-  ctx.lineTo(x + s * 0.88, y + s * 0.06);   // top-right rim
-  ctx.lineTo(x + s * 0.66, y + s * 0.50);   // neck right
-  ctx.lineTo(x + s * 0.34, y + s * 0.50);   // neck left
+  ctx.moveTo(x + s * 0.14, y + s * 0.03);
+  ctx.lineTo(x + s * 0.86, y + s * 0.03);
+  ctx.lineTo(x + s * 0.74, y + s * 0.34);
+  ctx.lineTo(x + s * 0.58, y + s * 0.44);
+  ctx.lineTo(x + s * 0.42, y + s * 0.44);
+  ctx.lineTo(x + s * 0.26, y + s * 0.34);
   ctx.closePath();
   ctx.fill();
 
-  // Inner rim shadow (suggests the horn's cavity)
-  ctx.fillStyle = dark;
-  ctx.fillRect(x + s * 0.18, y + s * 0.10, s * 0.64, 2);
-
-  // Left-edge shine
-  ctx.fillStyle = light;
+  // Dark interior of the horn — this is the giveaway it's a gramophone
+  ctx.fillStyle = hornDark;
   ctx.beginPath();
-  ctx.moveTo(x + s * 0.14, y + s * 0.08);
-  ctx.lineTo(x + s * 0.20, y + s * 0.08);
-  ctx.lineTo(x + s * 0.38, y + s * 0.48);
-  ctx.lineTo(x + s * 0.34, y + s * 0.48);
+  ctx.moveTo(x + s * 0.22, y + s * 0.07);
+  ctx.lineTo(x + s * 0.78, y + s * 0.07);
+  ctx.lineTo(x + s * 0.66, y + s * 0.30);
+  ctx.lineTo(x + s * 0.34, y + s * 0.30);
   ctx.closePath();
   ctx.fill();
 
-  // ── STEM (neck connecting horn to base) ──
-  ctx.fillStyle = gold;
-  ctx.fillRect(x + s * 0.44, y + s * 0.50, s * 0.12, s * 0.26);
-  ctx.fillStyle = light;
-  ctx.fillRect(x + s * 0.44, y + s * 0.50, 2, s * 0.26);
+  // Bright rim around the horn mouth
+  ctx.fillStyle = goldLight;
+  ctx.fillRect(x + s * 0.14, y + s * 0.03, s * 0.72, 2);
+  // Left-edge highlight running down the outer shell
+  ctx.beginPath();
+  ctx.moveTo(x + s * 0.14, y + s * 0.03);
+  ctx.lineTo(x + s * 0.20, y + s * 0.03);
+  ctx.lineTo(x + s * 0.30, y + s * 0.34);
+  ctx.lineTo(x + s * 0.26, y + s * 0.34);
+  ctx.closePath();
+  ctx.fill();
 
-  // ── BASE (two-tier pedestal) ──
+  // ═══ 2. NECK — short arm connecting horn to the disc ═══
   ctx.fillStyle = gold;
-  ctx.fillRect(x + s * 0.22, y + s * 0.76, s * 0.56, s * 0.06);
-  ctx.fillStyle = light;
-  ctx.fillRect(x + s * 0.22, y + s * 0.76, s * 0.56, 1);
-  ctx.fillStyle = dark;
-  ctx.fillRect(x + s * 0.14, y + s * 0.82, s * 0.72, s * 0.10);
-  ctx.fillStyle = gold;
-  ctx.fillRect(x + s * 0.14, y + s * 0.82, s * 0.72, 1);
+  ctx.fillRect(x + s * 0.44, y + s * 0.42, s * 0.12, s * 0.08);
 
-  // Sparkle (that award-winning shine)
-  ctx.fillStyle = '#fff';
-  ctx.fillRect(x + s * 0.72, y + s * 0.16, 2, 2);
+  // ═══ 3. GOLD BODY — the phonograph disc + mounting plate ═══
+  // Wider plate (the disc, viewed from above)
+  ctx.fillStyle = gold;
+  ctx.fillRect(x + s * 0.16, y + s * 0.50, s * 0.68, s * 0.10);
+  // Plate top highlight
+  ctx.fillStyle = goldLight;
+  ctx.fillRect(x + s * 0.16, y + s * 0.50, s * 0.68, 1);
+  // Plate lower shadow edge
+  ctx.fillStyle = goldDark;
+  ctx.fillRect(x + s * 0.16, y + s * 0.59, s * 0.68, 1);
+
+  // Stepped plinth on top of the black base (narrower than the disc)
+  ctx.fillStyle = gold;
+  ctx.fillRect(x + s * 0.24, y + s * 0.60, s * 0.52, s * 0.07);
+  ctx.fillStyle = goldDark;
+  ctx.fillRect(x + s * 0.24, y + s * 0.66, s * 0.52, 1);
+
+  // ═══ 4. BLACK TRAPEZOIDAL BASE — the Grammy signature ═══
+  ctx.fillStyle = baseBlack;
+  ctx.beginPath();
+  ctx.moveTo(x + s * 0.20, y + s * 0.68);
+  ctx.lineTo(x + s * 0.80, y + s * 0.68);
+  ctx.lineTo(x + s * 0.92, y + s * 0.96);
+  ctx.lineTo(x + s * 0.08, y + s * 0.96);
+  ctx.closePath();
+  ctx.fill();
+
+  // Thin gold line along the top of the black base (seam detail)
+  ctx.fillStyle = goldLight;
+  ctx.fillRect(x + s * 0.20, y + s * 0.68, s * 0.60, 1);
+
+  // Bottom shadow of the base for contact
+  ctx.fillStyle = baseEdge;
+  ctx.fillRect(x + s * 0.08, y + s * 0.95, s * 0.84, 1);
 }
 
 const collectDrawFuncs = [drawVinylLP, drawGoldRecord, drawPlayButton, drawBackstagePass, drawGrammy];
