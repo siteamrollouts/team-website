@@ -1828,41 +1828,55 @@ a.nav__cta:hover{
     updateStage();
   }
 
-  // Recommendation logic — Enterprise is only triggered by real institutional
-  // signals (major label or 16+ headcount). Volume alone doesn't upsell —
-  // a prolific solo artist or small label belongs on Solo/Team. If they
-  // genuinely need SSO / custom deployments, they'll self-select Enterprise
-  // later when they hit a ceiling.
+  // Recommendation logic.
   //   q1 = org type     (artist | management | indie | major | other)
   //   q2 = team size    (solo | small | mid | large)
-  //   q3 = release volume (few | regular | high | massive) — currently not used for tier
+  //   q3 = release volume (few | regular | high | massive)
   //
-  //   Major label/distributor/group → Enterprise
-  //   Larger org (16+)              → Enterprise
-  //   Just me                       → Solo (free forever)
-  //   Else                          → Team
+  // Rules (anti-overselling philosophy — let buyers self-select up):
+  //   Q2 = Just me                                          → Solo
+  //   Q1 ≠ artist  AND  Q2 = Larger (16+)  AND  Q3 = High or V.High → Enterprise
+  //   Otherwise                                             → Team
+  //
+  // Notes:
+  //   - Artist projects never route to Enterprise (any team/volume size).
+  //   - Low-volume majors/indies at 16+ land on Team; they'll get pulled
+  //     into Enterprise sales via procurement/legal when they actually need it.
   function recommend() {
-    if (answers.q1 === 'major')    return 'enterprise';
-    if (answers.q2 === 'large')    return 'enterprise';
-    if (answers.q2 === 'solo')     return 'solo';
+    if (answers.q2 === 'solo') return 'solo';
+    if (
+      answers.q1 !== 'artist' &&
+      answers.q2 === 'large' &&
+      (answers.q3 === 'high' || answers.q3 === 'massive')
+    ) return 'enterprise';
     return 'team';
   }
 
   function reasonFor(tier) {
     if (tier === 'enterprise') {
-      if (answers.q1 === 'major') return "Major labels and distributors need custom deployments, SSO, and dedicated support — that's Enterprise territory.";
-      return "A 16+ person organization will get the most out of Enterprise's custom workflows and dedicated support.";
+      const orgLabel = {
+        management: 'management company',
+        indie: 'indie label',
+        major: 'major label, distributor or group',
+        other: 'music services operation'
+      }[answers.q1] || 'organisation';
+      return `A 16+ person ${orgLabel} running at high release volume — that's Enterprise territory. You'll want custom deployments, SSO, and dedicated support.`;
     }
     if (tier === 'solo') {
       return "You're working on your own — our free forever plan has everything you need to ship your first release. Upgrade the day you add a teammate.";
     }
-    // team
-    const sizeBit = { small: 'a small team', mid: 'a 6–15 person team' }[answers.q2] || 'a growing team';
-    const orgBit  = {
-      artist: 'working around an artist',
+    // Team — any combo that didn't trigger Solo or Enterprise
+    const sizeBit = {
+      small: 'a small team',
+      mid:   'a 6–15 person team',
+      large: 'a 16+ person organisation'
+    }[answers.q2] || 'a growing team';
+    const orgBit = {
+      artist:     'working around an artist',
       management: 'running a management company',
-      indie: 'running an indie label',
-      other: 'operating in music services'
+      indie:      'running an indie label',
+      major:      'working inside a major label',
+      other:      'operating in music services'
     }[answers.q1] || 'collaborating';
     return `You're ${orgBit} with ${sizeBit}. Team is built for this — collaboration, permissions, and shared workflows out of the box. Free for 60 days so your whole team can try it.`;
   }
