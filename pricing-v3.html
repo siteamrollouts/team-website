@@ -291,6 +291,72 @@ a.nav__cta:hover{
   .pricing-cards--two{grid-template-columns:1fr;max-width:28rem}
 }
 
+/* v3 — Limited-time pricing pill above the price row */
+.pricing-card__limited{
+  display:inline-block;align-self:flex-start;
+  font-size:0.625rem;font-weight:700;letter-spacing:0.1em;
+  text-transform:uppercase;
+  padding:0.22rem 0.55rem;border-radius:100px;
+  background:#D9FA87;color:#191919;
+  margin-bottom:0.625rem;
+  line-height:1.3;
+}
+
+/* v3 — Tiny info icon that reveals a tooltip on hover */
+.feat-info{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:14px;height:14px;border-radius:50%;
+  background:rgba(0,0,0,0.08);
+  color:rgba(0,0,0,0.55);
+  font-size:0.625rem;font-weight:700;font-style:italic;
+  font-family:Georgia,serif;
+  margin-left:0.4rem;cursor:help;
+  position:relative;vertical-align:baseline;
+  transition:background 0.2s,color 0.2s;
+}
+.feat-info:hover{background:rgba(0,0,0,0.14);color:#111}
+.pricing-card--team .feat-info,
+.td-team .feat-info{
+  background:rgba(255,255,255,0.18);
+  color:rgba(255,255,255,0.85);
+}
+.pricing-card--team .feat-info:hover,
+.td-team .feat-info:hover{background:rgba(255,255,255,0.3);color:#fff}
+.feat-info[data-tip]::after{
+  content:attr(data-tip);
+  position:absolute;
+  bottom:calc(100% + 0.5rem);left:50%;
+  transform:translateX(-50%);
+  background:#191919;color:#fff;
+  font-size:0.75rem;font-weight:500;font-style:normal;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  padding:0.55rem 0.75rem;border-radius:0.5rem;
+  width:max-content;max-width:14rem;
+  text-align:left;line-height:1.4;letter-spacing:0;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity 0.2s,visibility 0.2s;
+  z-index:20;
+  box-shadow:0 6px 24px rgba(0,0,0,0.18);
+}
+.feat-info:hover::after{opacity:1;visibility:visible}
+
+/* v3 — small "Beta" marker for early-stage features */
+.feat-beta{
+  display:inline-block;
+  font-size:0.5625rem;font-weight:700;letter-spacing:0.1em;
+  text-transform:uppercase;
+  padding:0.12rem 0.45rem;border-radius:100px;
+  background:rgba(245,96,2,0.12);
+  color:var(--accent);
+  margin-left:0.4rem;vertical-align:middle;
+  line-height:1.4;
+}
+.pricing-card--team .feat-beta,
+.td-team .feat-beta{
+  background:rgba(245,96,2,0.22);
+  color:#FFA665;
+}
+
 .pricing-card{
   background:#fff;
   border:1px solid rgba(0,0,0,0.06);
@@ -1079,7 +1145,7 @@ a.nav__cta:hover{
 <!-- Hero -->
 <section class="pricing-hero">
   <h1>Start free.<br><span class="nyght">Upgrade when you're ready.</span></h1>
-  <p>Free forever for one artist. Unlock the full platform with Pro &mdash; 30 days free.</p>
+  <p>Start using it with no commitment. Free forever for one artist, or unlock the full platform with Pro &mdash; 30 days free.</p>
   <a href="onboarding.html?plan=pro&amp;period=yearly" class="btn btn--primary-light pricing-hero__cta">
     <span class="pricing-hero__cta-full">Try Pro free for 30 days</span>
     <span class="pricing-hero__cta-short">Try Pro free</span>
@@ -1113,12 +1179,13 @@ a.nav__cta:hover{
     <div class="pricing-card__includes-label">Includes:</div>
     <ul class="pricing-card__features">
       <li>1 artist</li>
+      <li>Unlimited releases</li>
       <li>1 seat</li>
       <li>1 collaborator</li>
       <li>1 workspace</li>
       <li>Unlimited stacks</li>
-      <li>Unlimited releases</li>
-      <li>Unlimited AI Chat</li>
+      <li>TeamMate AI included <span class="feat-info" data-tip="Your AI co-pilot — drafts pitches, outreach, and release copy. Unlimited messages.">i</span></li>
+      <li>Intelligence (Basic) <span class="feat-info" data-tip="Lightweight insights on your release timeline and key tasks.">i</span></li>
       <li>Rollout Plan</li>
       <li>Budget Management</li>
     </ul>
@@ -1128,7 +1195,8 @@ a.nav__cta:hover{
   <!-- Pro (highlighted — uses .pricing-card--team styling for the dark premium look) -->
   <div class="pricing-card pricing-card--team" data-plan="pro" data-yearly="19.99" data-monthly="24.99" data-unit="seat">
     <div class="pricing-card__tier">Pro</div>
-    <div class="pricing-card__who">For artists, managers &amp; small teams</div>
+    <div class="pricing-card__who">For artists, managers, indie labels &amp; teams</div>
+    <div class="pricing-card__limited">Limited time pricing</div>
     <div class="pricing-card__price-row">
       <span class="pricing-card__amount">$0</span>
       <span class="pricing-card__period">/month per seat</span>
@@ -1144,9 +1212,11 @@ a.nav__cta:hover{
       <li>2 premium seats</li>
       <li>Unlimited collaborators (Timeline access)</li>
       <li>Unlimited workspaces</li>
+      <li>TeamMate AI included <span class="feat-info" data-tip="Your AI co-pilot — drafts pitches, outreach, and release copy. Unlimited messages.">i</span></li>
+      <li>Intelligence (Comprehensive) <span class="feat-info" data-tip="Reasoning against your timeline, proactive insights, and a memory that learns your release.">i</span></li>
       <li>TeamMate Email &amp; Text</li>
       <li>Press Tour</li>
-      <li>Tour Management</li>
+      <li>Tour Management <span class="feat-beta">Beta</span></li>
       <li>Document Ingestion</li>
       <li>Team Chat</li>
       <li>Reports &amp; Sharing</li>
@@ -1181,9 +1251,14 @@ a.nav__cta:hover{
         <td class="td-team check">Unlimited</td>
       </tr>
       <tr>
-        <td><span>AI Chat (daily message limit)</span></td>
-        <td class="check">Unlimited</td>
-        <td class="td-team check">Unlimited</td>
+        <td><span>TeamMate AI <span class="feat-info" data-tip="Your AI co-pilot — drafts pitches, outreach, and release copy. Unlimited messages.">i</span></span></td>
+        <td class="check"><span class="check-icon"><svg viewBox="0 0 16 16"><polyline points="3 8 6.5 11.5 13 5"/></svg></span></td>
+        <td class="td-team check"><span class="check-icon"><svg viewBox="0 0 16 16"><polyline points="3 8 6.5 11.5 13 5"/></svg></span></td>
+      </tr>
+      <tr>
+        <td><span>Intelligence <span class="feat-info" data-tip="Pro gets full reasoning against your timeline, proactive insights, and a memory that learns your release.">i</span></span></td>
+        <td>Basic</td>
+        <td class="td-team check">Comprehensive</td>
       </tr>
       <tr>
         <td><span># of seats</span></td>
@@ -1226,7 +1301,7 @@ a.nav__cta:hover{
         <td class="td-team check"><span class="check-icon"><svg viewBox="0 0 16 16"><polyline points="3 8 6.5 11.5 13 5"/></svg></span></td>
       </tr>
       <tr>
-        <td><span>Tour Management</span></td>
+        <td><span>Tour Management <span class="feat-beta">Beta</span></span></td>
         <td><span class="dash-icon"><svg viewBox="0 0 12 2"><line x1="2" y1="1" x2="10" y2="1" stroke="rgba(0,0,0,0.2)" stroke-width="2" stroke-linecap="round"/></svg></span></td>
         <td class="td-team check"><span class="check-icon"><svg viewBox="0 0 16 16"><polyline points="3 8 6.5 11.5 13 5"/></svg></span></td>
       </tr>
