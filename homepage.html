@@ -819,7 +819,10 @@ body.nav-mobile-lock{overflow:hidden}
   font-size:0.8125rem;font-weight:700;
   padding:0.5rem 1.25rem;border-radius:2rem;
   border:1px solid transparent;
-  transition:all 0.3s;
+  /* Only transition visuals — leaving width/height/padding to GSAP avoids
+     a fight between the CSS transition and the click-morph timeline that
+     otherwise leaves the button stuck mid-squash on scroll re-entry. */
+  transition:background 0.3s, color 0.3s, border-color 0.3s, backdrop-filter 0.3s;
   white-space:nowrap;flex-shrink:0;
   position:relative;overflow:hidden;
 }
